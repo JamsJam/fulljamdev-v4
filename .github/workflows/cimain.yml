@@ -1,4 +1,4 @@
-name: deployprod
+name: cimain
 
 on:
   push:

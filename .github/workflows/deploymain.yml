@@ -15,7 +15,6 @@ jobs:
           password: ${{ secrets.APP_PASS }}
           port: ${{ secrets.APP_PORT }}
           script: |
-            set -e
             echo
             echo "============================"
             echo "[ Ouverture du dossier ]"

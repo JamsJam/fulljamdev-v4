@@ -47,6 +47,7 @@ jobs:
             echo "============================"
             echo
             composer dump-env prod
+            php bin/console cache:clear
             echo
             echo "============================"
             echo "[ mise a jour des packages ]"

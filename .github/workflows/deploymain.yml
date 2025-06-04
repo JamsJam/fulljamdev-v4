@@ -1,8 +1,8 @@
-name: deployprod
+name: deploymain
 
 on:
   workflow_run:
-    workflows: ["ci"]
+    workflows: ["cimain"]
     types:
       - completed
 

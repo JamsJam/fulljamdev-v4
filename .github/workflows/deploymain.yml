@@ -1,0 +1,66 @@
+name: deployprod
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.APP_SERVER }}
+          username: ${{ secrets.APP_USER }}
+          password: ${{ secrets.APP_PASS }}
+          port: ${{ secrets.APP_PORT }}
+          script: |
+            set -e
+            echo
+            echo "============================"
+            echo "[ Ouverture du dossier ]"
+            echo "============================"
+            echo
+            cd /var/www/${{ secrets.APP_USER }}/${{ secrets.APP_DOMAIN }}
+            echo
+            echo "============================"
+            echo "[ mise a jour du dossier ]"
+            echo "============================"
+            echo
+            git stash
+            git pull
+            echo
+            echo "============================"
+            echo "[ creation du .env ]"
+            echo "============================"
+            echo
+            cat <<EOF > .env.local
+            APP_ENV=prod
+            APP_DEBUG=0
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            APP_SECRET=${{ secrets.APP_SECRET }}
+            MAILER_DSN=${{ secrets.MAILER_DSN }}
+            MESSENGER_TRANSPORT_DSN=${{ secrets.MESSENGER_TRANSPORT_DSN }}
+            EOF
+            echo
+            echo "============================"
+            echo "[ Generation du .env.local.php ]"
+            echo "============================"
+            echo
+            composer dump-env prod
+            echo
+            echo "============================"
+            echo "[ mise a jour des packages ]"
+            echo "============================"
+            echo
+            composer install --no-dev --optimize-autoloader -n
+            php bin/console cache:clear
+            echo
+            echo "============================"
+            echo "[ mise a jour de la BBD ]"
+            echo "============================"
+            echo
+            php bin/console d:m:m -n
+
+
+

@@ -15,6 +15,7 @@ final class ProjectController extends AbstractController
             'controller_name' => 'ProjectController',
         ]);
     }
+
     #[Route('/project', name: 'app_front_project')]
     public function show(): Response
     {

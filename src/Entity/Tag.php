@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

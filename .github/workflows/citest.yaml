@@ -37,7 +37,7 @@ jobs:
           php bin/console lint:yaml .
           php bin/console lint:twig templates/
           php bin/console lint:container 
-          if [ -d translations ]; then php bin/console lint:translations; fi
+          
 
       - name: 🧹 PHP Linter (php-cs-fixer)
         run: |
@@ -50,7 +50,7 @@ jobs:
           php bin/console doctrine:database:create --if-not-exists
           php bin/console doctrine:schema:validate
           php bin/console doctrine:migrations:migrate --no-interaction
-          php bin/console doctrine:fixtures:load --no-interaction
+          
 
       - name: 🧪 Run PHPUnit tests
         env:

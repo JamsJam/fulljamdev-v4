@@ -22,7 +22,6 @@ jobs:
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
-        env: 
         with:
           host: ${{ secrets.APP_SERVER }}
           username: ${{ secrets.APP_USER }}
@@ -86,7 +85,7 @@ jobs:
             echo "[ mise a jour de la BBD ]"
             echo "============================"
             echo
-            php bin/console d:d:d -f
+            php bin/console d:d:d -f --if-exists
             php bin/console d:d:c
             php bin/console d:m:m -n
             

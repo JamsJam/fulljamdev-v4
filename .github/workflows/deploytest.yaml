@@ -111,23 +111,23 @@ jobs:
           git commit -m "🔄 Mise à jour automatique du CHANGELOG"
           git push https://x-access-token:${{ secrets.PAT_PUSH }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
 
-      - name: Envoyer un email avec le lien de test
-        if: success()
-        uses: matthewnitschke/send-email@v1
-        with:
-          smtp-server: ${{ secrets.SMTP_SERVER }}
-          smtp-port: ${{ secrets.SMTP_PORT }}
-          smtp-username: ${{ secrets.SMTP_USERNAME }}
-          smtp-password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "✅ Déploiement réussi – Version de test"
-          to: ${{ secrets.EMAIL_TO }}
-          from: ${{ secrets.SMTP_USERNAME }}
-          body: "La version de test est en ligne : http://test-${{ steps.hash.outputs.hash }}.${{ secrets.APP_DOMAIN }}"
+      # - name: Envoyer un email avec le lien de test
+      #   if: success()
+      #   uses: matthewnitschke/send-email@v1
+      #   with:
+      #     smtp-server: ${{ secrets.SMTP_SERVER }}
+      #     smtp-port: ${{ secrets.SMTP_PORT }}
+      #     smtp-username: ${{ secrets.SMTP_USERNAME }}
+      #     smtp-password: ${{ secrets.SMTP_PASSWORD }}
+      #     subject: "✅ Déploiement réussi – Version de test"
+      #     to: ${{ secrets.EMAIL_TO }}
+      #     from: ${{ secrets.SMTP_USERNAME }}
+      #     body: "La version de test est en ligne : http://test-${{ steps.hash.outputs.hash }}.${{ secrets.APP_DOMAIN }}"
 
-      - name: Envoyer un email d’échec (optionnel)
-        if: failure()
-        run: |
-          echo "Le déploiement a échoué." | mail -s "❌ Échec du déploiement" ${{ secrets.EMAIL_TO }}
+      # - name: Envoyer un email d’échec (optionnel)
+      #   if: failure()
+      #   run: |
+      #     echo "Le déploiement a échoué." | mail -s "❌ Échec du déploiement" ${{ secrets.EMAIL_TO }}
 
 
 

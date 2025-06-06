@@ -66,6 +66,12 @@ jobs:
             EOF
             echo
             echo "============================"
+            echo "[ dependency installation ]"
+            echo "============================"
+            echo
+            composer install
+            echo
+            echo "============================"
             echo "[ Generation du .env.local.php ]"
             echo "============================"
             echo

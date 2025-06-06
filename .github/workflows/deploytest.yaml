@@ -69,7 +69,7 @@ jobs:
             echo "[ Generation du .env.local.php ]"
             echo "============================"
             echo
-            composer dump-env prod
+            APP_ENV=prod APP_DEBUG=0 php bin/console dotenv:dump
             php bin/console cache:clear
             echo
             echo "============================"

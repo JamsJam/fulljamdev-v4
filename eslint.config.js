@@ -8,7 +8,7 @@ export default [
     rules: {
       semi: ['error', 'always'],
       quotes: ['error', 'single'],
-      indent: ['warning', 4],
+      indent: ['warn', 4],
     },
   },
 ];

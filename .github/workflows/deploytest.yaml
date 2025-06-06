@@ -85,7 +85,7 @@ jobs:
             echo "[ mise a jour de la BBD ]"
             echo "============================"
             echo
-            php bin/console d:d:d -f
+            php bin/console d:d:d -f --if-exists
             php bin/console d:d:c
             php bin/console d:m:m -n
             

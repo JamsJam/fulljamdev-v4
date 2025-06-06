@@ -1,8 +1,8 @@
-name: deploytest
+name: deploy-test
 
 on:
   push:
-    branches: ["citest"]
+    branches: ["test"]
 
 
 jobs:

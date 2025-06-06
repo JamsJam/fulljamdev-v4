@@ -57,8 +57,8 @@ jobs:
             APP_DEBUG=0
             DATABASE_URL=${{ secrets.DATABASE_TEST_URL }}
             APP_SECRET=${{ secrets.APP_TEST_SECRET }}
-            MAILER_DSN=${{ secrets.MAILER_TEST_DSN }}
-            MESSENGER_TRANSPORT_DSN=${{ secrets.MESSENGER_TEST_TRANSPORT_DSN }}
+            MESSENGER_TRANSPORT_DSN=${{ secrets.MAILER_TEST_DSN }}
+            MAILER_DSN=${{ secrets.MESSENGER_TEST_TRANSPORT_DSN }}
             EOF
             echo
             echo "============================"

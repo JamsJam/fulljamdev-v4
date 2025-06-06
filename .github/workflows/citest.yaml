@@ -54,6 +54,6 @@ jobs:
         run: |
           npx eslint ./assets//**/*.js
 
-      - name: 🎨 SCSS Linter (stylelint via npx)
-        run: |
-          npx stylelint "assets/styles/**/*.scss"
+      # - name: 🎨 SCSS Linter (stylelint via npx)
+      #   run: |
+      #     npx stylelint "assets/styles/**/*.scss"

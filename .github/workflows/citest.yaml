@@ -34,9 +34,9 @@ jobs:
 
       - name: 🧪 Run Symfony Linters
         run: |
-          php bin/console lint:yaml
-          php bin/console lint:twig
-          php bin/console lint:container
+          php bin/console lint:yaml .
+          php bin/console lint:twig templates/
+          php bin/console lint:container 
           if [ -d translations ]; then php bin/console lint:translations; fi
 
       - name: 🧹 PHP Linter (php-cs-fixer)

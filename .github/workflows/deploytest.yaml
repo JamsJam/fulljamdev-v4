@@ -22,7 +22,6 @@ jobs:
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
-        env: 
         with:
           host: ${{ secrets.APP_SERVER }}
           username: ${{ secrets.APP_USER }}

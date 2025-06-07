@@ -14,6 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          persist-credentials: false
           fetch-depth: 0
 
       - name: Générer un sous-domaine temporaire
@@ -104,9 +105,10 @@ jobs:
       - name: Commit & push le nouveau CHANGELOG.md
         run: |
           set -e
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f CHANGELOG.md
+
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
 
           if git diff --cached --quiet; then
             echo "🔹 Aucun changement à committer."
@@ -114,7 +116,13 @@ jobs:
           fi
 
           git commit -m "🔄 Mise à jour automatique du CHANGELOG"
-          git push https://x-access-token:${{ secrets.PAT_PUSH }}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+          
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
       # - name: Envoyer un email avec le lien de test
       #   if: success()

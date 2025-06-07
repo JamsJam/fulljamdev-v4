@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Générer un sous-domaine temporaire
         id: hash
@@ -94,8 +96,6 @@ jobs:
 
 
       - name: Générer une entré dans CHANGELOG.md
-        with:
-          fetch-depth: 0 
         run: |
           chmod +x .github/workflows/script/generate_changelog.sh
           .github/workflows/script/generate_changelog.sh

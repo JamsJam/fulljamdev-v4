@@ -1,11 +1,9 @@
 name: deploy-test
 
-
 on:
-  workflow_run:
-    workflows: ["citest"]
-    types:
-      - completed
+  push:
+    branches: ["test"]
+
 
 jobs:
   build:

@@ -94,6 +94,8 @@ jobs:
 
 
       - name: Générer une entré dans CHANGELOG.md
+        with:
+          fetch-depth: 0 
         run: |
           chmod +x .github/workflows/script/generate_changelog.sh
           .github/workflows/script/generate_changelog.sh

@@ -8,6 +8,8 @@ if [ -z "$(git log "$LAST_TAG"..HEAD --oneline)" ]; then
   exit 0
 fi
 
+
+
 # Date actuelle
 DATE=$(date +%F)
 
@@ -22,7 +24,9 @@ HAS_FIX=false
 
 # Analyser les types de commit depuis le dernier tag
 TMP_LOG="full_log.tmp"
-git log "$LAST_TAG"..HEAD --pretty=format:"%s%n%b" > "$TMP_LOG"
+# git log "$LAST_TAG"..HEAD --pretty=format:"%s%n%b" > "$TMP_LOG"
+# git log "$LAST_TAG"..HEAD --pretty=format:"%H %s" | grep "#"
+git log -1 --pretty=format:"%s%n%b" > "$TMP_LOG"
 
 while IFS= read -r line; do
   echo "$line" | grep -qi "BREAKING CHANGE"
@@ -58,6 +62,12 @@ else
 fi
 
 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+
+if [ "v$NEW_VERSION" == "$LAST_TAG" ]; then
+  echo "La version calculée ($NEW_VERSION) est identique au dernier tag. Aucun nouveau tag ne sera créé."
+else
+  git tag -f "v$NEW_VERSION"
+fi
 
 # Fichiers temporaires
 CHANGELOG_TMP="new_changelog.md"

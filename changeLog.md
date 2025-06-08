@@ -1,12 +1,114 @@
+## [0.2.0] - 2025-06-07
 
+### ✨ Added
+- feat: etat du changelog
+- feat: etat du changelog
 
+### 🐛 Fixed
+- fix: etat du changelog
+- fix: etat du changelog
+- fix: etat du changelog  (#22)
+- fix: etat du changelog
+- fix: etat du changelog  (#21)
+- fix: etat du changelog
+- fix: etat du changelog (#20)
+- fix: etat du changelog
+- fix: etat du changelog
+- fix: etat du changelog
+- fix: etat du changelog
+- fix: etat du changelog
+- fix: etat du changelog
+- fix: 2tat du changelog
+- fix: etat du changelog
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: CD test
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: ajout ESlint.config.js
+- fix: correction lint js
+- fix: mise en place de la pipeline de CI/CD test et main
+- fix: mise en place de la pipeline de CI/CD test et main
+- fix: mise en place de la pipeline de CI/CD test et main
 
-
-## Légende des catégories
-
-- **Ajouté** : nouvelle fonctionnalité.
-- **Modifié** : modification d’une fonctionnalité existante.
-- **Corrigé** : correction de bug.
-- **Supprimé** : suppression d’une fonctionnalité ou d’un élément obsolète.
-- **Sécurité** : mise à jour liée à la sécurité.
+### 📦 Other
+- Develop (#23)
+-  fix: etat du changelog
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- * fix: etat du changelog
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- style: etat du changelog
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- style: etat du changelog
+- changeent du trigger de la CD de test
+- changeent du trigger de la CD de test
+- Merge pull request #19 from JamsJam/develop
+- changeent du trigger de la CD de test
+- Merge pull request #18 from JamsJam/develop
+- changeent du trigger de la CD de test
+- Merge pull request #17 from JamsJam/develop
+- Merge pull request #16 from JamsJam/develop
+- Merge pull request #15 from JamsJam/JamsJam-patch-2
+- Update deploytest.yaml
+- Update deploytest.yaml
+- Merge pull request #14 from JamsJam/develop
+- Merge pull request #13 from JamsJam/develop
+- Merge pull request #12 from JamsJam/JamsJam-patch-1
+- Update deploytest.yaml
+- Update deploytest.yaml
+- Merge pull request #11 from JamsJam/develop
+- Merge pull request #10 from JamsJam/develop
+- Merge pull request #9 from JamsJam/develop
+- Fix CD
+- Merge pull request #7 from JamsJam/test
+- Merge pull request #6 from JamsJam/develop
+- Merge pull request #8 from JamsJam/develop
+- Merge pull request #6 from JamsJam/develop
+- Develop
+- Merge pull request #5 from JamsJam/test
+- Test
+- Merge pull request #4 from JamsJam/develop
+- Merge pull request #2 from JamsJam/develop
+- Merge pull request #1 from JamsJam/develop
+- CI : mise en place de la pipeline de CI/CD test et main
+- CI : mise en place de la pipeline de CI/CD test et main
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
+- chore:first commit
 

@@ -117,15 +117,15 @@ jobs:
           git commit -m "🔄 Mise à jour automatique du CHANGELOG"
           
 
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
 
-      - name: Push tags (force)
-        run: |
-          git push origin --tags --force
+      # - name: Push tags (force)
+      #   run: |
+      #     git push origin --tags --force
 
       # - name: Envoyer un email avec le lien de test
       #   if: success()

@@ -116,7 +116,10 @@ jobs:
 
           git commit -m "🔄 Mise à jour automatique du CHANGELOG"
           
-
+      - name: Setup Git authentication
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          
      # - name: Push changes
      #   uses: ad-m/github-push-action@master
      #   with:

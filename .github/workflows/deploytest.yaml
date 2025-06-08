@@ -120,19 +120,19 @@ jobs:
         run: |
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           
-     # - name: Push changes
-     #   uses: ad-m/github-push-action@master
-     #   with:
-     #     github_token: ${{ secrets.GITHUB_TOKEN }}
-     #     branch: ${{ github.ref }}
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
 
       - name: Push tags (force)
         run: |
           git config user.name "GitHub Actions"
           git config user.email "github-actions@users.noreply.github.com"
           git push origin --tags --force
-     #    git push origin $NEW_TAG
-     #    git tag $NEW_TAG
+      #    git push origin $NEW_TAG
+      #    git tag $NEW_TAG
 
       # - name: Envoyer un email avec le lien de test
       #   if: success()

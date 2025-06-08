@@ -8,8 +8,6 @@ if [ -z "$(git log "$LAST_TAG"..HEAD --oneline)" ]; then
   exit 0
 fi
 
-
-
 # Date actuelle
 DATE=$(date +%F)
 

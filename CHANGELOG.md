@@ -1,3 +1,8 @@
+## [0.1.1] - 2025-06-08
+
+### 🐛 Fixed
+- fix: md bug nouveau fichier changelog
+
 ## [0.2.0] - 2025-06-08
 
 ### ✨ Added

@@ -1,6 +1,17 @@
 //? ========= Font....
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Merienda:wght@300..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@font-face {
+  font-family: 'Arkhip';
+  src: url('../font/Arkhip/Arkhip-Regular.ttf') format('truetype');
+  font-weight: normal ;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('../font/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900 ;
+  font-style: normal;
+}
 
 //? == familly
 $font-title: "Manrope", sans-serif;

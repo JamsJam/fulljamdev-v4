@@ -95,7 +95,13 @@ jobs:
             php bin/console d:d:d -f --if-exists
             php bin/console d:d:c
             php bin/console d:m:m -n
-            
+            echo
+            echo "============================"
+            echo "[ Build du style ]"
+            echo "============================"
+            echo
+            php bin/console sass:build
+            php bin/console asset-map:compile
 
 
 

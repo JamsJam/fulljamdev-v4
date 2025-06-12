@@ -1,4 +1,4 @@
-//? ========= Colors
+//? ========= main Colors
 //* === primary
 $primary-35: hsl(248, 81%, 35%);
 $primary-20: hsl(249, 100%, 20%);
@@ -35,3 +35,16 @@ $bg-linear : linear-gradient(
     21% $primary-05, 
     63% $primary-05, 
     );
+
+//? ========= admin Colors
+
+//* === nuance
+$admin-nuance-b-30: hsl(0, 0%, 30%);
+$admin-nuance-b-20: hsl(0, 0%, 20%);
+$admin-nuance-b-15: hsl(0, 0%, 15%);
+
+
+$admin-nuance-w-100: hsl(0, 0%, 100%);
+
+
+git add . ; git commit -m "ajout des variable color admin "

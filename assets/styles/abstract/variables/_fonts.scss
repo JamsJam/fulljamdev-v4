@@ -1,4 +1,6 @@
 //? ========= Font....
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+//? ========= Font....
 
 @font-face {
   font-family: 'Nunito';
@@ -13,10 +15,11 @@
   font-style: normal;
 }
 
+
 //? ====== familly
 $font-title: "Arkhip", sans-serif;
 $font-text: "Nunito", sans-serif;
-
+$admin-font: "Monserrat", serif;
 //? ====== size
 $fs-0-00: 0rem;       // 0px
 $fs-0-13: 0.125rem;   // 2px

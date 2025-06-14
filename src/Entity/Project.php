@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[UniqueEntity(
+    fields: 'slug',
+    message: 'Ce slug correspond a un projet existant'
+)]
 class Project
 {
     #[ORM\Id]
@@ -23,30 +29,63 @@ class Project
     private ?\DateTimeImmutable $editedAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(groups: ['generalProject'])]
+    #[Assert\Type(
+        'string',
+        groups: ['generalProject']
+    )]
+    #[Assert\Length(
+        min: 3,
+        message:'Le titre doit contenir au moins {{ limit }} caractères.',
+        groups: ['generalProject']
+    )]
     private ?string $title = null;
-
+    
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(groups: ['generalProject'])]
+    #[Assert\Type(
+        'string',
+        groups: ['generalProject']
+    )]
+    #[Assert\Length(
+        min: 50,
+        message:'La description doit contenir au moins {{ limit }} caractères.',
+        groups: ['generalProject']
+    )]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('array', groups: ['generalProject'])]
+    #[Assert\All(
+        new Assert\Type('string')
+    )]
     private ?array $technologies = null;
-
+    
     #[ORM\Column(nullable: true)]
+    #[Assert\Type('array', groups: ['generalProject'])]
+    #[Assert\All(
+        new Assert\Type('string')
+    )]
     private ?array $images = null;
-
+    
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(groups: ['generalProject'])]
     private ?string $projectlink = null;
-
+    
     #[ORM\Column]
+    #[Assert\Type('boolean',groups: ['generalProject'])]
     private ?bool $isOnline = null;
-
+    
     #[ORM\Column]
+    #[Assert\Type('boolean',groups: ['generalProject'])]
     private ?bool $isGitpublic = null;
-
+    
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(groups: ['generalProject'])]
     private ?string $gitlink = null;
-
+    
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    // #[Assert\Url(groups: ['caseStudy'])]
     private ?string $casestudy = null;
 
     /**
@@ -55,7 +94,12 @@ class Project
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'project')]
     private Collection $tags;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique:true)]
+
+    #[Assert\Type(
+        'string',
+        groups: ['generalProject']
+    )]
     private ?string $slug = null;
 
     public function __construct()

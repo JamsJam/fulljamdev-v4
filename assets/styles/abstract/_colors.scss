@@ -39,11 +39,18 @@ $bg-linear : linear-gradient(
 //? ========= admin Colors
 
 //* === nuance
+// $admin-nuance-b-30 : $bg-linear ;
+// $admin-nuance-b-20 : $bg-linear ;
+// $admin-nuance-b-15 : $bg-linear ;
+
+
+// $admin-nuance-w-100 : $bg-linear ;
 $admin-nuance-b-30: hsl(0, 0%, 30%);
 $admin-nuance-b-20: hsl(0, 0%, 20%);
 $admin-nuance-b-15: hsl(0, 0%, 15%);
 
 
 $admin-nuance-w-100: hsl(0, 0%, 100%);
+$admin-nuance-w-87: hsl(0, 0%, 87%);
 
 

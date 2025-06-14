@@ -1,0 +1,9 @@
+@use "./../abstract/" as *;
+
+body.admin main{
+
+    height: 100dvh;
+    background-color: $admin-nuance-b-30;
+
+    padding: 4rem;
+}

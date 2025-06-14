@@ -1,16 +1,17 @@
 //? ========= Font....
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 //? ========= Font....
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('../../fonts/Arkhip/Arkhip-Regular.ttf') format('truetype');
+  font-family: 'Arkhip';
+  src: url('/portfoliov4/assets/fonts/Arkhip/Arkhip-Regular.ttf') format('truetype');
   font-weight: normal ;
   font-style: normal;
 }
 @font-face {
   font-family: 'Nunito';
-  src: url('../../fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+  src: url('/portfoliov4/assets/fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900 ;
   font-style: normal;
 }
@@ -19,7 +20,8 @@
 //? ====== familly
 $font-title: "Arkhip", sans-serif;
 $font-text: "Nunito", sans-serif;
-$admin-font: "Monserrat", serif;
+$admin-font: "Montserrat", sans-serif;
+
 //? ====== size
 $fs-0-00: 0rem;       // 0px
 $fs-0-13: 0.125rem;   // 2px

@@ -3,8 +3,8 @@
 //* =====================
 
 @each $direction in row, column {
-  @each $justify in flex-start, center, flex-end, space-between, space-around, space-evenly {
-    @each $align in flex-start, center, stretch {
+  @each $justify in start, center, flex-end, space-between, space-around, space-evenly {
+    @each $align in start, center, stretch {
       %flex-#{$direction}-#{$justify}-#{$align} {
         display: -webkit-flex;
         flex-direction: -webkit-#{$direction};

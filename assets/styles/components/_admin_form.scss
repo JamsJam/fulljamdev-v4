@@ -1,0 +1,27 @@
+@use "../abstract/" as *;
+
+input,textarea{
+    
+    width: 100%;
+    font-size: 1.5rem;
+}
+
+input[type="text"],textarea{
+    border-radius: 0.5rem;
+    padding:  1rem ;
+    outline: none;
+    border: none;
+    font-family: $admin-font;
+    color: $admin-nuance-b-15;
+}
+
+
+label{
+    font-weight: 500;
+    
+}
+
+.form_wrapper{
+    @extend %flex-column-center-start;
+    gap: 1rem;
+}

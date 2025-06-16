@@ -1,6 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin-base.html.twig' %}
 
-{% block title %}New Project{% endblock %}
+{% block title %}Project index{% endblock %}
 
 {% block body %}
     {# <h1>Create new Project</h1>
@@ -10,11 +10,11 @@
     <a href="{{ path('app_admin_project_index') }}">back to list</a> #}
 
 
-    {% extends 'admin-base.html.twig' %}
+    {# {% extends 'admin-base.html.twig' %} #}
 
-{% block title %}Project index{% endblock %}
 
-{% block body %}
+
+
 
 {#todo create a dash header component that get path as argument and get the breadscrum and title in yaml route index files  #}
         <div class="header">
@@ -36,41 +36,21 @@
         
             <header>
                 <turbo-frame id="projects-actions">
-                    <div class="project__actions">
-                        <a href=""></a>
-                        <a href="{{ path('app_admin_project_new') }}">Ajouter</a> 
-                    </div>
+                    {# <div class="project__actions"> #}
+                        {# <a href=""></a> #}
+                        <a href="{{ path('app_admin_project_index') }}" data-turbo-frame="projects-frame"
+                        data-turbo-action="replace" class="button__action">Retour</a> 
+                    {# </div> #}
                 </turbo-frame>
-                <form class="search" method="get" action="{{ path(app.request.attributes.get('_route')) }}" role="search" data-turbo-frame="projects-results">
-                    <input type="text" name="q" placeholder="Rechercher…" value="{{ app.request.query.get('q') }}">
-                    <button type="submit">Chercher</button>
-                </form> 
+                
             </header>
 
-            <turbo-frame id="projects-results">
-                <ul class="projets__grid">
-                    {# {% for article in articles %}
-                        <li class="projets__cell">
-                            <article class="article">
-                                <div class="article__visualbox">
-                                    <img class="article__image" src="{{ article.imageUrl }}" alt="{{ article.title }}">
-                                </div>
-                                <h2 class="article__titre">{{ article.title }}</h2>
-                                <div class="article__actions">
-                                    <ul>
-                                        <li>Voir</li>
-                                        <li>Modifier</li>
-                                        <li>Supprimer</li>
-                                    </ul>
-                                </div>
-                            </article>
-                        </li>
-                    {% else %}
-                        <li>
-                            <p>Aucun résultat trouvé.</p>
-                        </li>
-                    {% endfor %} #}
-                </ul>
+            <turbo-frame id="projects-form">
+                <h2>
+                    Ajouter un projet
+
+                </h2>
+                {{ include('admin/project/_form.html.twig') }}
 
 
 
@@ -93,6 +73,6 @@
             </turbo-frame>
         </section>
     </turbo-frame>
-{% endblock %}
+
 
 {% endblock %}

@@ -23,17 +23,23 @@
         <section class="project">
         
             <header>
+            
                 <turbo-frame id="projects-actions">
-                    <div class="project__actions">
-                        <a href=""></a>
-                        <a href="{{ path('app_admin_project_new') }}">Ajouter</a> 
-                    </div>
+                    {# <div class="project__actions"> #}
+                        <a class="button__action" href=""></a>
+                        <a class="button__action" href="{{ path('app_admin_project_new') }}" data-turbo-frame="projects-frame"
+                        data-turbo-action="replace"
+                        >Ajouter</a> 
+                    {# </div> #}
                 </turbo-frame>
+
                 <form class="search" method="get" action="{{ path(app.request.attributes.get('_route')) }}" role="search" data-turbo-frame="projects-results">
                     <input type="text" name="q" placeholder="Rechercher…" value="{{ app.request.query.get('q') }}">
                     <button type="submit">Chercher</button>
                 </form> 
             </header>
+
+
 
             <turbo-frame id="projects-results">
                 <ul class="projets__grid">

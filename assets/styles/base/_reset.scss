@@ -37,10 +37,11 @@ body{
       grid-template-columns: 300px 1fr;
       background-color: $admin-nuance-b-30;
 
-      & h1,& h2,& h3,& h4,& h5,& h6,& p,& a,& span,& strong {
+      & h1,& h2,& h3,& h4,& h5,& h6,& p,& a,& span,& strong, label {
         font-family: $admin-font;
         color: $admin-nuance-w-100;
       }
+
 
 
     }

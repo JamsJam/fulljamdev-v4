@@ -36,7 +36,7 @@ class Project
     )]
     #[Assert\Length(
         min: 3,
-        message:'Le titre doit contenir au moins {{ limit }} caractères.',
+        minMessage:'Le titre doit contenir au moins {{ limit }} caractères.',
         groups: ['generalProject']
     )]
     private ?string $title = null;
@@ -49,7 +49,7 @@ class Project
     )]
     #[Assert\Length(
         min: 50,
-        message:'La description doit contenir au moins {{ limit }} caractères.',
+        minMessage:'La description doit contenir au moins {{ limit }} caractères.',
         groups: ['generalProject']
     )]
     private ?string $description = null;

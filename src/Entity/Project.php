@@ -53,13 +53,6 @@ class Project
         groups: ['generalProject']
     )]
     private ?string $description = null;
-
-    #[ORM\Column(nullable: true)]
-    #[Assert\Type('array', groups: ['generalProject'])]
-    #[Assert\All(
-        new Assert\Type('string')
-    )]
-    private ?array $technologies = null;
     
     #[ORM\Column(nullable: true)]
     #[Assert\Type('array', groups: ['generalProject'])]
@@ -102,9 +95,16 @@ class Project
     )]
     private ?string $slug = null;
 
+    /**
+     * @var Collection<int, Technology>
+     */
+    #[ORM\ManyToMany(targetEntity: Technology::class, inversedBy: 'projects')]
+    private Collection $technology;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->technology = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,18 +156,6 @@ class Project
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getTechnologies(): ?array
-    {
-        return $this->technologies;
-    }
-
-    public function setTechnologies(?array $technologies): static
-    {
-        $this->technologies = $technologies;
 
         return $this;
     }
@@ -279,6 +267,30 @@ class Project
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Technology>
+     */
+    public function getTechnology(): Collection
+    {
+        return $this->technology;
+    }
+
+    public function addTechnology(Technology $technology): static
+    {
+        if (!$this->technology->contains($technology)) {
+            $this->technology->add($technology);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnology(Technology $technology): static
+    {
+        $this->technology->removeElement($technology);
 
         return $this;
     }

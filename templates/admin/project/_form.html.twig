@@ -1,47 +1,106 @@
 {{ form_start(form) }}
-    <input type="hidden" name="step" value="{{step + 1}}">
-    {# <input type"hidden" name="crsf" value="{{csrf_token()}}"- #}
-    {% if step == 1 %}
-    
-        {{form_row(form.title)}}
-        {{form_row(form.description)}}
-        {# {{form_row(form.teschnologies)}} #}
-        {# {{form_row(form.image)}} #}
-        {{form_row(form.isOnline)}}
-        {{form_row(form.isGitpublic)}}
-        {{form_row(form.gitlink)}}
-        {{form_row(form.projectlink)}}
-        {# {{form_row(form.tags)}} #}
-    {% endif %}
+<input
+type="hidden" name="step" value="{{step + 1}}">
+{# <input type"hidden" name="crsf" value="{{csrf_token()}}"- #}
+{% if step == 1 %}
 
-    {% if step == 2 %}
-    
-        {{form_row(form.casestudy)}}
+	{{form_row(form.title)}}
+	{{form_row(form.description)}}
 
-    
-    {% endif %}
+	<div class="dropzone" data-controller='dropzone' ,>
+		{{form_label(form.Images)}}
+		<div class="dropzone-container">
+			<p {{stimulus_target('dropzone','placeholder')}} class="dropzone-placeholder">
+				<span>Parcourir</span>
+				ou déposer vos fichier
+			</p>
 
-    {% if step == 3 %}
-        {{form_row(form.metaDescription)}}
-        {{form_row(form.opengraph)}}
-        {# {{form_row(form.)}}
-        {{form_row(form.)}} #}
-    
-    
-    {% endif %}
-    
-    {# {{ form_widget(form) }} #}
-    {% if step > 1 %}
-        <a class="button__componnent" href="">Précédent</a>
-    {% endif %}
+			{{form_widget(form.Images)}}
 
-    {% if step < 3 %}
-        <button class="button__componnent">{{ button_label|default('Suivant') }}</button>
-    {% endif %}
+			<div class="dropzone-preview hide" {{stimulus_target('dropzone','previewContainer')}}></div>
+		</div>
+		<div class='dropzone-helper'>
+			<span {{stimulus_target('dropzone','count')}}>0 fichier</span>
+			<button type="button" class="button__action" {{stimulus_action('dropzone','onClear', "click")}}>Vider</button>
+		</div>
+	</div>
 
-    
-    {% if step == 3 %}
-        <button class="button__componnent">{{ button_label|default('Enregistrer') }}</button>
-    {% endif %}
-    
+
+	{#? ===== Image form collection  #}
+
+	<div class="form_splitview">
+
+		<h3>Le projet est disponible...</h3>
+
+		<div class="form_splitview__container">
+			{{form_row(form.isOnline)}}
+			{{form_row(form.isGitpublic)}}
+		</div>
+	</div>
+
+
+
+	{#? ===== technologie form collection  #}
+
+	<div class="form_collection">
+		<h3>Technologies</h3>
+
+		<div {{ stimulus_controller('form-collection') }} data-form-collection-index-value="{{ form.technology|length > 0 ? form.technology|last.vars.name + 1 : 0 }}" data-form-collection-prototype-value="{{ form_row(form.technology.vars.prototype)|e('html_attr') }}" class="form_collection__container">
+
+			<button class="button__action" type="button" {{ stimulus_action('form-collection', 'addCollectionElement') }}>Ajouter une technologie</button>
+
+			<ul {{ stimulus_target('form-collection', 'collectionContainer') }} class="form_collection__list"></ul>
+
+		</div>
+	</div>
+
+	{#?==== tag collection #}
+	<div class="form_collection">
+		<h3>Tags</h3>
+
+		<div {{ stimulus_controller('form-collection') }} data-form-collection-index-value="{{ form.tags|length > 0 ? form.tags|last.vars.name + 1 : 0 }}" data-form-collection-prototype-value="{{ form_row(form.tags.vars.prototype)|e('html_attr') }}" class="form_collection__container">
+
+			<button class="button__action" type="button" {{ stimulus_action('form-collection', 'addCollectionElement') }}>Ajouter un tag</button>
+
+			<ul {{ stimulus_target('form-collection', 'collectionContainer') }} class="form_collection__list"></ul>
+
+		</div>
+	</div>
+
+{% endif %}
+
+{% if step == 2 %}
+
+	{{form_row(form.casestudy)}}
+
+
+{% endif %}
+
+{% if step == 3 %}
+	{{form_row(form.metaDescription)}}
+	{{form_row(form.opengraph)}}
+	{# {{form_row(form.)}}
+	        {{form_row(form.)}} #}
+
+
+{% endif %}
+<div class="form_button___container">
+
+
+	{% if step > 1 %}
+		<a class="button__componnent" href="">Précédent</a>
+	{% endif %}
+
+	{% if step < 3 %}
+		<button class="button__componnent">{{ button_label|default('Suivant') }}</button>
+	{% endif %}
+
+
+	{% if step == 3 %}
+		<button class="button__componnent">{{ button_label|default('Enregistrer') }}</button>
+	{% endif %}
+</div>
 {{ form_end(form) }}
+
+
+git add migrations/Version20250616201603.php migrations/Version20250616203247.php src/Entity/Technology.php src/Form/ src/Repository/TechnologyRepository.php assets/controllers/form_collection_controller.js src/Entity/Project.php templates/admin/project/_form.html.twig

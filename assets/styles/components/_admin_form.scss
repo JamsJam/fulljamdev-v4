@@ -8,7 +8,7 @@ input,textarea{
 
 input[type="text"],textarea{
     border-radius: 0.5rem;
-    padding:  1rem ;
+    padding: 0.5rem 1rem ;
     outline: none;
     border: none;
     font-family: $admin-font;
@@ -24,4 +24,63 @@ label{
 .form_wrapper{
     @extend %flex-column-center-start;
     gap: 1rem;
+}
+
+.form_button___container{
+    @extend %flex-row-center-center;
+    
+}
+
+.form_collection{
+
+    @extend %flex-column-start-start;
+    gap: 1rem;
+
+    &__container{
+        @extend %flex-column-start-start;
+        align-self: stretch;
+        gap:1rem;
+        padding: 2rem;
+        border: dashed $admin-nuance-w-87 2px;
+        border-radius: 0.5rem;
+    }
+
+    &__list{
+
+        @extend %flex-column-start-stretch;
+        gap: 1rem;
+        align-self: stretch;
+        
+        
+        li{
+            list-style: none;
+        }
+        
+        input[type="text"],textarea{
+            border-radius: 0.5rem;
+            outline: none;
+            border: none;
+            font-family: $admin-font;
+            font-size: 1rem;
+            color: $admin-nuance-b-15;
+        }
+    }
+
+
+}
+
+.form_splitview{
+    @extend %flex-column-start-start;
+    flex-wrap: wrap;
+    gap:1rem;
+    
+    &__container{
+        @extend %flex-row-space-around-center;
+        align-self: stretch;
+        gap:1rem;
+        padding: 2rem;
+        border: dashed $admin-nuance-w-87 2px;
+        border-radius: 0.5rem;
+    }
+    
 }

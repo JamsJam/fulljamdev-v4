@@ -8,6 +8,7 @@ use App\Form\TaginProjectForm;
 use App\Repository\ProjectRepository;
 use App\Form\TechnologiesInProjectForm;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\TechnologyAutocompleteField;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -72,12 +73,13 @@ final class ProjectController extends AbstractController
                         'data-suneditor-target' => 'sample',
                         // "id" => "editContainer"
                     ],
-                    
+
                 ])
                 ->add('technology', CollectionType::class, [
                     'entry_type' => TechnologiesInProjectForm::class,
                     'entry_options' => [
-                        "label" => false
+                        "label" => false,
+                        
                     ],
                     'label' => false,
                     'allow_add' => true,

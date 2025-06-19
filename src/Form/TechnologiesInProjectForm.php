@@ -17,6 +17,14 @@ class TechnologiesInProjectForm extends AbstractType
         $builder
             ->add('name',TextType::class,[
                 "label" => false,
+                'row_attr' =>[
+
+                    "data-controller" => "autocomplete"
+                ],
+                'attr' =>[
+
+                    "data-autocomplete-target" => "input"
+                ]
             ])
             // ->add('projects', EntityType::class, [
             //     'class' => Project::class,

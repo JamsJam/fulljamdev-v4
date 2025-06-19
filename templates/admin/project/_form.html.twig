@@ -92,15 +92,14 @@ type="hidden" name="step" value="{{step + 1}}">
 	{% endif %}
 
 	{% if step < 3 %}
-		<button class="button__componnent">{{ button_label|default('Suivant') }}</button>
+		<button type="submit" class="button__componnent">{{ button_label|default('Suivant') }}</button>
 	{% endif %}
 
 
 	{% if step == 3 %}
-		<button class="button__componnent">{{ button_label|default('Enregistrer') }}</button>
+		<button type="submit" class="button__componnent">{{ button_label|default('Enregistrer') }}</button>
 	{% endif %}
 </div>
 {{ form_end(form) }}
 
 
-git add migrations/Version20250616201603.php migrations/Version20250616203247.php src/Entity/Technology.php src/Form/ src/Repository/TechnologyRepository.php assets/controllers/form_collection_controller.js src/Entity/Project.php templates/admin/project/_form.html.twig

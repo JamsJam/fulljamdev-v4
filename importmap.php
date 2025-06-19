@@ -36,4 +36,17 @@ return [
     'suneditor' => [
         'version' => '2.47.5',
     ],
+    'suneditor/dist/css/suneditor.min.css' => [
+        'version' => '2.47.5',
+        'type' => 'css',
+    ],
+    'suneditor/src/plugins' => [
+        'version' => '2.47.5',
+    ],
+    'suneditor/src/lang' => [
+        'version' => '2.47.5',
+    ],
+    'suneditor/src/lang/fr' => [
+        'version' => '2.47.5',
+    ],
 ];

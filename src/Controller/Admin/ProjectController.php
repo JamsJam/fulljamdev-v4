@@ -8,7 +8,6 @@ use App\Form\TaginProjectForm;
 use App\Repository\ProjectRepository;
 use App\Form\TechnologiesInProjectForm;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\UX\Dropzone\Form\DropzoneType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -49,26 +48,31 @@ final class ProjectController extends AbstractController
 
         //? ==== Create form
 
-        $project = $project ?? new Project();
+        // $project = $project ?? new Project();
 
         if ($step === 1) {
-            $form = $this->createFormBuilder($project, [
-                'validation_groups' => $validatedRule[$step - 1]
+            $form = $this->createFormBuilder(null, [
+                // 'validation_groups' => $validatedRule[$step - 1],
+                "allow_extra_fields" => true
             ])
 
                 ->add('title', TextType::class, [
+
                     "row_attr" => [
                         "class" => "form_wrapper"
                     ]
                 ])
                 ->add('description', TextareaType::class, [
+                    "required" => false,
                     "row_attr" => [
                         "class" => "form_wrapper",
                         'data-controller' => 'suneditor',
                     ],
                     "attr" => [
-                        "id" => "editContainer"
+                        'data-suneditor-target' => 'sample',
+                        // "id" => "editContainer"
                     ],
+                    
                 ])
                 ->add('technology', CollectionType::class, [
                     'entry_type' => TechnologiesInProjectForm::class,
@@ -136,8 +140,8 @@ final class ProjectController extends AbstractController
             // $form->handleRequest($request);
         } elseif ($step === 2) {
 
-            $form = $this->createFormBuilder($project, [
-                'validation_groups' => $validatedRule[$step - 1]
+            $form = $this->createFormBuilder(null, [
+                // 'validation_groups' => $validatedRule[$step - 1]
             ])
                 ->add('casestudy', TextareaType::class, [
                     "row_attr" => [
@@ -147,8 +151,8 @@ final class ProjectController extends AbstractController
                 ->getForm();
             // $form->handleRequest($request);
         } elseif ($step === 3) {
-            $form = $this->createFormBuilder($project, [
-                'validation_groups' => $validatedRule[$step - 1]
+            $form = $this->createFormBuilder(null, [
+                // 'validation_groups' => $validatedRule[$step - 1]
             ])
                 ->add("metaDescription", TextareaType::class, [
                     "mapped" => false,
@@ -172,7 +176,8 @@ final class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $project = $form->getData();
+            dd($project);
             if ($step === 1) {
 
                 // register data in session
@@ -215,7 +220,7 @@ final class ProjectController extends AbstractController
         }
 
         return $this->render('admin/project/new.html.twig', [
-            'project' => $project,
+            // 'project' => $project,
             'form' => $form,
             'step' => $step
         ]);
@@ -232,7 +237,7 @@ final class ProjectController extends AbstractController
     #[Route('/{id}/edit', name: 'app_admin_project_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createFormBuilder($project)
+        $form = $this->createFormBuilder(null)
             //? implement form
             ->getForm();
         $form->handleRequest($request);

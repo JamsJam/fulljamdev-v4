@@ -9,7 +9,11 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
 
 
-    static targets = ["collectionContainer"]
+    static targets = [
+        "collectionContainer"
+
+    ]
+
 
     static values = {
         index    : Number,
@@ -22,6 +26,25 @@ export default class extends Controller {
         item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
         this.collectionContainerTarget.appendChild(item);
         this.indexValue++;
+        this.addTagFormDeleteLink(item)
     }
+
+    addTagFormDeleteLink(item) {
+        const removeFormButton = document.createElement('button');
+        removeFormButton.innerText = 'Supprimer';
+        removeFormButton.classList.add('button__action', 'action--delete') ;
+
+        item.append(removeFormButton);
+
+        removeFormButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // remove the li for the tag form
+            item.remove();
+        });
+
+
+}
+
+
 }
 

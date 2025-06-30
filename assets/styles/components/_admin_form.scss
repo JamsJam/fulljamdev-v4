@@ -54,6 +54,40 @@ label{
         
         li{
             list-style: none;
+
+
+            .autocomplete{
+                position:relative;
+
+                &__container{
+
+                    position: absolute;
+                    left: 0;
+                    // bottom: -100%;
+                    width: 100%;
+                    // height: 100%; */
+                    background-color: $admin-nuance-b-20;
+                    border-radius: 10px;
+                    z-index: 1;
+
+                }
+
+                &__option{
+                    list-style: none;
+                    width: 100%;
+                    padding-block: 1rem ;
+                    padding-inline-start: 0.5rem;
+                    padding-inline: 0.5rem ;
+                    background-color: transparent;
+                    color: $admin-nuance-w-100;
+                    font-family: $admin-font;
+
+
+                    &:hover{
+                        background-color: $admin-nuance-b-15;
+                    }
+                }
+            }
         }
         
         input[type="text"],textarea{
@@ -64,8 +98,17 @@ label{
             font-size: 1rem;
             color: $admin-nuance-b-15;
         }
+
+
     }
 
+    .button__delete{
+        margin-block: 0.25rem;
+        float: inline-end;
+        color: black;
+        background-color: orangered;
+        
+    }
 
 }
 

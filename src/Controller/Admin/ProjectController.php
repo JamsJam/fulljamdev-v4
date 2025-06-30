@@ -4,14 +4,15 @@ namespace App\Controller\Admin;
 
 
 use App\Entity\Project;
-use App\Form\TaginProjectForm;
+use App\Form\TagInProjectForm;
 use App\Repository\ProjectRepository;
 use App\Form\TechnologiesInProjectForm;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\TechnologyAutocompleteField;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -58,10 +59,22 @@ final class ProjectController extends AbstractController
             ])
 
                 ->add('title', TextType::class, [
-
+                    'label' => 'Titre du projet',
+                    "required" => false,
                     "row_attr" => [
                         "class" => "form_wrapper"
-                    ]
+                    ],
+                    'constraints' => [
+                        new Length(
+                            min: 3,
+                            minMessage: 'Entrer un titre d\'au moins 3 characteres',
+                            max: 100,
+                            maxMessage: 'Veuillez ne pas dépasser 100 characteres'
+                        ),
+                        new NotBlank(
+                            message: 'Veuillez renseigner le titre du projet'
+                        )
+                    ],
                 ])
                 ->add('description', TextareaType::class, [
                     "required" => false,
@@ -73,16 +86,29 @@ final class ProjectController extends AbstractController
                         'data-suneditor-target' => 'sample',
                         // "id" => "editContainer"
                     ],
+                    'constraints' => [
+                        new Length(
+                            min: 100,
+                            minMessage: 'Entrer une description d\'au moins 100 characteres',
+                            // max: 1000,
+                            // maxMessage: 'Veuillez ne pas dépasser 1000 characteres'
+                        ),
+                        new NotBlank(
+                            message: 'Veuillez renseigner la description du projet'
+                        ),
+                        
+                    ],
 
                 ])
                 ->add('technology', CollectionType::class, [
                     'entry_type' => TechnologiesInProjectForm::class,
                     'entry_options' => [
                         "label" => false,
-                        
                     ],
                     'label' => false,
                     'allow_add' => true,
+                    'allow_delete' => true,
+                    'required' => false
                 ])
                 ->add('Images', FileType::class, [
                     "multiple" => true,
@@ -92,8 +118,6 @@ final class ProjectController extends AbstractController
                     ],
 
                     'attr' => [
-
-
                         'class' => 'dropzone-input',
                         'data-dropzone-target' => 'input',
                         'data-action' => 'change->dropzone#onFileInputChange',
@@ -110,6 +134,7 @@ final class ProjectController extends AbstractController
                     ],
                     'label' => false,
                     'allow_add' => true,
+                    'allow_delete' => true,
                 ])
                 //  ->add('technologies',CollectionType::class,[])
                 //  ->add('images',CollectionType::class)
@@ -117,24 +142,26 @@ final class ProjectController extends AbstractController
                     "label" => "...en ligne ?",
                     "row_attr" => [
                         "class" => "form_wrapper"
-                    ]
+                    ],
+                    'required' => false
                 ])
-                ->add('projectlink', UrlType::class, [
-                    "row_attr" => [
-                        "class" => "form_wrapper"
-                    ]
-                ])
+                // ->add('projectlink', UrlType::class, [
+                //     "row_attr" => [
+                //         "class" => "form_wrapper"
+                //     ]
+                // ])
                 ->add('isGitpublic', CheckboxType::class, [
                     "label" => "...sur Github ?",
                     "row_attr" => [
                         "class" => "form_wrapper"
-                    ]
+                    ],
+                    'required' => false
                 ])
-                ->add('gitlink', UrlType::class, [
-                    "row_attr" => [
-                        "class" => "form_wrapper"
-                    ]
-                ])
+                // ->add('gitlink', UrlType::class, [
+                //     "row_attr" => [
+                //         "class" => "form_wrapper"
+                //     ]
+                // ])
 
                 ->getForm();
 
@@ -176,18 +203,20 @@ final class ProjectController extends AbstractController
 
 
         $form->handleRequest($request);
-
+        
+        // dd($form->getData());
         if ($form->isSubmitted() && $form->isValid()) {
             $project = $form->getData();
-            dd($project);
+            // dd($project);
             if ($step === 1) {
 
                 // register data in session
-                $session->set("generalData", $project || null);
+                $session->set("generalData", $project);
 
+                $step++;
                 // render form new
                 return $this->redirectToRoute('app_admin_project_new', [
-                    'step' => $step++,
+                    'step' => $step,
                 ]);
             }
             if ($step === 2) {

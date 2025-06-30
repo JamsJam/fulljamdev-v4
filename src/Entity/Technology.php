@@ -2,11 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\TechnologyRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use App\Repository\TechnologyRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource(
+    operations:[
+
+        new GetCollection(
+            normalizationContext: ['groups' => ['technologie:collection']],
+            )
+    ]
+)]
 #[ORM\Entity(repositoryClass: TechnologyRepository::class)]
 class Technology
 {
@@ -15,6 +26,7 @@ class Technology
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['technologie:collection'])]
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 

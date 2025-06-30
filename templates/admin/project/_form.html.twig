@@ -1,32 +1,12 @@
 {{ form_start(form) }}
 <input
-type="hidden" name="step" value="{{step + 1}}">
+type="hidden" name="step" value="{{step}}">
 {# <input type"hidden" name="crsf" value="{{csrf_token()}}"- #}
 {% if step == 1 %}
 
 	{{form_row(form.title)}}
 	{{form_row(form.description)}}
 
-	<div class="dropzone" data-controller='dropzone' ,>
-		{{form_label(form.Images)}}
-		<div class="dropzone-container">
-			<p {{stimulus_target('dropzone','placeholder')}} class="dropzone-placeholder">
-				<span>Parcourir</span>
-				ou déposer vos fichier
-			</p>
-
-			{{form_widget(form.Images)}}
-
-			<div class="dropzone-preview hide" {{stimulus_target('dropzone','previewContainer')}}></div>
-		</div>
-		<div class='dropzone-helper'>
-			<span {{stimulus_target('dropzone','count')}}>0 fichier</span>
-			<button type="button" class="button__action" {{stimulus_action('dropzone','onClear', "click")}}>Vider</button>
-		</div>
-	</div>
-
-
-	{#? ===== Image form collection  #}
 
 	<div class="form_splitview">
 
@@ -37,8 +17,6 @@ type="hidden" name="step" value="{{step + 1}}">
 			{{form_row(form.isGitpublic)}}
 		</div>
 	</div>
-
-
 
 	{#? ===== technologie form collection  #}
 
@@ -67,6 +45,27 @@ type="hidden" name="step" value="{{step + 1}}">
 		</div>
 	</div>
 
+
+
+	{#? ===== Image form collection  #}
+	<div class="dropzone" data-controller='dropzone' ,>
+		{{form_label(form.Images)}}
+		<div class="dropzone-container">
+			<p {{stimulus_target('dropzone','placeholder')}} class="dropzone-placeholder">
+				<span>Parcourir</span>
+				ou déposer vos fichier
+			</p>
+
+			{{form_widget(form.Images)}}
+
+			<div class="dropzone-preview hide" {{stimulus_target('dropzone','previewContainer')}}></div>
+		</div>
+		<div class='dropzone-helper'>
+			<span {{stimulus_target('dropzone','count')}}>0 fichier</span>
+			<button type="button" class="button__action" {{stimulus_action('dropzone','onClear', "click")}}>Vider</button>
+		</div>
+	</div>
+
 {% endif %}
 
 {% if step == 2 %}
@@ -80,7 +79,7 @@ type="hidden" name="step" value="{{step + 1}}">
 	{{form_row(form.metaDescription)}}
 	{{form_row(form.opengraph)}}
 	{# {{form_row(form.)}}
-	        {{form_row(form.)}} #}
+		        {{form_row(form.)}} #}
 
 
 {% endif %}
@@ -101,5 +100,3 @@ type="hidden" name="step" value="{{step + 1}}">
 	{% endif %}
 </div>
 {{ form_end(form) }}
-
-

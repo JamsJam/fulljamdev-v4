@@ -17,10 +17,15 @@ class TagInProjectForm extends AbstractType
             ->add('name',TextType::class,[
                 "label" => false,
                 'row_attr' =>[
-                    "data-controller" => "autocomplete"
+                    "data-controller" => "autocomplete",
+                    "data-autocomplete-target" => "container",
+                    "data-autocomplete-url-provider-value"=>"/api/tags",
+                    "data-autocomplete-property-name-value"=>"name",
+                    'class' => 'autocomplete'
                 ],
                 'attr' =>[
-                    "data-autocomplete-target" => "input"
+                    "data-autocomplete-target" => "input",
+                    'data-action' => "focus->autocomplete#displayOnFocus input->autocomplete#searchOnChange "
                 ]
 
             ])

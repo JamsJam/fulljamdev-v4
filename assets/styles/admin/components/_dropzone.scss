@@ -1,0 +1,90 @@
+@use "../../abstract/" as *;
+
+.dropzoneWithPreview {
+
+    // @extend %flex-row-space-around-center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 2rem;
+    height: 15rem;
+
+    .dropzone {
+
+        &__container {
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            border: dashed 2px;
+            border-radius: 1rem;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            transition: background-color 500ms ease-in-out;
+
+            &--drophover {
+                // background-color: #ffffff20;
+            }
+
+            input[type='file'] {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                opacity: 0;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .preview {
+        &__container {
+            // display: none;
+            border: dashed 2px;
+            border-radius: 1rem;
+            height: 100%;
+            width: 100%;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+            }
+        }
+    }
+
+    @each $theme, $color in $themes {
+        .dropzone {
+
+            &__container--#{$theme} {
+                border-color: map-get($color, border);
+                background-color: map-get($color, bg);
+
+                &:hover {
+                    background-color: map-get($color, bg-light);
+
+                }
+            }
+
+            &__container--drophover--#{$theme} {
+                background-color: map-get($color, bg-light);
+            }
+
+
+            &__placeholder--#{$theme} {
+
+                color: map-get($color, text-muted);
+
+
+            }
+        }
+    }
+}

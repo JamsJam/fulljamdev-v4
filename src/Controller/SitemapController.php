@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class SitemapController extends AbstractController
 {
@@ -14,21 +14,20 @@ final class SitemapController extends AbstractController
     {
         $paths = [
             'app_home',
-            
         ];
         // find published blog posts from db
-        
+
         $today = new \DateTimeImmutable();
 
         $urls = [];
-                foreach ($paths as $path) {
+        foreach ($paths as $path) {
             $urls[] = [
                 'loc' => $this->generateUrl(
                     $path,
                     [],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 ),
-                'lastmod' => "2025-08-19",
+                'lastmod' => '2025-08-19',
                 'changefreq' => 'monthly',
                 'priority' => '1.0',
             ];

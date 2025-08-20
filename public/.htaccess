@@ -92,12 +92,16 @@ DirectoryIndex index.php
 
 
 
+
+
   <FilesMatch "\.gz$">
     AddEncoding gzip .gz
     AddType application/javascript .js.gz
     AddType text/css .css.gz
   </FilesMatch>
 
+
 # </IfModule>
+
 
 

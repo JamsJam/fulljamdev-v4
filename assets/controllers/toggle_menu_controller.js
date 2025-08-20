@@ -7,7 +7,7 @@ import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['toggleButton']
+    static targets = ['toggleButton'];
 
     initialize() {
         // Called once when the controller is first instantiated (per element)
@@ -39,6 +39,6 @@ export default class extends Controller {
     }
 
     toggle(){
-        this.element.classList.toggle('open')
+        this.element.classList.toggle('open');
     }
 }

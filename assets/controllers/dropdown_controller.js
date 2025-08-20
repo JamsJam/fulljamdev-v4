@@ -7,12 +7,12 @@ import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['container', 'toggleler']
+    static targets = ['container', 'toggleler'];
     static values = {
         isOpen: {
             type:Boolean, default: false
         },
-    }
+    };
 
     initialize() {
         // Called once when the controller is first instantiated (per element)
@@ -29,8 +29,8 @@ export default class extends Controller {
         // Here you can add event listeners on the element or target elements,
         // add or remove classes, attributes, dispatch custom events, etc.
         // this.fooTarget.addEventListener('click', this._fooBar)
-        document.addEventListener('click',(e) => this.closeDropDown(e))
-        this.togglelerTarget.addEventListener('click',(e)=>this.toggleDropDown(e))
+        document.addEventListener('click',(e) => this.closeDropDown(e));
+        this.togglelerTarget.addEventListener('click',(e)=>this.toggleDropDown(e));
     }
 
     // Add custom controller actions here
@@ -47,18 +47,18 @@ export default class extends Controller {
 
     toggleDropDown(e){
         
-            e.stopPropagation()
-            if(!this.isOpenValue){
+        e.stopPropagation();
+        if(!this.isOpenValue){
 
-                const allDrop = document.querySelectorAll('ul.actionDropdown')
-                allDrop.forEach(element=>element.classList.remove("open"))
+            const allDrop = document.querySelectorAll('ul.actionDropdown');
+            allDrop.forEach(element=>element.classList.remove('open'));
 
-                this.isOpenValue = true;
-                this.containerTarget.classList.add("open");
-            }else{
-                this.closeDropDown(e)
+            this.isOpenValue = true;
+            this.containerTarget.classList.add('open');
+        }else{
+            this.closeDropDown(e);
 
-            }
+        }
         // }
     }
 
@@ -67,7 +67,7 @@ export default class extends Controller {
         // e.stopPropagation()
         if(!this.containerTarget.contains(e.target) && this.isOpenValue ){
             this.isOpenValue = false;
-            this.containerTarget.classList.remove("open");
+            this.containerTarget.classList.remove('open');
         } 
     }
 }

@@ -7,20 +7,20 @@ import { Controller } from '@hotwired/stimulus';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['burgerBtn', 'mobileNav', 'closeBtn']
+    static targets = ['burgerBtn', 'mobileNav', 'closeBtn'];
     static values = {
         isOpen: Boolean,
         widthSize: Number,
-    }
+    };
 
     initialize() {
-        this.getInnerWidth()
+        this.getInnerWidth();
     }
 
     connect() {
 
 
-        window.addEventListener("resize",()=>{
+        window.addEventListener('resize',()=>{
             this.getInnerWidth();
 
             if (this.widthSizeValue > 769) {
@@ -28,7 +28,7 @@ export default class extends Controller {
                 this.isOpenValue = false;
             }
 
-        })
+        });
 
     }
 
@@ -45,27 +45,27 @@ export default class extends Controller {
 
     onToggleNav(){
         if (this.widthSizeValue > 769) {
-            return
+            return;
         }else{
-            this.toggleMobileNav()
+            this.toggleMobileNav();
         }
     }
 
     closeMobileNav(){
 
-            this.mobileNavTarget.classList.remove('open')
+        this.mobileNavTarget.classList.remove('open');
         
     }
     
     toggleMobileNav(){
 
-            this.mobileNavTarget.classList.toggle('open')
-            this.isOpenValue = this.mobileNavTarget.classList.contains('open');
+        this.mobileNavTarget.classList.toggle('open');
+        this.isOpenValue = this.mobileNavTarget.classList.contains('open');
 
     }
 
     getInnerWidth(){
-        this.widthSizeValue =  window.innerWidth
+        this.widthSizeValue =  window.innerWidth;
     }
 
 }

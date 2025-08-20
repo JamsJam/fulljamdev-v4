@@ -9,22 +9,22 @@ export default class extends Controller {
     static targets = [
         'description',
         'descriptionFull'
-    ]
+    ];
     static values = {
         numBeforeBeak: {type:Number, default: 40},
-    }
+    };
     initialize(){}
 
     connect(){}
 
     descriptionTargetConnected(element){
-        element.innerText = element.innerText.replaceAll('<div>','')
-        element.innerText = element.innerText.replaceAll('</div>','')
-        element.innerText = element.innerText.replaceAll('&nbsp;','')
+        element.innerText = element.innerText.replaceAll('<div>','');
+        element.innerText = element.innerText.replaceAll('</div>','');
+        element.innerText = element.innerText.replaceAll('&nbsp;','');
         
         if(element.innerText.length > this.numBeforeBeakValue){
 
-            element.innerText =   element.innerText.slice(0, this.numBeforeBeakValue) + '...' 
+            element.innerText =   element.innerText.slice(0, this.numBeforeBeakValue) + '...'; 
         }
         
 
@@ -32,9 +32,9 @@ export default class extends Controller {
     }
 
     descriptionFullTargetConnected(element){
-        element.innerText = element.innerText.replaceAll('<div>','')
-        element.innerText = element.innerText.replaceAll('</div>','')
-        element.innerText = element.innerText.replaceAll('&nbsp;','')
+        element.innerText = element.innerText.replaceAll('<div>','');
+        element.innerText = element.innerText.replaceAll('</div>','');
+        element.innerText = element.innerText.replaceAll('&nbsp;','');
         
 
         

@@ -10,7 +10,7 @@ export default class extends Controller {
 
     static targets = [
         'menu'
-    ]
+    ];
 
     initialize() {
         // Called once when the controller is first instantiated (per element)
@@ -41,20 +41,20 @@ export default class extends Controller {
     }
 
     async switchTheme(){
-        console.log('THEME')
+        console.log('THEME');
         const menu = document.querySelector('.menu');
-        const actualTheme = Array.from(this.menuTarget.classList).some((el => el.endsWith('--dark'))) ? "dark" : "light";
-        const newTheme = actualTheme === "dark" ? "light" : "dark"
+        const actualTheme = Array.from(this.menuTarget.classList).some((el => el.endsWith('--dark'))) ? 'dark' : 'light';
+        const newTheme = actualTheme === 'dark' ? 'light' : 'dark';
         const success = await this.switchThemeConfig(newTheme);
         if (!success) {
-            console.error("Erreur lors de la mise à jour du thème côté serveur");
+            console.error('Erreur lors de la mise à jour du thème côté serveur');
             return;
         }
-        const items = document.querySelectorAll(`[class *="--${actualTheme}"`)
+        const items = document.querySelectorAll(`[class *="--${actualTheme}"`);
         items.forEach(element => {
-            const oldClass = Array.from(element.classList).find((el => el.endsWith(`--${actualTheme}`)))
-            const newClass = oldClass.replace(`--${actualTheme}`,`--${newTheme}`)
-            element.classList.replace(oldClass, newClass)
+            const oldClass = Array.from(element.classList).find((el => el.endsWith(`--${actualTheme}`)));
+            const newClass = oldClass.replace(`--${actualTheme}`,`--${newTheme}`);
+            element.classList.replace(oldClass, newClass);
         });
     }
 
@@ -69,13 +69,13 @@ export default class extends Controller {
                     // Ajouter CSRF token ici si nécessaire
                 },
                 body:JSON.stringify({theme})
-            })
+            });
             if(response.ok){
     
-                return true
+                return true;
             }
         }catch (error) {
-            console.error("Erreur fetch:", error);
+            console.error('Erreur fetch:', error);
             return false;
         }
 

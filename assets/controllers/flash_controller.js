@@ -6,10 +6,10 @@ import { Controller } from '@hotwired/stimulus';
 */
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-    static targets = ['flash']
+    static targets = ['flash'];
     static values = {
         countdown: {type:Number, default: 5000},
-    }
+    };
     
     initialize(){}
 
@@ -18,20 +18,20 @@ export default class extends Controller {
     flashTargetConnected(){
         setTimeout(() => {
             
-            this.flashFadeDown()
+            this.flashFadeDown();
         }, 2000);
         
         
         setTimeout(() => {
-            this.flashContainerHide()
+            this.flashContainerHide();
         }, this.countdownValue);
     }
 
 
     flashFadeDown(){
-        this.flashTarget.classList.add('hide')
+        this.flashTarget.classList.add('hide');
     }
     flashContainerHide(){
-        this.element.style.display = "none"
+        this.element.style.display = 'none';
     }
 }

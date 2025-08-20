@@ -12,7 +12,7 @@ fi
 DATE=$(date +%F)
 
 # Supprimer le préfixe "v" si présent (ex: v1.2.3 → 1.2.3)
-RAW_VERSION=$(echo "$LAST_TAG" | sed 's/^v//')
+RAW_VERSION=$(sed 's/^v//' <<< "$LAST_TAG")
 IFS='.' read -r MAJOR MINOR PATCH <<< "$RAW_VERSION"
 
 # Flags pour déterminer le type de changement
@@ -21,15 +21,27 @@ HAS_FEAT=false
 HAS_FIX=false
 
 # Analyser les types de commit depuis le dernier tag
-git log "$LAST_TAG"..HEAD --pretty=format:"%s%n%b" | while IFS= read -r line; do
-  if echo "$line" | grep -qi "BREAKING CHANGE"; then
+TMP_LOG="full_log.tmp"
+# git log "$LAST_TAG"..HEAD --pretty=format:"%s%n%b" > "$TMP_LOG"
+# git log "$LAST_TAG"..HEAD --pretty=format:"%H %s" | grep "#"
+git log -1 --pretty=format:"%s%n%b" > "$TMP_LOG"
+
+while IFS= read -r line; do
+  echo "$line" | grep -qi "BREAKING CHANGE"
+  if [ $? -eq 0 ]; then
     HAS_BREAKING=true
-  elif echo "$line" | grep -qE '^feat:|^add:'; then
-    HAS_FEAT=true
-  elif echo "$line" | grep -qE '^fix:'; then
-    HAS_FIX=true
+  else
+    echo "$line" | grep -qE '^feat:|^add:'
+    if [ $? -eq 0 ]; then
+      HAS_FEAT=true
+    else
+      echo "$line" | grep -qE '^fix:'
+      if [ $? -eq 0 ]; then
+        HAS_FIX=true
+      fi
+    fi
   fi
-done
+done < "$TMP_LOG"
 
 # Appliquer la logique de versioning sémantique
 if $HAS_BREAKING; then
@@ -43,11 +55,17 @@ elif $HAS_FIX; then
   ((PATCH++))
 else
   echo "ℹ️ Aucun changement significatif détecté. Le changelog ne sera pas mis à jour."
+  rm -f "$TMP_LOG"
   exit 0
 fi
 
 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
 
+if [ "v$NEW_VERSION" == "$LAST_TAG" ]; then
+  echo "La version calculée ($NEW_VERSION) est identique au dernier tag. Aucun nouveau tag ne sera créé."
+else
+  git tag -f "v$NEW_VERSION"
+fi
 
 # Fichiers temporaires
 CHANGELOG_TMP="new_changelog.md"
@@ -58,70 +76,91 @@ FIXED_TMP="fixed.tmp"
 OTHER_TMP="other.tmp"
 
 # Nettoyage fichiers temporaires
-> $CHANGELOG_TMP
-> $BREAKING_TMP
-> $ADDED_TMP
-> $CHANGED_TMP
-> $FIXED_TMP
-> $OTHER_TMP
+> "$CHANGELOG_TMP"
+> "$BREAKING_TMP"
+> "$ADDED_TMP"
+> "$CHANGED_TMP"
+> "$FIXED_TMP"
+> "$OTHER_TMP"
 
-# Extraction des commits depuis le dernier tag
-git log "$LAST_TAG"..HEAD --pretty=format:"%s%n%b" | while IFS= read -r line; do
-  if echo "$line" | grep -qi "BREAKING CHANGE"; then
-    echo "- ❗ ${line}" >> $BREAKING_TMP
-  elif echo "$line" | grep -qE '^feat:|^add:'; then
-    echo "- ${line}" >> $ADDED_TMP
-  elif echo "$line" | grep -qE '^fix:'; then
-    echo "- ${line}" >> $FIXED_TMP
-  elif echo "$line" | grep -qE '^change:|^refactor:|^update:'; then
-    echo "- ${line}" >> $CHANGED_TMP
-  elif [ -n "$line" ]; then
-    echo "- ${line}" >> $OTHER_TMP
+# Traitement des commits
+while IFS= read -r line; do
+  echo "$line" | grep -qi "BREAKING CHANGE"
+  if [ $? -eq 0 ]; then
+    echo "- ❗ ${line}" >> "$BREAKING_TMP"
+    continue
   fi
-done
+
+  echo "$line" | grep -qE '^feat:|^add:'
+  if [ $? -eq 0 ]; then
+    echo "- ${line}" >> "$ADDED_TMP"
+    continue
+  fi
+
+  echo "$line" | grep -qE '^fix:'
+  if [ $? -eq 0 ]; then
+    echo "- ${line}" >> "$FIXED_TMP"
+    continue
+  fi
+
+  echo "$line" | grep -qE '^change:|^refactor:|^update:'
+  if [ $? -eq 0 ]; then
+    echo "- ${line}" >> "$CHANGED_TMP"
+    continue
+  fi
+
+  if [ -n "$line" ]; then
+    echo "- ${line}" >> "$OTHER_TMP"
+  fi
+done < "$TMP_LOG"
 
 # Écriture du header du changelog
-echo "## [$NEW_VERSION] - $DATE" >> $CHANGELOG_TMP
+echo "## [$NEW_VERSION] - $DATE" >> "$CHANGELOG_TMP"
 
 # Section breaking changes si présente
-if [ -s $BREAKING_TMP ]; then
-  echo -e "\n### ⚠️ Breaking Changes" >> $CHANGELOG_TMP
-  cat $BREAKING_TMP >> $CHANGELOG_TMP
+if [ -s "$BREAKING_TMP" ]; then
+  echo "" >> "$CHANGELOG_TMP"
+  echo "### ⚠️ Breaking Changes" >> "$CHANGELOG_TMP"
+  cat "$BREAKING_TMP" >> "$CHANGELOG_TMP"
 fi
 
 # Sections par type de commit
-if [ -s $ADDED_TMP ]; then
-  echo -e "\n### ✨ Added" >> $CHANGELOG_TMP
-  cat $ADDED_TMP >> $CHANGELOG_TMP
+if [ -s "$ADDED_TMP" ]; then
+  echo "" >> "$CHANGELOG_TMP"
+  echo "### ✨ Added" >> "$CHANGELOG_TMP"
+  cat "$ADDED_TMP" >> "$CHANGELOG_TMP"
 fi
 
-if [ -s $CHANGED_TMP ]; then
-  echo -e "\n### 🔧 Changed" >> $CHANGELOG_TMP
-  cat $CHANGED_TMP >> $CHANGELOG_TMP
+if [ -s "$CHANGED_TMP" ]; then
+  echo "" >> "$CHANGELOG_TMP"
+  echo "### 🔧 Changed" >> "$CHANGELOG_TMP"
+  cat "$CHANGED_TMP" >> "$CHANGELOG_TMP"
 fi
 
-if [ -s $FIXED_TMP ]; then
-  echo -e "\n### 🐛 Fixed" >> $CHANGELOG_TMP
-  cat $FIXED_TMP >> $CHANGELOG_TMP
+if [ -s "$FIXED_TMP" ]; then
+  echo "" >> "$CHANGELOG_TMP"
+  echo "### 🐛 Fixed" >> "$CHANGELOG_TMP"
+  cat "$FIXED_TMP" >> "$CHANGELOG_TMP"
 fi
 
-if [ -s $OTHER_TMP ]; then
-  echo -e "\n### 📦 Other" >> $CHANGELOG_TMP
-  cat $OTHER_TMP >> $CHANGELOG_TMP
+if [ -s "$OTHER_TMP" ]; then
+  echo "" >> "$CHANGELOG_TMP"
+  echo "### 📦 Other" >> "$CHANGELOG_TMP"
+  cat "$OTHER_TMP" >> "$CHANGELOG_TMP"
 fi
 
 # Ajout d’un saut de ligne
-echo -e "\n" >> $CHANGELOG_TMP
+echo "" >> "$CHANGELOG_TMP"
 
 # Fusion avec changelog existant
 if [ -f CHANGELOG.md ]; then
-  cat $CHANGELOG_TMP CHANGELOG.md > tmp && mv tmp CHANGELOG.md
+  cat "$CHANGELOG_TMP" CHANGELOG.md > tmp && mv tmp CHANGELOG.md
 else
-  mv $CHANGELOG_TMP CHANGELOG.md
+  mv "$CHANGELOG_TMP" CHANGELOG.md
 fi
 
 # Nettoyage
-rm -f $BREAKING_TMP $ADDED_TMP $CHANGED_TMP $FIXED_TMP $OTHER_TMP
+rm -f "$BREAKING_TMP" "$ADDED_TMP" "$CHANGED_TMP" "$FIXED_TMP" "$OTHER_TMP" "$TMP_LOG"
 
 # Affichage final
 echo "✅ Changelog généré :"

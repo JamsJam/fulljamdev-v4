@@ -7,8 +7,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[UniqueEntity(
+    fields: 'slug',
+    message: 'Ce slug correspond a un projet existant'
+)]
 class Project
 {
     #[ORM\Id]
@@ -23,30 +29,56 @@ class Project
     private ?\DateTimeImmutable $editedAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(groups: ['generalProject'])]
+    #[Assert\Type(
+        'string',
+        groups: ['generalProject']
+    )]
+    #[Assert\Length(
+        min: 3,
+        minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.',
+        groups: ['generalProject']
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\NotBlank(groups: ['generalProject'])]
+    #[Assert\Type(
+        'string',
+        groups: ['generalProject']
+    )]
+    #[Assert\Length(
+        min: 50,
+        minMessage: 'La description doit contenir au moins {{ limit }} caractères.',
+        groups: ['generalProject']
+    )]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
-    private ?array $technologies = null;
-
-    #[ORM\Column(nullable: true)]
+    #[Assert\Type('array', groups: ['generalProject'])]
+    #[Assert\All(
+        new Assert\Type('string')
+    )]
     private ?array $images = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(groups: ['generalProject'])]
     private ?string $projectlink = null;
 
     #[ORM\Column]
+    #[Assert\Type('boolean', groups: ['generalProject'])]
     private ?bool $isOnline = null;
 
     #[ORM\Column]
+    #[Assert\Type('boolean', groups: ['generalProject'])]
     private ?bool $isGitpublic = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(groups: ['generalProject'])]
     private ?string $gitlink = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    // #[Assert\Url(groups: ['caseStudy'])]
     private ?string $casestudy = null;
 
     /**
@@ -55,12 +87,23 @@ class Project
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'project')]
     private Collection $tags;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Type(
+        'string',
+        groups: ['generalProject']
+    )]
     private ?string $slug = null;
+
+    /**
+     * @var Collection<int, Technology>
+     */
+    #[ORM\ManyToMany(targetEntity: Technology::class, inversedBy: 'projects')]
+    private Collection $technology;
 
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->technology = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,18 +155,6 @@ class Project
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getTechnologies(): ?array
-    {
-        return $this->technologies;
-    }
-
-    public function setTechnologies(?array $technologies): static
-    {
-        $this->technologies = $technologies;
 
         return $this;
     }
@@ -235,6 +266,30 @@ class Project
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Technology>
+     */
+    public function getTechnology(): Collection
+    {
+        return $this->technology;
+    }
+
+    public function addTechnology(Technology $technology): static
+    {
+        if (!$this->technology->contains($technology)) {
+            $this->technology->add($technology);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnology(Technology $technology): static
+    {
+        $this->technology->removeElement($technology);
 
         return $this;
     }

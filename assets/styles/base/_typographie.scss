@@ -1,0 +1,29 @@
+@use "../abstract/" as *;
+//? ============ title
+
+.header-2{
+    color: $color;
+    font-size: $h2-size-desktop;
+    text-wrap: pretty;
+
+    @media screen and (max-width:24rem) {
+        
+        font-size: $h2-size-mobile
+
+    }
+}
+
+.header-3{
+    color: $color;
+    font-size: $h3-size-desktop;
+    text-wrap: pretty;
+    font-weight: 600;
+
+    // @media screen and (max-width:24rem) {
+        
+    //     font-size: $h2-size-mobile
+
+    // }
+}
+
+//? ============ texts

@@ -1,4 +1,18 @@
 {
+    "api-platform/symfony": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "4.0",
+            "ref": "e9952e9f393c2d048f10a78f272cd35e807d972b"
+        },
+        "files": [
+            "config/packages/api_platform.yaml",
+            "config/routes/api_platform.yaml",
+            "src/ApiResource/.gitignore"
+        ]
+    },
     "doctrine/deprecations": {
         "version": "1.1",
         "recipe": {
@@ -45,6 +59,18 @@
         },
         "files": [
             ".php-cs-fixer.dist.php"
+        ]
+    },
+    "nelmio/cors-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.5",
+            "ref": "6bea22e6c564fba3a1391615cada1437d0bde39c"
+        },
+        "files": [
+            "config/packages/nelmio_cors.yaml"
         ]
     },
     "phpstan/phpstan": {
@@ -306,6 +332,27 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/uid": {
+        "version": "7.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.0",
+            "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
+        }
+    },
+    "symfony/ux-icons": {
+        "version": "2.29",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.17",
+            "ref": "803a3bbd5893f9584969ab8670290cdfb6a0a5b5"
+        },
+        "files": [
+            "assets/icons/symfony.svg"
+        ]
+    },
     "symfony/ux-turbo": {
         "version": "2.25",
         "recipe": {
@@ -314,6 +361,18 @@
             "version": "2.20",
             "ref": "c85ff94da66841d7ff087c19cbcd97a2df744ef9"
         }
+    },
+    "symfony/ux-twig-component": {
+        "version": "2.26",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.13",
+            "ref": "9b627037a510e20eddb559e06050a34854ce51d6"
+        },
+        "files": [
+            "config/packages/twig_component.yaml"
+        ]
     },
     "symfony/validator": {
         "version": "7.3",
@@ -351,6 +410,9 @@
         "files": [
             "config/packages/messenger.yaml"
         ]
+    },
+    "symfonycasts/sass-bundle": {
+        "version": "v0.8.2"
     },
     "twig/extra-bundle": {
         "version": "v3.21.0"

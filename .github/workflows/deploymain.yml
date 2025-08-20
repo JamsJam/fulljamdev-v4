@@ -69,6 +69,14 @@ jobs:
             echo "============================"
             echo
             php bin/console d:m:m -n
+            echo
+            echo "============================"
+            echo "[ Build du style ]"
+            echo "============================"
+            echo
+            php bin/console sass:build
+            php bin/console asset-map:compile
+
 
 
 

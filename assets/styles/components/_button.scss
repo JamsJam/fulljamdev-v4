@@ -1,0 +1,47 @@
+@use "../abstract/" as *;
+
+.button{
+
+    font-size: clamp(0.9rem, 0.5809rem + 1.0213vw, 1.5rem);
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid;
+    box-shadow: $shadow;
+
+    transition: 
+        background-color 150ms ease-in-out,
+        border-color 100ms ease-out
+        ;
+    font-weight: 500;
+
+
+
+    &--primary{
+        background-color: $bg-accent;
+        border-color: $border-accent-muted;
+        color: $color;
+        border-color: $border-accent-muted;
+        
+        &:hover,&:focus{
+            background-color: $bg-dark-accent;
+
+
+
+        }
+    }
+    &--secondary{
+        background-color: $bg-primary;
+        border-color: $border-primary-muted;
+        color: $color;
+        border-color: $border-primary-muted;
+        &:hover,&:focus{
+            background-color: $bg-dark-primary;
+            border-color: $border-primary;
+
+    
+        }
+
+
+    }
+
+}

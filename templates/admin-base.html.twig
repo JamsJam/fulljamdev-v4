@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}
+				| FullJam Dev
+			{% endblock %}
+		</title>
+		{# ? === css global === #}
+		{% block stylesheets %}
+			{# <link rel="stylesheet" href="{{ asset('styles/admin.scss') }}"> #}
+		{% endblock %}
+		{# ? === js === #}
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap(['admin']) }}
+			{% endblock %}
+		{% endblock %}
+	</head>
+	<body class="admin" {{stimulus_controller('theme_switch')}}>
+
+		{% include "partials/admin/components/_aside.html.twig" with {theme:theme} %}
+
+		<div class="container container--{{theme}}">
+			{% include "partials/admin/components/_header.html.twig" with {
+			title: block('pagetitle') ?? 'Titre de la page',
+			theme: theme
+		} %}
+			<main>
+
+
+				{% include "partials/admin/components/_flashes.html.twig" with {
+						flashes: app.flashes,
+						
+					} %}
+
+
+				{% block body %}{% endblock %}
+			</main>
+		</div>
+	</body>
+</html>

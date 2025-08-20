@@ -1,0 +1,59 @@
+@use '../../abstract/' as * ;
+
+.button{
+
+
+    border: 2px solid ;
+    border-radius: 0.25rem;
+    padding-block: 0.75rem;
+    padding-inline: 1.5rem;
+    // box-shadow: $shadow;
+
+    &--secondary{
+        
+    }
+
+    &--success{
+        font-weight: 700;
+        font-size: 1rem;
+        align-self: center;
+
+        
+    }
+
+    @each $theme, $color in $themes{
+        &--#{$theme}{
+            &.button--secondary{
+    
+                border-color:  map-get($color, primary );
+                background-color: map-get($color, bg );
+                color: map-get($color, text );
+                
+                &:hover{
+                    border-color:  map-get($color, secondary );
+    
+                    color: map-get($color, secondary );
+    
+                }
+            }
+            &.button--sucess{
+    
+                border-color:  map-get($color, border-muted );
+                background-color: map-get($color, success );
+                color: map-get($color, bg );
+                
+                &:hover{
+                    background-color: map-get($color, bg );
+                    border-color:  map-get($color, success );
+                    color: map-get($color, success );
+                    box-shadow: $shadow;
+    
+    
+                }
+            }
+        }
+    }
+        
+
+
+}

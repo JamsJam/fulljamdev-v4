@@ -3,13 +3,14 @@ symfonycasts_sass:
     root_sass:
         - "%kernel.project_dir%/assets/styles/app.scss"
         - "%kernel.project_dir%/assets/styles/admin.scss"
+        - "%kernel.project_dir%/assets/styles/home.scss"
 
     # The Sass binary to use
     binary:               null
     sass_options:
 
         # The style of the generated CSS: compressed or expanded.
-        style:                expanded # One of "compressed"; "expanded"
+        style:                compressed # One of "compressed"; "expanded"
 
         # Whether to include the charset declaration in the generated Sass.
         charset:              true
@@ -40,4 +41,5 @@ symfonycasts_sass:
 
         # Print full Dart stack traces for exceptions.
         trace:                false
-    embed_sourcemap:      null # Deprecated (Since symfonycast/sass-bundle 0.4: Option "embed_sourcemap" at "symfonycasts_sass" is deprecated. Use "sass_options.embed_source_map" instead".)
+
+        #embed_source_map:      null # Deprecated (Since symfonycast/sass-bundle 0.4: Option "embed_sourcemap" at "symfonycasts_sass" is deprecated. Use "sass_options.embed_source_map" instead".)

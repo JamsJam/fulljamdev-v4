@@ -1,0 +1,49 @@
+@use "../abstract/" as *;
+
+    .badgers{
+
+        &__list{
+            @extend %flex-row-center-center;
+            gap: 1rem;
+    
+        }
+        &__container{
+            list-style: none;
+        }
+        &__item{
+
+            @extend %flex-column-center-center;
+            gap: 0.5rem;
+
+            padding-inline:1rem;
+            padding-block:0.5rem;
+
+            height: 72px;
+            width: 72px;
+            
+            color: $color-muted;
+            font-size: 0.9rem;
+
+            border: 1px solid $border-primary-muted;
+            border-radius: 0.25rem;
+            box-shadow: $shadow;
+            
+            transform: translateY(0);
+            transition: transform 200ms ease-in-out ;
+
+            
+            &:hover,&:focus{
+                border-color: $color;
+                color: $color;
+                                transform: translateY(-0.5rem);
+
+            }
+
+            &__img{
+                height: 1.2rem;
+                width: 1.2rem;
+
+            }
+        // }
+        }
+    }

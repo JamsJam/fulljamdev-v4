@@ -1,0 +1,261 @@
+@use '../../abstract/' as *;
+
+.evenements {
+
+    padding-block: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+    gap: 4rem;
+
+    height: calc(100dvh - 120px);
+    overflow-y: scroll;
+
+    &__row {
+        // background-color: beige;
+
+        width: 100%;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 2rem;
+
+        padding-inline: 2rem;
+
+        .row__action{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+        }
+    }
+
+
+    // .events {
+
+    //     padding: 2rem;
+
+    //     display: flex;
+    //     flex-direction: column;
+    //     justify-content: space-around;
+    //     align-items: center;
+    //     gap: 1rem;
+
+    //     // box-shadow: $shadow;
+
+
+    //     &__content {
+    //         font-weight: 600;
+    //         font-size: 2rem;
+    //     }
+
+
+
+
+
+    // }
+
+    .events {
+
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: stretch;
+        gap: 2rem;
+
+        padding: 2rem;
+        // box-shadow: $shadow;
+
+        &__title {
+            text-align: center;
+        }
+
+        &__container {
+
+            width: calc(100dvw - 22rem);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+
+            border-radius: 8px;
+            // overflow: hidden;
+            box-shadow: $shadow;
+        }
+
+        thead {
+
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid;
+
+            .dot {
+                height: 1.5rem;
+                width: 1.5rem;
+            }
+        }
+
+
+        th {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+
+        }
+
+        td {
+            font-size: 0.95rem;
+            position: relative;
+
+            button{
+                all:unset;
+                padding:1rem;
+                &:hover{
+                    cursor:pointer
+                    
+                }
+            }
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        /* Message "Aucun évènements" centré */
+        td[colspan="3"] {
+            text-align: center;
+            font-style: italic;
+
+        }
+
+
+
+    }
+
+
+    @each $theme, $color in $themes {
+        // .card {
+
+        //     &--#{$theme} {
+        //         background-color: map-get($color, bg);
+        //     }
+
+        //     &__title--#{$theme} {
+        //         color: map-get($color, text-muted);
+        //     }
+
+        //     &__content--#{$theme} {
+        //         color: map-get($color, text);
+        //     }
+        // }
+
+        // .chart {
+        //     &--#{$theme} {
+        //         background-color: map-get($color, bg);
+        //     }
+
+        //     &__title--#{$theme} {
+        //         color: map-get($color, text-muted);
+        //     }
+
+        //     &__content--#{$theme} {
+        //         color: map-get($color, text);
+        //     }
+
+        // }
+
+        .events {
+            &--#{$theme} {
+                background-color: map-get($color, bg);
+            }
+
+            &__title--#{$theme} {
+                color: map-get($color, text-muted);
+            }
+
+            &__content--#{$theme} {
+                color: map-get($color, text);
+            }
+
+            .table--#{$theme} {
+                background-color: map-get($color, bg-light);
+            }
+
+            .thead--#{$theme} {
+                background-color: map-get($color, bg-dark);
+                color: map-get($color, text-muted);
+
+            }
+
+            tbody {
+                .tr--#{$theme} {
+                    border-color: map-get($color, border-muted);
+
+                    &:hover {
+
+                        background-color: map-get($color, hoverlight);
+                    }
+                }
+
+                .td--#{$theme}{
+
+                    color: map-get($color, text);
+                    
+                    button:hover{
+                        
+                        color: map-get($color, text-muted);
+                    }
+                }
+
+                td[colspan="3"].td--#{$theme} {
+                    color: map-get($color, text-muted);
+                    
+                }
+
+
+            }
+
+
+        }
+    }
+
+    @media screen and (max-width:1024px) {
+
+
+        &__row {
+            padding-inline: 1rem;
+
+            .chart {
+                // width:  calc(100dvw - 2rem);
+                // min-width: 30rem;
+
+                &__container {
+
+                    width: calc(100dvw - 2rem);
+                    min-width: 30rem;
+                }
+            }
+
+            .events {
+                padding-inline: 1rem;
+            }
+        }
+    }
+}

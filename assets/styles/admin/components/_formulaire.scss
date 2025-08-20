@@ -1,0 +1,155 @@
+@use '../../abstract/' as * ;
+
+
+form{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    max-width: 64rem;
+    gap: 2rem;
+
+
+    .form{
+
+        
+        &__row{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0.5rem;
+
+            width: 100%;
+
+            &.radio_field{
+
+                align-items: stretch;
+
+                gap: 1rem;
+
+                label{
+                    align-self: center ;
+                }
+            }
+        }
+        &__label{
+            font-weight: 600;
+        }
+
+
+        &__input-text{
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+
+            border: 2px solid ;
+            border-radius: 0.75rem;
+            outline: none;
+
+            transition: all 0.25s ease;
+            
+            &:focus {
+                // border-color: #4a90e2;
+                // background-color: #fff;
+                box-shadow: $shadow;
+            }
+        }
+
+        &__input-textarea{
+            width: 100%;
+            min-height: 5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+
+            border: 2px solid ;
+            border-radius: 0.75rem;
+            outline: none;
+
+            transition: all 0.25s ease;
+            
+            &:focus {
+                // border-color: #4a90e2;
+                // background-color: #fff;
+                box-shadow: $shadow;
+            }
+        }
+        &__fieldset{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+
+
+            .radio_field__row{
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+
+
+            }
+        }
+
+
+        @each $theme, $color in $themes{
+            &__label--#{$theme}{
+
+                
+                    // border-color:  map-get($color, primary );
+                    // background-color: map-get($color, bg );
+                    color: map-get($color, text );
+
+            }
+            &__row--#{$theme}{
+
+                li{
+
+                    
+                    // border-color:  map-get($color, primary );
+                    // background-color: map-get($color, bg );
+                    color: map-get($color, danger );
+                }
+
+            }
+            &__input-text--#{$theme},&__input-textarea--#{$theme}{
+
+                
+                    border-color:  map-get($color, border-muted );
+                    background-color: map-get($color, bg );
+                    color: map-get($color, text-muted );
+
+                    &:focus {
+                        border-color: map-get($color, primary );
+                        background-color: map-get($color, bg-light );
+                        color: map-get($color, text );
+
+                    }
+                    &::placeholder {
+
+                        color: map-get($color, border );
+
+                    }
+                    
+            // &__input-textarea--#{$theme}{
+
+                
+            //         border-color:  map-get($color, primary );
+            //         background-color: map-get($color, bg );
+            //         color: map-get($color, text );
+
+            }
+            &__help--#{$theme}{
+
+
+                color: map-get($color, text-muted);
+            }
+        }
+        
+
+    }
+    
+}

@@ -1,0 +1,96 @@
+<header class="header">
+    {# <div class="mobile__container"> #}
+        <div class="logo">
+            <img 
+                src="{{asset('/images/logos/logo-320.png')}}" 
+                width="320px" 
+                height="49px"
+                alt="Logo fulljamdev" 
+            >
+            
+        </div>
+        <nav aria-label="Navigation desktop" role="navigation">
+            <ul class="nav__items">
+                <li class="nav__item">
+                    <a class="nav__link" href="{{path('app_home')}}">Accueil</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{path('app_home')}}#about">A propos</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{path('app_home')}}#contact">Contact</a>
+                </li>
+            </ul>
+        </nav>
+        <ul class="badgers__list" aria-label="Liste de mes réseaux sociaux">
+            <li class="badgers__container" >
+                <a href="https://github.com/JamsJam" class="badgers__item" target="_blank" rel="noopener nofollow" >
+                    <img  class="badgers__img" src="{{asset('icons/github_icn.svg')}}" alt='' role="presentation">
+                    Github
+                </a>
+            </li>
+            <li class="badgers__container" >
+                <a href="https://www.malt.fr/profile/jeremyantoine" class="badgers__item" target="_blank" rel="noopener nofollow" >
+                    <img  class="badgers__img" src="{{asset('icons/malt_icn.svg')}}" alt='' role="presentation">
+                    Malt
+                </a>
+            </li>
+            <li class="badgers__container" >
+                <a href="https://www.linkedin.com/in/jeremy-antoine-dwwm/" class="badgers__item" target="_blank" rel="noopener nofollow" >
+                    <img  class="badgers__img" src="{{asset('icons/linkedin_icn.svg')}}" alt='' role="presentation">
+                    Linkedin
+                </a>
+            </li>
+
+        </ul>
+
+        <button  aria-label="Ouvrir la navigation mobile"  aria-controls="mobile-nav" type="button" class="burger__container" {{stimulus_target("responsive_nav","burgerBtn") | stimulus_action("responsive_nav","onToggleNav","click")}}>
+            {{ ux_icon('icon-park-outline:hamburger-button',{class: 'burger__svg'}) }}
+        </button>
+    
+
+</header>
+<div class="header--mobile" {{stimulus_target("responsive_nav","mobileNav")}} >
+        <button aria-label="Fermer la navigation mobile" aria-controls="mobile-nav" type="button" class="close__container" {{stimulus_action("responsive_nav","closeMobileNav","click")}}>
+            {{ ux_icon('flowbite:close-outline',{class: 'close__svg'}) }}
+        </button>
+    <div class="nav__mobile">
+        <nav aria-label="Navigation mobile" role="navigation">
+            <ul class="nav__items">
+                <li class="nav__item">
+                    <a class="nav__link" href="{{path('app_home')}}">Accueil</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{path('app_home')}}#about">A propos</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{path('app_home')}}#contact">Contact</a>
+                </li>
+            </ul>
+        </nav>
+
+        <ul class="badgers__list" aria-label="Liste de mes réseaux sociaux">
+            <li class="badgers__container">
+                <a href="https://github.com/JamsJam" class="badgers__item" target="_blank" rel="noopener nofollow" >
+                    <img class="badgers__img" src="{{asset('icons/github_icn.svg')}}" alt='Lien vers github' role="presentation">
+                    Github
+                </a>
+            </li>
+            <li class="badgers__container">
+                <a href="https://www.malt.fr/profile/jeremyantoine" class="badgers__item" target="_blank" rel="noopener nofollow">
+                    <img  class="badgers__img" src="{{asset('icons/malt_icn.svg')}}" alt='Lien vers malt' role="presentation">
+                    Malt
+                </a>
+            </li>
+            <li class="badgers__container">
+                <a href="https://www.linkedin.com/in/jeremy-antoine-dwwm/" class="badgers__item" target="_blank" rel="noopener nofollow">
+                    <img  class="badgers__img" src="{{asset('icons/linkedin_icn.svg')}}" alt='Lien vers linkedin' role="presentation">
+                    Linkedin
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>

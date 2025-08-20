@@ -17,7 +17,7 @@ return [
         'entrypoint' => true,
     ],
     'home' => [
-        'path' => './assets/entrypoints/home.js',
+        'path' => './assets/home.js',
         'entrypoint' => true,
     ],
     'admin' => [

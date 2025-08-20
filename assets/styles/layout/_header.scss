@@ -1,0 +1,219 @@
+@use '../abstract/' as *;
+
+
+header.header{
+    // background-color: black;
+    position: sticky;
+    top: 0;
+    width: 100dvw;
+    z-index: 4;
+    
+    @extend %flex-row-space-between-center;
+
+    padding-inline: clamp(1rem, -2.4382rem + 7.1535vw, 4rem);
+    padding-block: 2rem;
+    backdrop-filter: blur(32px);
+    box-shadow: $shadow;
+    border-block-end: 1px solid $border-secondary-muted;
+    background-color: hsla(245, 92%, 5%, 0.6);
+
+
+    .logo{
+
+        height: clamp(1.0625rem, -0.0013rem + 3.4043vw, 3.0625rem);
+        width:  clamp(7rem, 0.0851rem + 22.1277vw, 20rem);
+        img{
+            height: 100%;
+            width: 100%;
+            object-position: center;
+            object-fit: center;
+        }
+    }
+
+    nav{
+        .nav{
+
+            &__items{
+                @extend %flex-row-center-center;
+                gap: clamp(1rem, -0.1429rem + 2.381vw, 2rem);
+    
+            }
+            &__item{
+                list-style: none;
+            }
+            &__link{
+                font-weight: 500;
+                font-size: clamp(1.2rem, 0.2857rem + 1.9048vw, 2rem);
+                color: $color;
+                text-transform: capitalize;
+                
+                &:hover,&:focus{
+                    color: $color-muted;
+
+                }
+            }
+        }
+    }
+
+
+
+    .burger{
+        &__container{
+            all:unset;
+            display: none;
+            padding: 0.25rem;
+            // background-color: aliceblue;
+            justify-content: center;
+            align-items: center;
+
+            &:hover{
+                .burger__svg{
+                    color:$color-muted
+                }
+            }
+        
+        }
+        &__svg{
+            height: 3rem;
+            width:  3rem;
+            color: $color;
+        
+        }
+    }
+
+
+
+
+    @media screen and (max-width:768px) {
+        nav{
+            display: none;
+
+        }
+        .badgers__list{
+            display: none;
+        }
+
+        .header--mobile .open{
+            display: none;
+        
+        }
+        .burger{
+            &__container{
+                display: flex;
+            
+            }
+            &__svg{
+                // display: none;
+            
+            }
+        }
+
+    }
+}
+    .header--mobile{
+        // display: none;
+
+        height: 0%;
+        width: 0%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 5;
+        background-color: #00000000;
+        backdrop-filter: blur(0px);
+        
+
+        transition: 
+            backgound-color 250ms ease 250ms,
+            backdrop-filter 500ms ease 250ms,
+            height 500ms ease,
+            width 500ms ease,
+        ;
+
+        overflow: hidden;
+
+        .close{
+
+            &__container{
+                all:unset;
+                position: absolute;
+                top: 2rem;
+                right: 2rem;
+                display: flex;
+                padding: 0.25rem;
+                // background-color: aliceblue;
+                justify-content: center;
+                align-items: center;
+
+                &:hover{
+                    .burger__svg{
+                        color:$color-muted
+                    }
+                }
+            
+            }
+            &__svg{
+                height: 3rem;
+                width:  3rem;
+                color: $color;
+            
+            }
+        }
+        
+        & .nav__mobile{
+            opacity: 0;
+            transition: opacity 100ms ease-out ;
+            @extend %flex-column-space-around-stretch;
+            height: 100%;
+            gap: 3rem;
+            overflow-y: scroll ;
+            padding-block: 2rem;
+
+
+            nav{
+
+                .nav{
+                    &__items{
+                        @extend %flex-column-space-around-center;
+                        gap: 3rem;
+                    }
+                    &__item{
+                        list-style: none;
+
+                    }
+                    &__link{
+                        font-weight: 500;
+                        font-size: clamp(1.2rem, 0.6286rem + 2.8571vw, 2rem);
+                        color: $color;
+                        text-transform: capitalize;
+                        
+                        &:hover,&:focus{
+                            color: $color-muted;
+
+                        }
+                    }
+                }
+            }
+
+            .badgers__list{
+                width: 100%;
+                @extend %flex-row-space-around-stretch;
+            }
+        }
+        &.open{
+            background-color: #000000A0;
+            backdrop-filter: blur(10px);
+            height: 100%;
+            width: 100%;
+
+
+            & .nav__mobile{
+                opacity: 1;
+                transition: opacity 100ms ease-out 400ms;
+
+            }
+        }
+
+
+
+    }

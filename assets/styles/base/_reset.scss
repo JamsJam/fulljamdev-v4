@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
+    scroll-behavior: smooth;
 }
 
 :root{
@@ -23,26 +23,33 @@ body{
     
     & h1, & h2, & h3, & h4, & h5, & h6{
 
-      font-family: $font-title;
+      font-family: $font-familly;
     }
     
     & p,& a,& span,& strong {
-      font-family: $font-text;
+      font-family: $font-familly;
     }
     
 
-    &.admin {
-      // @extend %flex-row-start-start;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      background-color: $admin-nuance-b-30;
+    // &.admin {
+    //   // @extend %flex-row-start-start;
+    //   // display: grid;
+    //   // grid-template-columns: 300px 1fr;
+    //   // background-color: $admin-nuance-b-30;
 
-      & h1,& h2,& h3,& h4,& h5,& h6,& p,& a,& span,& strong, label, button {
-        font-family: $admin-font;
-        color: $admin-nuance-w-100;
+ 
+
+
+
+    // }
+
+    &.front{
+      background: $bg-linear ;
+      
+
+      main{
+        position: relative;
+        padding-block: clamp(1rem, -1.8626rem + 9.1603vw, 4rem);
       }
-
-
-
     }
 }

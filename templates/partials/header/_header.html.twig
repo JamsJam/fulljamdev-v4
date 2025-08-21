@@ -50,7 +50,9 @@
     
 
 </header>
-<div class="header--mobile" {{stimulus_target("responsive_nav","mobileNav")}} role="region" aria-label="header-container">
+
+<div class="header--mobile" {{stimulus_target("responsive_nav","mobileNav")}} role="region" aria-label="header-container" id="mobile-nav">
+
         <button aria-label="Fermer la navigation mobile" aria-controls="mobile-nav" type="button" class="close__container" {{stimulus_action("responsive_nav","closeMobileNav","click")}}>
             {{ ux_icon('flowbite:close-outline',{class: 'close__svg'}) }}
         </button>

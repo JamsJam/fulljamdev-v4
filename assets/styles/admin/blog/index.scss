@@ -1,0 +1,17 @@
+@use '../../abstract/' as * ;
+
+.blog{
+    @extend %flex-column-start-stretch;
+    gap:2rem;
+    width: 100%;
+
+        .row{
+            // outline: 2px solid blue;
+            @extend %flex-row-start-center;
+            width: 100%;
+
+            &--reverse{
+                justify-content: end;
+            }
+        }
+    }

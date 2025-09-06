@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class DashboardController extends AbstractController
 {
-    #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
+    #[Route('/dashboard', name: 'app_admin_dashboard')]
     public function index(
         ThemeService $theme_service,
     ): Response {

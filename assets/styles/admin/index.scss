@@ -1,9 +1,10 @@
 // @forward 'reservation_field';
+@use 'adherent' as *;
+@use 'evenements' as *;
+@use 'components' as *;
+@use 'blog' as *;
 @forward 'adminBase';
 @forward 'dashboard';
-@use 'adherent';
-@use 'evenements';
-@use 'components';
 
 
 

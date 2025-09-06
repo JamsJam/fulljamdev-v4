@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class SitemapController extends AbstractController
 {
-    #[Route('/sitemap', name: 'app_sitemap')]
+    #[Route('/sitemap.xml', name: 'app_sitemap')]
     public function index(): Response
     {
         $paths = [

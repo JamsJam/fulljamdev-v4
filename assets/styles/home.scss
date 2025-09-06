@@ -1,5 +1,6 @@
 @use "base" as *;
-@use "./components/button" as *;
+@forward "./components/button" ;
+@forward './components/badgers';
 @forward "./pages/front/home.scss" ;
 
 

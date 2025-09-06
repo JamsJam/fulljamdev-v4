@@ -1,0 +1,59 @@
+@use '../../abstract' as *;
+
+.pagination {
+    width: 100%;
+
+    &__items {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    &__item {
+        border: 2px solid;
+        border-radius: 0.5rem;
+    }
+    &__link {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    @each $theme, $color in $themes {
+        &__item--#{$theme} {
+            background-color: map-get($color, bg-light);
+            color: map-get($color, text-muted);
+            border-color: map-get($color, border-muted);
+
+            &:hover:not(.disabled) {
+                background-color: map-get($color, bg);
+                color: map-get($color, text);
+                border-color: map-get($color, border);
+            }
+
+            &.active {
+                background-color: map-get($color, bg);
+                // color: map-get($color, text);
+                border-color: map-get($color, border);
+            }
+            &.disabled {
+                background-color: map-get($color, bg-dark);
+                // color: map-get($color, bg-light);
+                border-color: map-get($color, border-muted);
+            }
+        }
+        &__link--#{$theme} {
+            // background-color: map-get($color, bg-light);
+            color: map-get($color, text);
+
+            &.disabled {
+                color: map-get($color, text-muted);
+                // border-color:  map-get($color, border-muted);
+            }
+        }
+    }
+}

@@ -1,0 +1,73 @@
+- id: 1
+  title: "How to Build a Modern Symfony Blog"
+  content: "This comprehensive guide covers everything you need to know to build a modern blog with Symfony, from setup to deployment."
+  authors:
+  - id: 4
+    firstname: "Jane"
+    lastname: "Doe"
+    title: "Symfony Developer"
+    site: "https://janedoe.dev"
+    image: "https://cataas.com/cat?author1"
+    description: "Jane is a passionate Symfony developer with a knack for clean web architectures and efficient APIs."
+    links:
+      - label: "LinkedIn"
+        url: "https://www.linkedin.com/in/janedoe/"
+        dofollow: true
+      - label: "GitHub"
+        url: "https://github.com/janedoe"
+        dofollow: true
+  createdAt: "2025-08-20T09:10:00"
+  editedAt: "2025-08-22T13:45:00"
+  slug: "how-to-build-modern-symfony-blog"
+  category: "Web Development"
+  tag: ["symfony", "php", "guide"]
+  description: "A practical guide to building a Symfony-powered blog."
+  image: "https://cataas.com/cat?1"
+
+- id: 2
+  title: "Understanding Doctrine Relationships"
+  content: "Learn the essentials of managing Doctrine's OneToMany and ManyToMany relationships in your Symfony entities."
+  author: "Maxime Robert"
+  createdAt: "2025-08-18T15:25:00"
+  editedAt: "2025-08-19T08:30:00"
+  slug: "understanding-doctrine-relationships"
+  category: "Database"
+  tag: ["doctrine", "symfony", "database"]
+  description: "Doctrine relationships explained for Symfony beginners."
+  image: "https://cataas.com/cat?2"
+
+- id: 3
+  title: "Top 10 Tips for Clean PHP Code"
+  content: "Writing clean code is essential for future-proof applications. Here are 10 actionable tips for better PHP code quality."
+  author: "Alice Watson"
+  createdAt: "2025-08-15T10:05:00"
+  editedAt: "2025-08-15T17:45:00"
+  slug: "top-10-tips-clean-php-code"
+  category: "Programming"
+  tag: ["php", "clean code", "tips"]
+  description: "Improve your PHP code with these top tips."
+  image: "https://cataas.com/cat?3"
+
+- id: 4
+  title: "Mastering SEO for Developers"
+  content: "A developer’s guide to practical SEO: on-page, performance, and structured data implementation."
+  author: "Lucas Martin"
+  createdAt: "2025-08-10T09:50:00"
+  editedAt: "2025-08-11T12:00:00"
+  slug: "mastering-seo-for-developers"
+  category: "SEO"
+  tag: ["seo", "symfony", "web"]
+  description: "Everything developers need to boost website SEO."
+  image: "https://cataas.com/cat?4"
+
+- id: 5
+  title: "Integrating JSON-LD with Your Blog"
+  content: "Learn how to implement structured data via JSON-LD in your Symfony blog for better search visibility."
+  author: "Sophie Lee"
+  createdAt: "2025-08-05T13:00:00"
+  editedAt: "2025-08-07T09:15:00"
+  slug: "integrating-json-ld-symfony-blog"
+  category: "Web Development"
+  tag: ["jsonld", "seo", "symfony"]
+  description: "Step-by-step for adding JSON-LD to your blog articles."
+  image: "https://cataas.com/cat?5"

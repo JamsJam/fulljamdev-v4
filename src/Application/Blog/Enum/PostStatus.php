@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Application\Blog\Enum;
 
 enum PostStatus: int
@@ -9,7 +10,7 @@ enum PostStatus: int
     case Archived = 3;
 
     /**
-     * Retourne le label lisible pour chaque statut
+     * Retourne le label lisible pour chaque statut.
      */
     public function label(): string
     {

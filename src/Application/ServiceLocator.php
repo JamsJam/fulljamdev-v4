@@ -5,7 +5,7 @@ namespace App\Application;
 class ServiceLocator
 {
     private array $namespaces = [
-        "Application\\Blog\\Services\\",
+        'Application\\Blog\\Services\\',
         // "Application\\CV\\Services\\",
         // "Application\\Guestbook\\Services\\",
     ];
@@ -13,9 +13,9 @@ class ServiceLocator
     public function resolve(string $serviceName): object
     {
         foreach ($this->namespaces as $ns) {
-            $fqcn = $ns . $serviceName;
+            $fqcn = $ns.$serviceName;
             if (class_exists($fqcn)) {
-                return new $fqcn(); 
+                return new $fqcn();
             }
         }
 

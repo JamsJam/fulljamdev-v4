@@ -4,7 +4,7 @@ namespace App\Application\PageGenerator\Blocks\Back;
 
 use App\Application\PageGenerator\Blocks\BlockInterface;
 
-final class AdminSortableTableBlock  implements BlockInterface
+final class AdminSortableTableBlock implements BlockInterface
 {
     public function __construct(
         public string $theme,
@@ -15,8 +15,9 @@ final class AdminSortableTableBlock  implements BlockInterface
         public int $maxItems,
         public string $noItemsLabel,
         public string $tableTitle,
-        public ?int $maxPage
-    ){}
+        public ?int $maxPage,
+    ) {
+    }
 
     public function getType(): string
     {
@@ -35,13 +36,11 @@ final class AdminSortableTableBlock  implements BlockInterface
             'noItemsLabel' => $this->noItemsLabel,
             'tableTitle' => $this->tableTitle,
             'maxPage' => $this->maxPage,
-
-
         ];
     }
 
-     public function getTemplate(): string
-     {
+    public function getTemplate(): string
+    {
         return 'partials/blocks/admin/AdminSortableTableBlock.html.twig';
-     }
+    }
 }

@@ -33,7 +33,6 @@ class BlogAuthor
     #[ORM\Column]
     private ?\DateTimeImmutable $editedAt = null;
 
-
     /**
      * @var Collection<int, Post>
      */
@@ -159,7 +158,6 @@ class BlogAuthor
         return $this;
     }
 
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -183,6 +181,4 @@ class BlogAuthor
 
         return $this;
     }
-
-
 }

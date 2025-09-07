@@ -2,12 +2,12 @@
 
 namespace App\Controller\Admin\Blog;
 
+use App\Application\PageGenerator\Services\PageService;
 use App\Service\ThemeService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Application\PageGenerator\Services\PageService;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class BlogController extends AbstractController
 {
@@ -15,13 +15,11 @@ final class BlogController extends AbstractController
     public function index(
         ThemeService $theme_service,
         PageService $pageService,
-        #[Autowire('%kernel.project_dir%/src/Pages/Back/Blog/')] string $yamlFilePath
-    ): Response
-    {
+        #[Autowire('%kernel.project_dir%/src/Pages/Back/Blog/')] string $yamlFilePath,
+    ): Response {
         $theme = $theme_service->getTheme();
 
-
-        $page = $pageService->createPageFromYamlFile($yamlFilePath . "index.yaml");
+        $page = $pageService->createPageFromYamlFile($yamlFilePath.'index.yaml');
 
         dump($page);
 

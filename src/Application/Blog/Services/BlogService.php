@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Application\Blog\Services;
 
 use App\Application\Blog\Post\Provider\PostProvider;
@@ -6,9 +7,10 @@ use App\Application\Blog\Post\Provider\PostProvider;
 final class BlogService
 {
     public function __construct(
-        private PostProvider $postProvider
-    ) {}
-    //?===== Selection
+        private PostProvider $postProvider,
+    ) {
+    }
+    // ?===== Selection
 
     public function getPosts()
     {
@@ -17,7 +19,7 @@ final class BlogService
         return $posts;
     }
 
-    public function getPostOrderBy(?string $query = null, ?string $orderBy = null, ?string $orderDirection = null ) : array
+    public function getPostOrderBy(?string $query = null, ?string $orderBy = null, ?string $orderDirection = null): array
     {
         // $posts = $this->postProvider->searchAndSortPost($query, $orderBy, $orderDirection);
         $posts = [];
@@ -25,17 +27,19 @@ final class BlogService
         return $posts;
     }
 
-    //?===== Creation
-    
+    // ?===== Creation
+
     public function createPostFrom()
-    {}
+    {
+    }
 
+    // ?===== Edition
 
-    //?===== Edition
-    
     public function editPostFrom()
-    {}
+    {
+    }
 
     public function editPostFromm()
-    {}
+    {
+    }
 }

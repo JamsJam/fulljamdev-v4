@@ -2,10 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Blog\Post;
 use App\Entity\Blog\BlogAuthor;
 use App\Entity\Blog\BlogCategory;
 use App\Entity\Blog\BlogTags;
+use App\Entity\Blog\Post;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -18,7 +18,7 @@ class AppFixtures extends Fixture
 
         // --- Categories ---
         $categories = [];
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $category = new BlogCategory();
             $category->setName($faker->unique()->word())
                 ->setDescription($faker->sentence(10))
@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
 
         // --- Authors ---
         $authors = [];
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $author = new BlogAuthor();
             $author->setName($faker->lastName())
                 ->setFistname($faker->firstName())
@@ -45,7 +45,7 @@ class AppFixtures extends Fixture
 
         // --- Tags ---
         $tags = [];
-        for ($i = 0; $i < 8; $i++) {
+        for ($i = 0; $i < 8; ++$i) {
             $tag = new BlogTags();
             $tag->setName($faker->unique()->word())
                 ->setDescription($faker->optional()->sentence(8))
@@ -57,7 +57,7 @@ class AppFixtures extends Fixture
         }
 
         // --- Posts ---
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; ++$i) {
             $post = new Post();
             $post->setTitle($faker->sentence(5))
                 ->setDescription($faker->sentence(15))
@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
                 ->setSlug($faker->slug())
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setEditedAt(new \DateTimeImmutable())
-                ->setPublishedAt((new \DateTimeImmutable())->createFromInterface($faker->optional()->dateTimeBetween('-1 years', 'now') ))
+                ->setPublishedAt((new \DateTimeImmutable())->createFromInterface($faker->optional()->dateTimeBetween('-1 years', 'now')))
                 ->setStatus($faker->numberBetween(0, 3))
                 ->setCategory($faker->randomElement($categories))
                 ->setAuthor($faker->randomElement($authors));

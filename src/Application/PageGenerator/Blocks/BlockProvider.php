@@ -2,9 +2,9 @@
 
 namespace App\Application\PageGenerator\Blocks;
 
-use App\Service\ThemeService;
-use App\Application\PageGenerator\Blocks\Back\AdminTabsBlock;
 use App\Application\PageGenerator\Blocks\Back\AdminSortableTableBlock;
+use App\Application\PageGenerator\Blocks\Back\AdminTabsBlock;
+use App\Service\ThemeService;
 
 final class BlockProvider
 {
@@ -20,23 +20,19 @@ final class BlockProvider
         switch ($config['type']) {
             case 'adminTabsBlock':
                 return new AdminTabsBlock(
-
                     $config['tabs'] ?? [],
                     $this->themeService->getTheme(),
                     $config['reverse'] ?? false
                 );
             case 'adminSortableTableBlock':
-                
                 // searchandsort to get rows
                 $rows = [];
-                if($config['isPaginated']){
+                if ($config['isPaginated']) {
                     // paginatedService
                     // $maxPage = 0;
-                } 
-                
-                
-                return new AdminSortableTableBlock(
+                }
 
+                return new AdminSortableTableBlock(
                     $this->themeService->getTheme(),
                     $rows ?? [],
                     $config['isPaginated'] ?? false,
@@ -46,7 +42,6 @@ final class BlockProvider
                     $config['noItemsLabel'] ?? 'messae tableau vide',
                     $config['tableTitle'] ?? 'Titre du tableau',
                     $maxPage ?? null
-
                 );
 
             default:

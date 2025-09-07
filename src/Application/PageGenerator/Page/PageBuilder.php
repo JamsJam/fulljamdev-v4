@@ -1,14 +1,11 @@
 <?php
 
-Namespace App\Application\PageGenerator\Page;
+namespace App\Application\PageGenerator\Page;
 
 use App\Application\PageGenerator\Blocks\BlockProvider;
 
-
 final class PageBuilder
 {
-
-    
     private array $blocks = [];
     private BlockProvider $blockProvider;
 
@@ -17,7 +14,7 @@ final class PageBuilder
         $this->blockProvider = $blockProvider;
     }
 
-    public function fromYaml(array $yamlConfig,array $params = []): self
+    public function fromYaml(array $yamlConfig, array $params = []): self
     {
         foreach ($yamlConfig['page'] as $blockConfig) {
             $this->blocks[] = $this->blockProvider->createBlock($blockConfig, $params);
@@ -30,6 +27,4 @@ final class PageBuilder
     {
         return new Page($this->blocks);
     }
-
-
 }

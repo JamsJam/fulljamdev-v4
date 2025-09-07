@@ -1,5 +1,6 @@
 <?php
-Namespace App\Application\PageGenerator\Services;
+
+namespace App\Application\PageGenerator\Services;
 
 use App\Application\PageGenerator\Page\Page;
 use App\Application\PageGenerator\Page\PageBuilder;
@@ -9,8 +10,9 @@ final class PageService
 {
     public function __construct(
         private PageBuilder $pageBuilder,
-        private YamlLoaderService $yamlLoaderService
-    ){}
+        private YamlLoaderService $yamlLoaderService,
+    ) {
+    }
 
     public function createPageFromYamlFile(string $filePath): Page
     {

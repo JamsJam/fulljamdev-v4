@@ -4,13 +4,14 @@ namespace App\Application\PageGenerator\Blocks\Back;
 
 use App\Application\PageGenerator\Blocks\BlockInterface;
 
-final class AdminTabsBlock  implements BlockInterface
+final class AdminTabsBlock implements BlockInterface
 {
     public function __construct(
         public array $tabs,
         public string $theme,
         public bool $reverse,
-    ){}
+    ) {
+    }
 
     public function getType(): string
     {
@@ -26,8 +27,8 @@ final class AdminTabsBlock  implements BlockInterface
         ];
     }
 
-     public function getTemplate(): string
-     {
+    public function getTemplate(): string
+    {
         return 'partials/blocks/admin/adminTabsBlock.html.twig';
-     }
+    }
 }

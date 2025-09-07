@@ -1,10 +1,8 @@
 <?php
 
-Namespace App\Application\PageGenerator\Page;
+namespace App\Application\PageGenerator\Page;
 
 use App\Application\PageGenerator\Blocks\BlockInterface;
-
-
 
 class Page
 {
@@ -27,5 +25,3 @@ class Page
         $this->blocks[] = $block;
     }
 }
-
-

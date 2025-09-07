@@ -2,7 +2,7 @@
 
 namespace App\Application\Blog\Post\Provider;
 
-final class PostProvider 
+final class PostProvider
 {
     public function __construct()
     {
@@ -13,9 +13,8 @@ final class PostProvider
     // public function findByTag(Tag $tag)
     // public function findByStatus(Tag $tag)
 
-    public function searchAndSortPost(?string $query = null, ?string $orderBy = null, ?string $orderDirection = null):array
+    public function searchAndSortPost(?string $query = null, ?string $orderBy = null, ?string $orderDirection = null): array
     {
-
         // $posts =  $this->postRepository->searchAndSort($query, $orderBy, $orderDirection);
         return $posts = [];
     }

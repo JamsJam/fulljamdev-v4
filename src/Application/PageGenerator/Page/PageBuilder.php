@@ -14,7 +14,7 @@ final class PageBuilder
         $this->blockProvider = $blockProvider;
     }
 
-    public function fromYaml(array $yamlConfig, array $params = []): self
+    public function fromYaml(array $yamlConfig = [], array $params = []): self
     {
         foreach ($yamlConfig['page'] as $blockConfig) {
             $this->blocks[] = $this->blockProvider->createBlock($blockConfig, $params);

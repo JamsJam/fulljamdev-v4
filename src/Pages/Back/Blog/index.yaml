@@ -14,6 +14,7 @@ page:
       - label: "Archives"
         href: "app_home"
         isActive: false
+
   - type: adminTabsBlock
     reverse: true
     tabs:
@@ -23,24 +24,32 @@ page:
       - label: "Retour"
         href: "app_home"
         isActive: false
-  - type: adminSortableTableBlock
-    tableTitle: 'Liste des vêtements'
-    noItemsLabel: "aucun élément trouvé"
-    isPaginated: false
-    reverse: true
-    isSearchable: true								# bool → active la pagination							# bool → active la pagination
-    limit: 10							# int → nombre total de pages
-    colTitles: 									# array → titres colonnes
-      - label: 'Nom'
-        isSortable: false
-      - label: 'Image'
-        isSortable: false
-      - label: 'Categorie'
-        isSortable:  false
-      - label: 'Status'
-        isSortable:  false
-      - label: 'Action'
-        isSortable: false
+  # - type: adminSortableTableBlock
+  #   tableTitle: 'Liste des article'
+  #   noItemsLabel: "aucun élément trouvé"
+  #   isPaginated: false
+  #   reverse: true
+  #   isSearchable: true								# bool → active la pagination							# bool → active la pagination
+  #   limit: 10							# int → nombre total de pages
+  #   colTitles: 									# array → titres colonnes
+  #     - label: 'Nom'
+  #       property: ''
+  #       isSortable: false
+  #     - label: 'Image'
+  #       property: ''
+  #       isSortable: false
+  #     - label: 'Categorie'
+  #       property: ''
+  #       isSortable:  false
+  #     - label: 'Status'
+  #       property: ''
+  #       isSortable:  false
+  #     # - label: 'Action'
+  #     #   property: ''
+
+  #     #   isSortable: false
+  #   service: BlogService
+  #   method: 'getPost'
 
     # currentPage: 1									# int → page actuelle
     # currentSort: "nom"								# string → colonne triée actuellement

@@ -2,47 +2,30 @@
 
 namespace App\Application\PageGenerator\Blocks;
 
-use App\Application\PageGenerator\Blocks\Back\AdminSortableTableBlock;
-use App\Application\PageGenerator\Blocks\Back\AdminTabsBlock;
 use App\Service\ThemeService;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
+
 
 final class BlockProvider
 {
-    private ThemeService $themeService;
+    
 
-    public function __construct(ThemeService $themeService)
-    {
-        $this->themeService = $themeService;
-    }
+    public function __construct(
+        private ThemeService $themeService,
 
-    public function createBlock(array $config, array $params): BlockInterface
+        //? instancie dynamiquement le block avec le bon service
+        #[AutowireLocator([
+
+        ])]
+        private ContainerInterface $services
+    ){}
+
+    public function createBlock(array $config, array $params ): BlockInterface
     {
+        // add case to the switch
         switch ($config['type']) {
-            case 'adminTabsBlock':
-                return new AdminTabsBlock(
-                    $config['tabs'] ?? [],
-                    $this->themeService->getTheme(),
-                    $config['reverse'] ?? false
-                );
-            case 'adminSortableTableBlock':
-                // searchandsort to get rows
-                $rows = [];
-                if ($config['isPaginated']) {
-                    // paginatedService
-                    // $maxPage = 0;
-                }
 
-                return new AdminSortableTableBlock(
-                    $this->themeService->getTheme(),
-                    $rows ?? [],
-                    $config['isPaginated'] ?? false,
-                    $config['reverse'] ?? false,
-                    $config['colTitles'] ?? [],
-                    $config['maxItems'] ?? 20,
-                    $config['noItemsLabel'] ?? 'messae tableau vide',
-                    $config['tableTitle'] ?? 'Titre du tableau',
-                    $maxPage ?? null
-                );
 
             default:
                 throw new \Exception("Bloc inconnu : {$config['type']}");

@@ -4,7 +4,6 @@ namespace App\Application;
 
 class ServiceLocator
 {
-    
     private array $namespaces = [
         'App\\Application\\Blog\\Services\\',
         // "Application\\CV\\Services\\",

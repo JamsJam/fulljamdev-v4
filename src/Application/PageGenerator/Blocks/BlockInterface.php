@@ -3,7 +3,7 @@
 namespace App\Application\PageGenerator\Blocks;
 
 /**
- * Undocumented interface
+ * Undocumented interface.
  */
 interface BlockInterface
 {

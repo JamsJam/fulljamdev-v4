@@ -22,6 +22,7 @@
 
 
 {% block importmap %}
+
     {{ importmap(['app','home']) }}
 {% endblock %}
 
@@ -35,7 +36,10 @@
             <div class="buttons__container">
                 <a href="#resume" class="button button--secondary">Mon parcours</a>
                 <a href="#contact" class="button button--primary">Contactez-moi</a>
+                {# <twig:Button variant="outline">Mon parcours</twig:Button>
+                <twig:Button variant="secondary">Contactez-moi</twig:Button> #}
             </div>
+
         </div>
     </section>
 

@@ -1,16 +1,16 @@
-name: deploymain
+name: deploydevelop
 
 on:
   push:
     branches:
-      - main
+      - develop
 
 permissions:
   contents: read
 
 concurrency:
-  group: deploy-main
-  cancel-in-progress: false
+  group: deploy-develop
+  cancel-in-progress: true
 
 jobs:
   quality:
@@ -43,21 +43,21 @@ jobs:
 
   deploy:
     needs: quality
-    name: Deployer en production
+    name: Deployer l'environnement de developpement
     runs-on: ubuntu-latest
 
     steps:
       - name: Recuperer le depot
         uses: actions/checkout@v6
 
-      - name: Deployer sur le serveur de production
+      - name: Deployer sur le serveur de test
         uses: appleboy/ssh-action@v1.2.5
         env:
           APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
-          APP_SECRET_SOURCE: ${{ secrets.APP_MAIN_SECRET }}
-          DATABASE_URL_SOURCE: ${{ secrets.DATABASE_MAIN_URL }}
-          MAILER_DSN_SOURCE: ${{ secrets.MAILER_MAIN_DSN }}
-          MESSENGER_TRANSPORT_DSN_SOURCE: ${{ secrets.MESSENGER_MAIN_TRANSPORT_DSN }}
+          APP_SECRET_SOURCE: ${{ secrets.APP_TEST_SECRET }}
+          DATABASE_URL_SOURCE: ${{ secrets.DATABASE_TEST_URL }}
+          MAILER_DSN_SOURCE: ${{ secrets.MAILER_TEST_DSN }}
+          MESSENGER_TRANSPORT_DSN_SOURCE: ${{ secrets.MESSENGER_TEST_TRANSPORT_DSN }}
         with:
           host: ${{ secrets.APP_SERVER }}
           username: ${{ secrets.APP_USER }}
@@ -67,7 +67,7 @@ jobs:
           script: |
             set -Eeuo pipefail
 
-            PROJECT_DIR="/var/www/${{ secrets.APP_USER }}/${APP_DOMAIN}"
+            PROJECT_DIR="/var/www/${{ secrets.APP_USER }}/test-${APP_DOMAIN}"
 
             echo "==========[1/9] Verification de la configuration=========="
             for VARIABLE_NAME in APP_DOMAIN APP_SECRET_SOURCE DATABASE_URL_SOURCE MAILER_DSN_SOURCE MESSENGER_TRANSPORT_DSN_SOURCE; do
@@ -84,10 +84,10 @@ jobs:
             fi
             cd "$PROJECT_DIR"
 
-            echo "==========[3/9] Recuperation de main=========="
-            git fetch --prune origin main
-            git checkout -B main origin/main
-            git reset --hard origin/main
+            echo "==========[3/9] Recuperation de develop=========="
+            git fetch --prune origin develop
+            git checkout -B develop origin/develop
+            git reset --hard origin/develop
 
             echo "==========[4/9] Creation de la configuration Symfony=========="
             dotenv_quote() {
@@ -123,4 +123,4 @@ jobs:
             echo "==========[9/9] Rechauffement du cache=========="
             APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup
 
-            echo "Deploiement de production termine avec succes."
+            echo "Deploiement de develop termine avec succes."

@@ -8,8 +8,45 @@
 }
 
 :root{
-    font-size: 16px;
+  font-size: 16px;
+  //? color variable
+  @each $theme, $map in $themes {
+    &[data-theme="#{$theme}"] {
+        @each $key, $value in $map {
+        --#{$key}: #{$value};
+        }
+    }
+  }
+  //? fontfamily variable
+  @each $key, $value in $fontfamily {
+    --font-#{$key}: #{$value};
+  }
+  //? fontsize variable
+  @each $key, $value in map-get($fontsize, desktop) {
+    --#{$key}:#{$value};
+  
+  }
+
+
+
+//surcharge font size for table
+  @media (max-width: 789px) {
+    &{
+      @each $key, $value in map-get($fontsize, tablet) {
+        --#{$key}:#{$value};
+      }
+    }
+  }
+//surcharge font size for mobile
+  @media (max-width: 500px) {
+    &{
+      @each $key, $value in map-get($fontsize, mobile) {
+        --#{$key}: #{$value};
+      }
+    }
+  }
 }
+  
 
 html,body{
   min-height: 100dvh;
@@ -24,25 +61,13 @@ body{
     
     & h1, & h2, & h3, & h4, & h5, & h6{
 
-      font-family: $font-familly;
+      font-family: var(--font-title);
     }
     
     & p,& a,& span,& strong {
-      font-family: $font-familly;
+      font-family: var(--font-text);
     }
     
-
-    // &.admin {
-    //   // @extend %flex-row-start-start;
-    //   // display: grid;
-    //   // grid-template-columns: 300px 1fr;
-    //   // background-color: $admin-nuance-b-30;
-
- 
-
-
-
-    // }
 
     &.front{
       background: $bg-linear ;
@@ -54,3 +79,4 @@ body{
       }
     }
 }
+

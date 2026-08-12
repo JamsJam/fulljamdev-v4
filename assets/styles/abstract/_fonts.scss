@@ -1,14 +1,18 @@
 //? ========= Font....
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Verdana:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
 
 
 //? ====== familly
 // $font-title: "Arkhip", sans-serif;
+$font-title: "Verdana", sans-serif;
 $font-text: "Onest", serif;
-$font-familly: "Onest", serif;
 
-// $admin-font: "Montserrat", sans-serif;
+$fontfamily: (
+    title: $font-title,
+    text: $font-text
+);
+
 
 //? ====== size
 $fs-0-00: 0rem;       // 0px
@@ -46,35 +50,62 @@ $fs-5-75 : 5.75rem;  // 92px
 $fs-6-00    : 6rem;   // 96px
 
 
-$h2-size-desktop:  clamp(2rem, 0.7692rem + 1.9231vw, 2.5rem);
-$h2-size-mobile: clamp(1.75rem, 1.3929rem + 1.7857vw, 2.25rem);
-
-$h3-size-desktop: clamp(1.5rem, 1.3571rem + 0.7143vw, 2rem);
-// $h3-size-mobile: clamp(1.75rem, 1.3929rem + 1.7857vw, 2.25rem);;
+$h1-size-desktop: clamp(2.5rem, 1.591rem + 1.8433vw, 3.25rem);
+$h1-size-tablet: clamp(2rem, 1.1349rem + 2.7682vw, 2.5rem);
+$h1-size-mobile: clamp(1.75rem, 1.3056rem + 2.2222vw, 2rem);
 
 
+$h2-size-desktop: clamp(2.25rem, 1.341rem + 1.8433vw, 3rem);
+$h2-size-tablet: clamp(1.75rem, 0.8849rem + 2.7682vw, 2.25rem);
+$h2-size-mobile: clamp(1.5rem, 1.0556rem + 2.2222vw, 1.75rem);
 
+$h3-size-desktop: clamp(1.75rem, 1.447rem + 0.6144vw, 2rem);
+$h3-size-tablet: clamp(1.5rem, 1.0675rem + 1.3841vw, 1.75rem);
+$h3-size-mobile: clamp(1.375rem, 1.1528rem + 1.1111vw, 1.5rem);
 
-//?================= admin
+$text-l-desktop: clamp(1.375rem, 1.2235rem + 0.3072vw, 1.5rem);
+$text-l-tablet: clamp(1.25rem, 1.0337rem + 0.692vw, 1.375rem);
+$text-l-mobile: clamp(1.125rem, 0.9028rem + 1.1111vw, 1.25rem);
 
-//?===== typo desk
-//titre
+$text-m-desktop: clamp(1.125rem, 0.9735rem + 0.3072vw, 1.25rem);
+$text-m-tablet: clamp(1rem, 0.6972rem + 0.9689vw, 1.175rem);
+$text-m-mobile: 1rem;
 
-$title-48-32-desk :clamp(2rem, 0.8539rem + 2.3845vw, 3rem);
-$title-32-24-desk :clamp(1.5rem, 0.927rem + 1.1923vw, 2rem);
-$title-24-20-desk :clamp(1.25rem, 0.9643rem + 0.5952vw, 1.5rem);
+$text-s-desktop: clamp(0.9375rem, 0.8618rem + 0.1536vw, 1rem);
+$text-s-tablet: clamp(0.875rem, 0.7669rem + 0.346vw, 0.9375rem);
+$text-s-mobile: 0.875rem;
 
+$annotation-desktop: clamp(0.8125rem, 0.7044rem + 0.346vw, 0.875rem);
+$annotation-tablet: clamp(0.75rem, 0.6419rem + 0.346vw, 0.8125rem);
+$annotation-mobile: 0.75rem;
 
-//text
-$text-48-32-desk :clamp(2rem, 0.8539rem + 2.3845vw, 3rem);
-$text-40-24-desk :clamp(2rem, 1.4302rem + 1.1887vw, 2.5rem);
-$text-24-16-desk :clamp(1rem, 0.427rem + 1.1923vw, 1.5rem);
+$fontsize:(
+    desktop: (
+        h1: $h1-size-desktop,
+        h2: $h2-size-desktop,
+        h3: $h3-size-desktop,
+        text-l: $text-l-desktop,
+        text-m: $text-m-desktop,
+        text-s: $text-s-desktop,
+        annotation: $annotation-desktop
+    ),
+    tablet: (
+        h1: $h1-size-tablet,
+        h2: $h2-size-tablet,
+        h3: $h3-size-tablet,
+        text-l: $text-l-tablet,
+        text-m: $text-m-tablet,
+        text-s: $text-s-tablet,
+        annotation: $annotation-tablet
+    ),
+    mobile: (
+        h1: $h1-size-mobile,
+        h2: $h2-size-mobile,
+        h3: $h3-size-mobile,
+        text-l: $text-l-mobile,
+        text-m: $text-m-mobile,
+        text-s: $text-s-mobile,
+        annotation: $annotation-mobile
+    )
 
-//?===== typo mob
-
-$title-32-20-mob : clamp(1.25rem, 0.7143rem + 2.6786vw, 2rem);
-$title-24-20-mob : clamp(1.25rem, 1.0714rem + 0.8929vw, 1.5rem);
-$title-20-18-mob : clamp(1.125rem, 1.0357rem + 0.4464vw, 1.25rem);
-
-
-$text-24-16-mob : clamp(1rem, 0.8214rem + 0.8929vw, 1.25rem);
+);

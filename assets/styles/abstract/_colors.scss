@@ -48,13 +48,13 @@ $border-accent-muted: hsl(176, 30%, 45%);
 
 $bg-primary: hsl(249, 100%, 20%);
 $bg-dark-primary: hsl(249, 100%, 10%);
-// $border-primary: hsl(247, 75%, 30%);
+
 $border-primary: hsl(234 92% 30% / 1);;
 $border-primary-muted: hsl(247, 35%, 30%);
 
 $border-secondary:hsl(275, 40%, 55%);
 $border-secondary-muted:hsl(275, 20%, 25%);
-//$border-muted:
+
 $color: hsl(249, 100%, 95%);
 $color-muted:hsl(240, 20%, 65%);
 $shadow: 0 4px 4px 0px hsla(0, 0%, 0%, 0.30), 0 2px 2px 0px hsla(0, 0%, 0%, 0.15);
@@ -86,35 +86,114 @@ $shadow: 0 4px 4px 0px hsla(0, 0%, 0%, 0.30), 0 2px 2px 0px hsla(0, 0%, 0%, 0.15
 
 //! ======= admin variable
 
+//*--------- background
 $dark-mode__bg-dark: oklch(0.1 0.05 293);
 $dark-mode__bg: oklch(0.15 0.05 293);
 $dark-mode__bg-light: oklch(0.2 0.05 293);
+//*--------- text
 $dark-mode__text: oklch(0.96 0.1 293);
 $dark-mode__text-muted: oklch(0.76 0.1 293);
 $dark-mode__highlight: oklch(0.5 0.1 293);
+//*--------- border
 $dark-mode__border: oklch(0.4 0.1 293);
 $dark-mode__border-muted: oklch(0.3 0.1 293);
+//*--------- buttons
 $dark-mode__primary: oklch(0.76 0.1 293);
+$dark-mode__primary-foreground: oklch(0.1 0.05 293);
 $dark-mode__secondary: oklch(0.76 0.1 113);
+$dark-mode__secondary-foreground: oklch(0.1 0.05 113);
+$dark-mode__muted: oklch(0.2 0.05 293);
+$dark-mode__muted-foreground: $dark-mode__text-muted;
 $dark-mode__danger: oklch(0.7 0.2 30);
+$dark-mode__danger-foreground: oklch(0.12 0.04 30);
 $dark-mode__warning: oklch(0.7 0.2 100);
+$dark-mode__warning-foreground: oklch(0.12 0.04 100);
 $dark-mode__success: oklch(0.7 0.2 160);
+$dark-mode__success-foreground: oklch(0.12 0.04 160);
 $dark-mode__info: oklch(0.7 0.2 260);
+$dark-mode__info-foreground: oklch(0.12 0.04 260);
+//*--------- card
+$dark-mode__card: oklch(0.2 0.05 293);
+$dark-mode__card-foreground: $dark-mode__text;
+//*--------- popover
+$dark-mode__popover: oklch(0.2 0.05 293);
+$dark-mode__popover-foreground: $dark-mode__text;
+//*--------- accent
+$dark-mode__accent: oklch(0.5 0.1 191);
+$dark-mode__accent-foreground: oklch(0.96 0.06 191);
+//*--------- ring
+$dark-mode__ring: oklch(0.76 0.1 293);
+$dark-mode__input: oklch(0.3 0.1 293);
+//*--------- chart
+$dark-mode__chart-1: oklch(0.76 0.1 293);
+$dark-mode__chart-2: oklch(0.76 0.1 191);
+$dark-mode__chart-3: oklch(0.7 0.2 30);
+$dark-mode__chart-4: oklch(0.7 0.2 100);
+$dark-mode__chart-5: oklch(0.7 0.2 160);
+//*--------- sidebar
+$dark-mode__sidebar: oklch(0.1 0.05 293);
+$dark-mode__sidebar-foreground: $dark-mode__text;
+$dark-mode__sidebar-primary: $dark-mode__primary;
+$dark-mode__sidebar-primary-foreground: $dark-mode__bg-dark;
+$dark-mode__sidebar-accent: $dark-mode__accent;
+$dark-mode__sidebar-accent-foreground: $dark-mode__accent-foreground;
+$dark-mode__sidebar-border: $dark-mode__border-muted;
+$dark-mode__sidebar-ring: $dark-mode__ring;
 
+//! ======= light variable
+
+//*--------- background
 $light-mode__bg-dark: oklch(0.92 0.05 293);
 $light-mode__bg: oklch(0.96 0.05 293);
 $light-mode__bg-light: oklch(1 0.05 293);
+//*--------- text
 $light-mode__text: oklch(0.15 0.1 293);
 $light-mode__text-muted: oklch(0.4 0.1 293);
 $light-mode__highlight: oklch(1 0.1 293);
+//*--------- border
 $light-mode__border: oklch(0.6 0.1 293);
 $light-mode__border-muted: oklch(0.7 0.1 293);
+//*--------- buttons
 $light-mode__primary: oklch(0.4 0.1 293);
+$light-mode__primary-foreground: oklch(0.98 0.02 293);
 $light-mode__secondary: oklch(0.4 0.1 113);
+$light-mode__secondary-foreground: oklch(0.98 0.02 191);
+$light-mode__muted: oklch(0.91 0.04 293);
+$light-mode__muted-foreground: $light-mode__text-muted;
 $light-mode__danger: oklch(0.5 0.2 30);
+$light-mode__danger-foreground: oklch(0.98 0.02 30);
 $light-mode__warning: oklch(0.5 0.2 100);
+$light-mode__warning-foreground: oklch(0.14 0.04 100);
 $light-mode__success: oklch(0.5 0.2 160);
+$light-mode__success-foreground: oklch(0.14 0.04 160);
 $light-mode__info: oklch(0.5 0.2 260);
+$light-mode__info-foreground: oklch(0.98 0.02 260);
+$light-mode__accent: oklch(0.88 0.09 191);
+$light-mode__accent-foreground: oklch(0.22 0.08 191);
+//*--------- card
+$light-mode__card: oklch(0.985 0.025 293);
+$light-mode__card-foreground: $light-mode__text;
+//*--------- popover
+$light-mode__popover: oklch(0.995 0.015 293);
+$light-mode__popover-foreground: $light-mode__text;
+//*--------- popover
+$light-mode__ring: oklch(0.55 0.18 293);
+$light-mode__input: oklch(0.74 0.08 293);
+//*--------- chart
+$light-mode__chart-1: oklch(0.48 0.19 293);
+$light-mode__chart-2: oklch(0.52 0.14 191);
+$light-mode__chart-3: oklch(0.62 0.17 35);
+$light-mode__chart-4: oklch(0.65 0.16 85);
+$light-mode__chart-5: oklch(0.58 0.15 155);
+//*--------- sidebar
+$light-mode__sidebar: oklch(0.975 0.035 293);
+$light-mode__sidebar-foreground: $light-mode__text;
+$light-mode__sidebar-primary: oklch(0.46 0.16 293);
+$light-mode__sidebar-primary-foreground: oklch(0.98 0.02 293);
+$light-mode__sidebar-accent: oklch(0.91 0.07 191);
+$light-mode__sidebar-accent-foreground: oklch(0.22 0.08 191);
+$light-mode__sidebar-border: oklch(0.78 0.07 293);
+$light-mode__sidebar-ring: $light-mode__ring;
 
 
 $shadow: 0px 2px 2px #00000030, 0px 4px 4px #00000015;
@@ -132,9 +211,38 @@ $themes: (
         primary: $dark-mode__primary,
         secondary: $dark-mode__secondary,
         danger: $dark-mode__danger,
+        danger-foreground: $dark-mode__danger-foreground,
         warning: $dark-mode__warning,
+        warning-foreground: $dark-mode__warning-foreground,
         success: $dark-mode__success,
-        info: $dark-mode__info
+        success-foreground: $dark-mode__success-foreground,
+        info: $dark-mode__info,
+        info-foreground: $dark-mode__info-foreground,
+        card: $dark-mode__card,
+        card-foreground: $dark-mode__card-foreground,
+        popover: $dark-mode__popover,
+        popover-foreground: $dark-mode__popover-foreground,
+        primary-foreground: $dark-mode__primary-foreground,
+        secondary-foreground: $dark-mode__secondary-foreground,
+        muted: $dark-mode__muted,
+        muted-foreground: $dark-mode__muted-foreground,
+        accent: $dark-mode__accent,
+        accent-foreground: $dark-mode__accent-foreground,
+        ring: $dark-mode__ring,
+        input: $dark-mode__input,
+        chart-1: $dark-mode__chart-1,
+        chart-2: $dark-mode__chart-2,
+        chart-3: $dark-mode__chart-3,
+        chart-4: $dark-mode__chart-4,
+        chart-5: $dark-mode__chart-5,
+        sidebar: $dark-mode__sidebar,
+        sidebar-foreground: $dark-mode__sidebar-foreground,
+        sidebar-primary: $dark-mode__sidebar-primary,
+        sidebar-primary-foreground: $dark-mode__sidebar-primary-foreground,
+        sidebar-accent: $dark-mode__sidebar-accent,
+        sidebar-accent-foreground: $dark-mode__sidebar-accent-foreground,
+        sidebar-border: $dark-mode__sidebar-border,
+        sidebar-ring: $dark-mode__sidebar-ring
     ),
     light: (
         bg-dark: $light-mode__bg-dark,
@@ -148,11 +256,37 @@ $themes: (
         primary: $light-mode__primary,
         secondary: $light-mode__secondary,
         danger: $light-mode__danger,
+        danger-foreground: $light-mode__danger-foreground,
         warning: $light-mode__warning,
+        warning-foreground: $light-mode__warning-foreground,
         success: $light-mode__success,
-        info: $light-mode__info
+        success-foreground: $light-mode__success-foreground,
+        info: $light-mode__info,
+        info-foreground: $light-mode__info-foreground,
+        card: $light-mode__card,
+        card-foreground: $light-mode__card-foreground,
+        popover: $light-mode__popover,
+        popover-foreground: $light-mode__popover-foreground,
+        primary-foreground: $light-mode__primary-foreground,
+        secondary-foreground: $light-mode__secondary-foreground,
+        muted: $light-mode__muted,
+        muted-foreground: $light-mode__muted-foreground,
+        accent: $light-mode__accent,
+        accent-foreground: $light-mode__accent-foreground,
+        ring: $light-mode__ring,
+        input: $light-mode__input,
+        chart-1: $light-mode__chart-1,
+        chart-2: $light-mode__chart-2,
+        chart-3: $light-mode__chart-3,
+        chart-4: $light-mode__chart-4,
+        chart-5: $light-mode__chart-5,
+        sidebar: $light-mode__sidebar,
+        sidebar-foreground: $light-mode__sidebar-foreground,
+        sidebar-primary: $light-mode__sidebar-primary,
+        sidebar-primary-foreground: $light-mode__sidebar-primary-foreground,
+        sidebar-accent: $light-mode__sidebar-accent,
+        sidebar-accent-foreground: $light-mode__sidebar-accent-foreground,
+        sidebar-border: $light-mode__sidebar-border,
+        sidebar-ring: $light-mode__sidebar-ring
     )
 );
-
-
-

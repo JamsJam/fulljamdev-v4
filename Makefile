@@ -4,18 +4,20 @@
 PHP ?= php
 COMPOSER ?= composer
 DEV_MEMORY_LIMIT ?= 512M
+PHPSTAN_MEMORY_LIMIT ?= 512M
 SYMFONY ?= symfony
 CONSOLE := $(PHP) bin/console
 PHP_CS_FIXER := vendor/bin/php-cs-fixer
 PHPUNIT := $(PHP) bin/phpunit
 BDI := vendor/bin/bdi
+PHPSTAN := vendor/bin/phpstan
 
 # * Le scan de style est non modifiant par défaut
 DR ?= 1
 # ==============================================================================
 # * Commandes combinées 
 # ==============================================================================
-quality: lint cs-scan
+quality: lint cs-scan phpstan
 
 
 # ==============================================================================
@@ -53,3 +55,7 @@ else ifeq ($(DR),0)
 else
 	$(error DR doit valoir 0 ou 1)
 endif
+
+# ? Analyse statique PHP
+phpstan:
+	$(PHPSTAN) analyse --memory-limit=$(PHPSTAN_MEMORY_LIMIT)

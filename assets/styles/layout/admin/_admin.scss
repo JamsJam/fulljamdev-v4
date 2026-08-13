@@ -1,0 +1,92 @@
+body.admin {
+    min-width: 0;
+    overflow: hidden;
+
+    .layout {
+        position: relative;
+        --sidebar-width: 20rem;
+        --sidebar-width-collapsed: 0rem;
+
+        display: grid;
+        grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+        grid-template-rows: 4rem minmax(0, 1fr);
+        grid-template-areas:
+            "aside header"
+            "aside content";
+        width: 100dvw;
+        height: 100dvh;
+        transition: grid-template-columns 200ms ease;
+
+        &.is-sidebar-collapsed {
+            grid-template-columns: var(--sidebar-width-collapsed) minmax(0, 1fr);
+        }
+
+        &__aside {
+            grid-area: aside;
+            min-height: 0;
+            overflow-y: auto;
+            min-width: 0;
+        }
+    }
+}
+
+body.admin .layout__overlay {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 200ms ease, visibility 200ms ease;
+}
+
+@media (max-width: 64rem) {
+    body.admin .layout {
+        grid-template-columns: 0 minmax(0, 1fr);
+
+        &__aside {
+            position: absolute;
+            z-index: 30;
+            inset-block: 0;
+            inset-inline-start: 0;
+            width: min(20rem, 86vw);
+            transform: translateX(-100%);
+            transition: transform 200ms ease;
+        }
+
+        &.is-sidebar-collapsed .layout__aside {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        &:not(.is-sidebar-collapsed) .layout__aside {
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        &__overlay {
+            position: absolute;
+            z-index: 20;
+            display: block;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            background: color-mix(in srgb, var(--bg-dark) 65%, transparent);
+            border: 0;
+            cursor: pointer;
+
+            &.is-visible {
+                visibility: visible;
+                pointer-events: auto;
+                opacity: 1;
+            }
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.admin .layout,
+    body.admin .layout__aside,
+    body.admin .layout__overlay {
+        transition: none;
+    }
+}

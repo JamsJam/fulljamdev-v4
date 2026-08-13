@@ -97,6 +97,7 @@ $dark-mode__highlight: oklch(0.5 0.1 293);
 //*--------- border
 $dark-mode__border: oklch(0.4 0.1 293);
 $dark-mode__border-muted: oklch(0.3 0.1 293);
+$dark-mode__shadow1: rgb(0 0 0 / 25%);
 //*--------- buttons
 $dark-mode__primary: oklch(0.76 0.1 293);
 $dark-mode__primary-foreground: oklch(0.1 0.05 293);
@@ -153,6 +154,7 @@ $light-mode__highlight: oklch(1 0.1 293);
 //*--------- border
 $light-mode__border: oklch(0.6 0.1 293);
 $light-mode__border-muted: oklch(0.7 0.1 293);
+$light-mode__shadow1: rgb(0 0 0 / 10%);
 //*--------- buttons
 $light-mode__primary: oklch(0.4 0.1 293);
 $light-mode__primary-foreground: oklch(0.98 0.02 293);
@@ -208,6 +210,7 @@ $themes: (
         hoverlight: $dark-mode__highlight,
         border: $dark-mode__border,
         border-muted: $dark-mode__border-muted,
+        shadow1: $dark-mode__shadow1,
         primary: $dark-mode__primary,
         secondary: $dark-mode__secondary,
         danger: $dark-mode__danger,
@@ -253,6 +256,7 @@ $themes: (
         hoverlight: $light-mode__highlight,
         border: $light-mode__border,
         border-muted: $light-mode__border-muted,
+        shadow1: $light-mode__shadow1,
         primary: $light-mode__primary,
         secondary: $light-mode__secondary,
         danger: $light-mode__danger,

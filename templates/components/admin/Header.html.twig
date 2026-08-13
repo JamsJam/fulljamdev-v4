@@ -1,0 +1,39 @@
+<header class="layout__header admin-header">
+    <div class="admin-header__navigation">
+        <button
+            class="admin-header__sidebar-trigger"
+            type="button"
+            aria-expanded="true"
+            aria-controls="admin-sidebar"
+            aria-label="Fermer le menu latéral"
+            title="Fermer le menu"
+            {{ stimulus_target('sidebar', 'trigger') }}
+            {{ stimulus_action('sidebar', 'toggle') }}
+        >
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M9 3v18" />
+            </svg>
+        </button>
+        <twig:Admin:Breadcrumb :items="breadcrumb" />
+    </div>
+
+    <div class="admin-header__actions" {{ stimulus_controller('admin-theme') }}>
+        <button
+            class="admin-header__action"
+            type="button"
+            aria-label="Changer de thème"
+            title="Changer de thème"
+            {{ stimulus_action('admin-theme', 'toggle') }}
+        >
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3a9 9 0 1 0 9 9c0-.46-.03-.91-.1-1.35A6 6 0 0 1 12 3Z" />
+            </svg>
+        </button>
+
+        <button class="admin-header__profile" type="button" aria-label="Ouvrir le menu du profil">
+            <span class="admin-header__avatar" aria-hidden="true">{{ this.initials }}</span>
+            <span class="admin-header__profile-name">{{ userName }}</span>
+        </button>
+    </div>
+</header>

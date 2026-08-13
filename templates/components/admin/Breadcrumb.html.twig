@@ -1,0 +1,21 @@
+{% if items is not empty %}
+    <nav class="breadcrumb" aria-label="Fil d’Ariane">
+        <ol class="breadcrumb__list" role="list">
+            {% for item in items %}
+                <li class="breadcrumb__item">
+                    {% if not loop.first %}
+                        <svg class="breadcrumb__separator" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                            <path d="m9 18 6-6-6-6" />
+                        </svg>
+                    {% endif %}
+
+                    {% if loop.last %}
+                        <span class="breadcrumb__current" aria-current="page">{{ item.label }}</span>
+                    {% else %}
+                        <a class="breadcrumb__link" href="{{ path(item.route) }}">{{ item.label }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </nav>
+{% endif %}

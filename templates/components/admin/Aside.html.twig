@@ -1,0 +1,93 @@
+<aside id="admin-sidebar" class="layout__aside sidebar" aria-label="Navigation de l’administration">
+    <div class="sidebar__header">
+        <a class="sidebar__brand" href="{{ path('app_dashboard') }}">
+            <span class="sidebar__brand-mark" aria-hidden="true">FJ</span>
+            <span class="sidebar__brand-label">{{ brand }}</span>
+        </a>
+    </div>
+
+    <nav class="sidebar__content" aria-label="Menu principal">
+        {% for group in groups %}
+            <section class="sidebar__group">
+                {% if group.label is defined %}
+                    <h2 class="sidebar__group-label">{{ group.label }}</h2>
+                {% endif %}
+
+                <ul class="sidebar__menu" role="list">
+                    {% for item in group.items %}
+                        {% set hasChildren = item.children is defined and item.children is not empty %}
+                        {% set active = item.route is defined and this.isActive(item.route) %}
+                        {% set childActive = hasChildren and this.hasActiveChild(item.children) %}
+
+                        <li
+                            class="sidebar__menu-item{{ hasChildren ? ' sidebar__menu-item--collapsible' : '' }}"
+                            {% if hasChildren %}
+                                {{ stimulus_controller('collapsible-menu', {open: childActive}) }}
+                                data-collapsible-menu-open-class="is-open"
+                            {% endif %}
+                        >
+                            {% if hasChildren %}
+                                <button
+                                    class="sidebar__menu-link sidebar__menu-button{{ childActive ? ' is-active' : '' }}"
+                                    type="button"
+                                    aria-expanded="{{ childActive ? 'true' : 'false' }}"
+                                    {{ stimulus_target('collapsible-menu', 'button') }}
+                                    {{ stimulus_action('collapsible-menu', 'toggle') }}
+                                >
+                            {% else %}
+                                <a
+                                    class="sidebar__menu-link{{ active ? ' is-active' : '' }}"
+                                    href="{{ path(item.route) }}"
+                                    {% if active %}aria-current="page"{% endif %}
+                                >
+                            {% endif %}
+
+                                {% if item.icon is defined %}
+                                    {{ ux_icon(item.icon, {class: 'sidebar__menu-icon', 'aria-hidden': 'true'}) }}
+                                {% endif %}
+                                <span class="sidebar__menu-label">{{ item.label }}</span>
+                                {% if item.badge is defined %}
+                                    <span class="sidebar__menu-badge">{{ item.badge }}</span>
+                                {% endif %}
+                                {% if hasChildren %}
+                                    <svg class="sidebar__menu-chevron" aria-hidden="true" viewBox="0 0 24 24" fill="none">
+                                        <path d="m9 18 6-6-6-6" />
+                                    </svg>
+                                {% endif %}
+
+                            {% if hasChildren %}
+                                </button>
+
+                                <div
+                                    class="sidebar__submenu-wrapper"
+                                    {{ stimulus_target('collapsible-menu', 'submenu') }}
+                                    {% if not childActive %}inert{% endif %}
+                                >
+                                    <ul class="sidebar__submenu" role="list">
+                                        {% for child in item.children %}
+                                            {% set childIsActive = this.isActive(child.route) %}
+                                            <li>
+                                                <a
+                                                    class="sidebar__submenu-link{{ childIsActive ? ' is-active' : '' }}"
+                                                    href="{{ path(child.route) }}"
+                                                    {% if childIsActive %}aria-current="page"{% endif %}
+                                                >
+                                                    <span>{{ child.label }}</span>
+                                                    {% if child.badge is defined %}
+                                                        <span class="sidebar__menu-badge">{{ child.badge }}</span>
+                                                    {% endif %}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% else %}
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endfor %}
+    </nav>
+</aside>

@@ -1,0 +1,11 @@
+<div
+    id="{{ id }}"
+    class="tabs__content{{ active|default(false) ? ' is-active' : '' }}"
+    role="tabpanel"
+    aria-labelledby="{{ labelledby }}"
+    data-panel="{{ value }}"
+    {% if not active|default(false) %}hidden{% endif %}
+    {{ stimulus_target('settings-tabs', 'panel') }}
+>
+    {% block content %}{% endblock %}
+</div>

@@ -1,4 +1,5 @@
 @use "../abstract/" as *;
+@use "../animations/variables" as animation;
 
 *,*::after,*::before{
     margin: 0;
@@ -24,7 +25,18 @@
   //? fontsize variable
   @each $key, $value in map-get($fontsize, desktop) {
     --#{$key}:#{$value};
-  
+  }
+
+  //? spacing variables
+  @each $property, $scale in $spaces {
+    @each $key, $value in $scale {
+      --#{$property}-#{$key}: #{$value};
+    }
+  }
+
+  //? animation variables
+  @each $key, $value in animation.$animations {
+    --animation-#{$key}: #{$value};
   }
 
 
@@ -79,4 +91,3 @@ body{
       }
     }
 }
-

@@ -1,7 +1,8 @@
 
-@use 'base' as *;
-// @use "./admin/" as *;
-// @forward 'layout/admin-main';
+// @use 'base' as *;
+@use 'layout/admin' as *;
+@use 'components/admin/breadcrumb' as *;
+@use 'pages/back/settings' as *;
+@use 'animations/turbo' as *;
 // @forward 'components/table';
 // @forward 'components/tabs';
-

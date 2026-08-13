@@ -1,0 +1,43 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Paramètres | FullJam Dev{% endblock %}
+
+{% block body %}
+    <section class="settings" aria-labelledby="settings-title">
+        <header class="settings__header">
+            <h1 id="settings-title">Paramètres</h1>
+            <p>Configurez les paramètres de votre espace d’administration.</p>
+        </header>
+
+        <twig:Admin:Tabs defaultValue="general">
+            <twig:block name="content">
+                <twig:Admin:TabsList label="Sections des paramètres">
+                    <twig:block name="content">
+                        <twig:Admin:TabsTrigger id="settings-tab-general" label="Général" value="general" controls="settings-panel-general" active="true" />
+                        <twig:Admin:TabsTrigger id="settings-tab-availability" label="Disponibilités" value="availability" controls="settings-panel-availability" />
+                        <twig:Admin:TabsTrigger id="settings-tab-account" label="Compte" value="account" controls="settings-panel-account" />
+                    </twig:block>
+                </twig:Admin:TabsList>
+
+                <twig:Admin:TabsContent id="settings-panel-general" value="general" labelledby="settings-tab-general" active="true">
+                    <twig:block name="content">
+                <h2>Paramètres généraux</h2>
+                <p>Les paramètres généraux de l’application seront disponibles ici.</p>
+                    </twig:block>
+                </twig:Admin:TabsContent>
+                <twig:Admin:TabsContent id="settings-panel-availability" value="availability" labelledby="settings-tab-availability">
+                    <twig:block name="content">
+                <h2>Disponibilités</h2>
+                <p>Configurez les créneaux disponibles pour les réservations.</p>
+                    </twig:block>
+                </twig:Admin:TabsContent>
+                <twig:Admin:TabsContent id="settings-panel-account" value="account" labelledby="settings-tab-account">
+                    <twig:block name="content">
+                <h2>Compte</h2>
+                <p>Les informations du compte seront gérées ici.</p>
+                    </twig:block>
+                </twig:Admin:TabsContent>
+            </twig:block>
+        </twig:Admin:Tabs>
+    </section>
+{% endblock %}

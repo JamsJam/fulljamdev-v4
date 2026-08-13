@@ -1,0 +1,69 @@
+html {
+    view-transition-name: none;
+}
+
+.layout__container {
+    view-transition-name: dashboard-content;
+}
+
+html[data-turbo-visit-direction="forward"]::view-transition-old(dashboard-content) {
+    animation: dashboard-content-out var(--animation-page-out-duration)
+        var(--animation-page-easing) both;
+    transform-origin: left center;
+}
+
+html[data-turbo-visit-direction="forward"]::view-transition-new(dashboard-content) {
+    animation: dashboard-content-in var(--animation-page-in-duration)
+        var(--animation-page-easing) both;
+}
+
+html[data-turbo-visit-direction="back"]::view-transition-old(dashboard-content) {
+    animation: dashboard-content-back-out var(--animation-page-out-duration)
+        var(--animation-page-easing) both;
+}
+
+html[data-turbo-visit-direction="back"]::view-transition-new(dashboard-content) {
+    animation: dashboard-content-back-in var(--animation-page-in-duration)
+        var(--animation-page-easing) both;
+}
+
+@keyframes dashboard-content-out {
+    to {
+        opacity: 0;
+        transform: translateX(-2rem) scale(0.97);
+    }
+}
+
+@keyframes dashboard-content-in {
+    from {
+        opacity: 0;
+        transform: translateX(2rem) scale(0.97);
+    }
+}
+
+@keyframes dashboard-content-back-out {
+    to {
+        opacity: 0;
+        transform: translateX(2rem) scale(0.97);
+    }
+}
+
+@keyframes dashboard-content-back-in {
+    from {
+        opacity: 0;
+        transform: translateX(-2rem) scale(0.97);
+    }
+}
+
+#turbo-progress-bar {
+    height: 0.1875rem;
+    background: var(--primary);
+    box-shadow: 0 0 0.75rem var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(dashboard-content),
+    ::view-transition-new(dashboard-content) {
+        animation: none;
+    }
+}

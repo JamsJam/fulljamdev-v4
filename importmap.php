@@ -30,9 +30,6 @@ return [
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
-    '@hotwired/turbo' => [
-        'version' => '7.3.0',
-    ],
     'suneditor' => [
         'version' => '2.47.5',
     ],
@@ -61,5 +58,8 @@ return [
     'tom-select/dist/css/tom-select.default.min.css' => [
         'version' => '2.4.3',
         'type' => 'css',
+    ],
+    '@hotwired/turbo' => [
+        'version' => '8.0.23',
     ],
 ];

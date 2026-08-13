@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="noindex, nofollow">
+        <meta name="view-transition" content="same-origin">
+        <meta name="turbo-refresh-method" content="morph">
+
+        <title>{% block title %}Administration | FullJam Dev{% endblock %}</title>
+        <link rel="icon" href="{{ asset('favicon/favicon.svg') }}">
+
+        {% block stylesheets %}{% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap(['app', 'admin']) }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body class="admin">
+        <div
+            class="layout"
+            {{ stimulus_controller('sidebar') }}
+            data-sidebar-collapsed-class="is-sidebar-collapsed"
+        >
+
+            <twig:Admin:Aside />
+
+
+            <button
+                class="layout__overlay"
+                type="button"
+                aria-label="Fermer le menu latéral"
+                aria-hidden="true"
+                {{ stimulus_target('sidebar', 'overlay') }}
+                {{ stimulus_action('sidebar', 'toggle') }}
+            ></button>
+
+            <twig:Admin:Header :breadcrumb="breadcrumb|default([])" />
+
+
+            <main class="layout__content">
+                <div class="layout__container">
+                    {% block body %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

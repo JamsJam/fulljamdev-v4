@@ -1,2 +1,10 @@
 parameters:
     theme: light
+    timezone: Europe/Paris
+account:
+    first_name: Jeremy
+    last_name: Antoine
+    email: contact@fulljamdev.fr
+    phone_number: '0786646817'
+    company: 'Fulljam dDev'
+    job_title: 'Développeur Fullstack Php Symfony'

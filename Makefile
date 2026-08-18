@@ -19,6 +19,12 @@ DR ?= 1
 # ==============================================================================
 quality: lint cs-scan phpstan
 
+# ? Vérifie le projet et simule les migrations avant de les exécuter
+migrate:
+	$(MAKE) lint
+	$(SYMFONY) console doctrine:migrations:migrate --dry-run --no-interaction && \
+	$(SYMFONY) console doctrine:migrations:migrate --no-interaction
+
 
 # ==============================================================================
 # * VALIDATION SYMFONY ET PRÉSENTATION

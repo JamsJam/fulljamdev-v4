@@ -21,5 +21,16 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\ConfigurationService:
+        arguments:
+            $configurationFile: '%kernel.project_dir%/src/Config/config.yaml'
+
+    App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator:
+        arguments:
+            $clientId: '%env(GOOGLE_CALENDAR_CLIENT_ID)%'
+            $clientSecret: '%env(GOOGLE_CALENDAR_CLIENT_SECRET)%'
+            $refreshToken: '%env(GOOGLE_CALENDAR_REFRESH_TOKEN)%'
+            $calendarId: '%env(GOOGLE_CALENDAR_ID)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

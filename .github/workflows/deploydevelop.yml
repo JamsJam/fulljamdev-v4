@@ -67,7 +67,7 @@ jobs:
           script: |
             set -Eeuo pipefail
 
-            PROJECT_DIR="/var/www/${{ secrets.APP_USER }}/test-${APP_DOMAIN}"
+            PROJECT_DIR="/var/www/${{ secrets.APP_USER }}/test.${APP_DOMAIN}"
 
             echo "==========[1/9] Verification de la configuration=========="
             for VARIABLE_NAME in APP_DOMAIN APP_SECRET_SOURCE DATABASE_URL_SOURCE MAILER_DSN_SOURCE MESSENGER_TRANSPORT_DSN_SOURCE; do

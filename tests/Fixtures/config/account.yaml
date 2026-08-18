@@ -1,0 +1,7 @@
+account:
+    first_name: Admin
+    last_name: Fulljam
+    email: admin@example.test
+    phone_number: '0102030405'
+    company: Fulljam Dev
+    job_title: Développeur

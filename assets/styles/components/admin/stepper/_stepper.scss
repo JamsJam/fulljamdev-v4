@@ -1,0 +1,106 @@
+.stepper {
+    --stepper-accent: var(--booking-accent, var(--primary, #6750a4));
+    --stepper-accent-foreground: var(--primary-foreground, #fff);
+    --stepper-text: var(--text, #25232a);
+    --stepper-muted-text: var(--text-muted, #77727f);
+    --stepper-muted: var(--muted, #eeeaf1);
+    --stepper-border: var(--border-muted, #cbc5d0);
+
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        display: grid;
+        flex: 0 0 auto;
+        gap: 0.55rem;
+        justify-items: center;
+        min-width: 5rem;
+        color: var(--stepper-muted-text);
+        text-align: center;
+
+        strong {
+            font-size: 0.875rem;
+            font-weight: 650;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        &.is-active {
+            color: var(--stepper-text);
+
+            .stepper__marker {
+                color: var(--stepper-accent-foreground);
+                background: var(--stepper-accent);
+                border-color: var(--stepper-accent);
+                box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--stepper-accent) 18%, transparent);
+                transform: scale(1.06);
+            }
+        }
+
+        &.is-complete {
+            color: var(--stepper-text);
+
+            .stepper__marker {
+                color: var(--stepper-accent-foreground);
+                background: var(--stepper-accent);
+                border-color: var(--stepper-accent);
+            }
+        }
+    }
+
+    &__marker {
+        display: inline-grid;
+        width: 2.15rem;
+        height: 2.15rem;
+        place-items: center;
+        color: var(--stepper-muted-text);
+        font-size: 0.82rem;
+        font-weight: 800;
+        line-height: 1;
+        background: var(--stepper-muted);
+        border: 2px solid var(--stepper-border);
+        border-radius: 50%;
+        transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+    }
+
+    &__separator {
+        flex: 1 1 4rem;
+        min-width: 1.5rem;
+        height: 2px;
+        margin-top: 1.05rem;
+        background: var(--stepper-border);
+
+        &:has(+ .is-active),
+        &:has(+ .is-complete) {
+            background: var(--stepper-accent);
+        }
+    }
+}
+
+@media (max-width: 32rem) {
+    .stepper {
+        &__item {
+            min-width: 3.75rem;
+
+            strong {
+                max-width: 5.25rem;
+                font-size: 0.75rem;
+                white-space: normal;
+            }
+        }
+
+        &__marker {
+            width: 1.9rem;
+            height: 1.9rem;
+        }
+
+        &__separator {
+            min-width: 0.65rem;
+            margin-top: 0.95rem;
+        }
+    }
+}

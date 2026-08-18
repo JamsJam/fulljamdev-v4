@@ -1,0 +1,29 @@
+<div id="{{ id }}" class="date-picker" aria-label="{{ label }}">
+    <div class="date-picker__toolbar">
+        <a href="{{ previousUrl }}" aria-label="Afficher le mois précédent" data-turbo-stream>
+            <
+        </a>
+        <strong>{{ calendar.label }}</strong>
+
+        <a href="{{ nextUrl }}" aria-label="Afficher le mois suivant" data-turbo-stream>
+            >
+        </a>
+    </div>
+
+    <div class="date-picker__weekdays" aria-hidden="true">
+        {% for day in ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}<span>{{ day }}</span>{% endfor %}
+    </div>
+
+    <div class="date-picker__month" data-month="{{ calendar.key }}">
+        <div class="date-picker__grid">
+            {% for week in calendar.weeks %}
+                {% for day in week %}
+                    <twig:Form:DatePicker:Cell
+                        :day="day"
+                        :choice="day.available ? attribute(field, day.choiceName) : null"
+                    />
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

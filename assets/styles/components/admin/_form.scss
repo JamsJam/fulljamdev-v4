@@ -3,7 +3,7 @@
 input,textarea{
     
     width: 100%;
-    font-size: 1.5rem;
+    font-size: var(--text-m);
 }
 
 input[type="text"],textarea{
@@ -95,7 +95,7 @@ label{
             outline: none;
             border: none;
             font-family: $admin-font;
-            font-size: 1rem;
+            font-size: var(--text-m);
             color: $admin-nuance-b-15;
         }
 

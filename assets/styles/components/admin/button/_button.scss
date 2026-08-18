@@ -1,0 +1,98 @@
+.admin .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.625rem 1rem;
+    font: inherit;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--primary-foreground);
+    text-decoration: none;
+    background: var(--primary);
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.08);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.55;
+    }
+
+    &--secondary {
+        color: var(--secondary-foreground);
+        background: var(--secondary);
+    }
+
+    &--destructive {
+        color: var(--danger-foreground);
+        background: var(--danger);
+    }
+
+    &--success {
+        color: var(--success-foreground);
+        background: var(--success);
+    }
+
+    &--outline {
+        color: var(--text);
+        background: transparent;
+        border-color: var(--border);
+    }
+
+    &--ghost {
+        color: var(--text);
+        background: transparent;
+
+        &:hover:not(:disabled),
+        &:focus-visible {
+            background: var(--muted);
+            border-color: var(--border-muted);
+            filter: none;
+        }
+    }
+
+    &--icon,
+    &--icon-only {
+        width: 2.5rem;
+        min-width: 2.5rem;
+        padding: 0;
+    }
+
+    &--withIcon,
+    &--loading {
+        color: var(--primary-foreground);
+        background: var(--primary);
+    }
+
+    &__icon,
+    &__spinner {
+        flex: 0 0 auto;
+        width: 1.125rem;
+        height: 1.125rem;
+    }
+
+    &__spinner {
+        border: 2px solid currentColor;
+        border-inline-end-color: transparent;
+        border-radius: 50%;
+        animation: button-spin 650ms linear infinite;
+    }
+}
+
+@keyframes button-spin {
+    to {
+        transform: rotate(1turn);
+    }
+}

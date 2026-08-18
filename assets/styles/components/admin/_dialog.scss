@@ -1,0 +1,169 @@
+.dialog {
+    position: absolute;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    width: min(38rem, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    color: var(--popover-foreground);
+    background: var(--popover);
+    border: 1px solid var(--border-muted);
+    border-radius: 0.75rem;
+    box-shadow: 0 1.5rem 4rem var(--shadow1);
+    translate: -50% -50%;
+    visibility: hidden;
+    opacity: 0;
+
+    &[open].is-visible:not(.is-closing) {
+        visibility: visible;
+        animation: dialog-appearance 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    &::backdrop {
+        background: color-mix(in srgb, var(--bg-dark) 72%, transparent);
+        backdrop-filter: blur(2px);
+        animation: backdrop-appearance 350ms ease-out both;
+    }
+
+    &.is-closing {
+        visibility: visible;
+        pointer-events: none;
+        animation: dialog-disappearance 350ms ease-in both;
+
+        &::backdrop {
+            animation: backdrop-disappearance 350ms ease-in both;
+        }
+    }
+
+    &__content {
+        display: grid;
+        max-height: calc(100dvh - 2rem);
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.5rem 1.5rem 1rem;
+
+        h2,
+        p {
+            margin: 0;
+        }
+
+        h2 {
+            font-size: var(--h3);
+        }
+
+        p {
+            margin-top: 0.35rem;
+            color: var(--text-muted);
+            font-size: var(--text-s);
+        }
+    }
+
+    &__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        color: var(--text-muted);
+        font: inherit;
+        font-size: var(--text-l);
+        background: transparent;
+        border: 0;
+        border-radius: 0.4rem;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--text);
+            background: var(--muted);
+        }
+    }
+
+    &__body {
+        padding: 0.5rem 1.5rem 1.5rem;
+        overflow-y: auto;
+    }
+}
+
+@keyframes dialog-appearance {
+    from {
+        opacity: 0;
+        transform: translateY(100vh);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes dialog-disappearance {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(100vh);
+    }
+}
+
+@keyframes backdrop-appearance {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes backdrop-disappearance {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dialog[open].is-visible {
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+    }
+
+    .dialog[open],
+    .dialog::backdrop,
+    .dialog.is-closing,
+    .dialog.is-closing::backdrop {
+        animation: none;
+    }
+}
+
+@container dashboard (max-width: 500px) {
+    .dialog {
+        width: calc(100% - 1rem);
+
+        &__header {
+            padding: 1rem 1rem 0.75rem;
+        }
+
+        &__body {
+            padding: 0.25rem 1rem 1rem;
+        }
+    }
+}

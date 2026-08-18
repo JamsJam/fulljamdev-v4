@@ -1,0 +1,11 @@
+{% if day.available and choice %}
+    <label class="date-picker__cell">
+        {{ form_widget(choice) }}
+        <span>{{ day.day }}</span>
+    </label>
+{% else %}
+    <span
+        class="date-picker__cell is-disabled {{ not day.inMonth ? 'is-outside' : '' }}"
+        aria-disabled="true"
+    >{{ day.day }}</span>
+{% endif %}

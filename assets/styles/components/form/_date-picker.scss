@@ -1,0 +1,61 @@
+.date-picker {
+    --date-picker-accent: var(--booking-accent, var(--primary, #6750a4));
+
+    &__toolbar {
+        display: grid;
+        grid-template-columns: 2.5rem minmax(10rem, 1fr) 2.5rem;
+        align-items: center;
+        max-width: 32rem;
+        margin: 0 auto 1.25rem;
+        text-align: center;
+
+        a {
+            padding: 0.25rem;
+            color: inherit;
+            font-size: 1.8rem;
+            text-decoration: none;
+        }
+    }
+
+    &__weekdays,
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(2rem, 1fr));
+        gap: 0.35rem;
+        max-width: 40rem;
+        margin-inline: auto;
+        text-align: center;
+    }
+
+    &__weekdays {
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    &__cell {
+        display: grid;
+        aspect-ratio: 1;
+        max-height: 3.5rem;
+        place-items: center;
+        border-radius: 50%;
+
+        input { position: absolute; opacity: 0; pointer-events: none; }
+
+        &:has(input) { cursor: pointer; }
+        input + span { display: grid; width: 100%; height: 100%; place-items: center; border: 1px solid transparent; border-radius: 50%; }
+        input:hover + span { border-color: var(--date-picker-accent); }
+        input:checked + span { color: #fff; background: var(--date-picker-accent); }
+        input:focus-visible + span { outline: 2px solid var(--date-picker-accent); outline-offset: 2px; }
+
+        &.is-disabled { color: #aaa6af; cursor: not-allowed; text-decoration: line-through; }
+        &.is-outside { opacity: 0.38; }
+    }
+}
+
+@media (max-width: 40rem) {
+    .date-picker {
+        &__weekdays,
+        &__grid { gap: 0.1rem; }
+    }
+}

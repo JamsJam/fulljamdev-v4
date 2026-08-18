@@ -16,7 +16,7 @@
                 <ul class="sidebar__menu" role="list">
                     {% for item in group.items %}
                         {% set hasChildren = item.children is defined and item.children is not empty %}
-                        {% set active = item.route is defined and this.isActive(item.route) %}
+                        {% set active = item.route is defined and this.isActive(item.route, item.activePrefixes|default([])) %}
                         {% set childActive = hasChildren and this.hasActiveChild(item.children) %}
 
                         <li
@@ -65,7 +65,7 @@
                                 >
                                     <ul class="sidebar__submenu" role="list">
                                         {% for child in item.children %}
-                                            {% set childIsActive = this.isActive(child.route) %}
+                                            {% set childIsActive = this.isActive(child.route, child.activePrefixes|default([])) %}
                                             <li>
                                                 <a
                                                     class="sidebar__submenu-link{{ childIsActive ? ' is-active' : '' }}"

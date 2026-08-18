@@ -1,0 +1,11 @@
+<div
+    class="tabs"
+    {% if navigation %}
+        {{ stimulus_controller('settings-navigation') }}
+        data-action="turbo:frame-load@document->settings-navigation#sync"
+    {% else %}
+        {{ stimulus_controller('settings-tabs', {defaultValue: defaultValue}) }}
+    {% endif %}
+>
+    {% block content %}{% endblock %}
+</div>

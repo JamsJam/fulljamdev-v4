@@ -1,0 +1,17 @@
+{% set tag = href ? 'a' : 'button' %}
+
+<{{ tag }}
+    {{ attributes.defaults({
+        class: 'dropdown-menu__item',
+        role: 'menuitem',
+        'data-action': copyText ? 'click->clipboard#copy click->dropdown-menu#close' : 'click->dropdown-menu#close'
+    }) }}
+    {% if copyText %}
+        {{ stimulus_controller('clipboard', {text: copyText}) }}
+        aria-label="{{ label }}"
+    {% endif %}
+    {% if href %}href="{{ href }}"{% else %}type="button"{% endif %}
+    {% if turboFrame %}data-turbo-frame="{{ turboFrame }}"{% endif %}
+>
+    <span{% if copyText %} {{ stimulus_target('clipboard', 'label') }}{% endif %}>{{ label }}</span>
+</{{ tag }}>

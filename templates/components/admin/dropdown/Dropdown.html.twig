@@ -1,0 +1,32 @@
+<div
+    {{ attributes.defaults({class: 'dropdown-menu dropdown-menu--' ~ alignment}) }}
+    {{ stimulus_controller('dropdown-menu') }}
+>
+    <twig:Admin:Button
+        :variant="variant"
+        :icon="icon"
+        :onlyIcon="onlyIcon"
+        :label="label"
+        title="{{ label }}"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        data-action="click->dropdown-menu#toggle"
+        data-dropdown-menu-target="trigger"
+    />
+
+    <div
+        class="dropdown-menu__content"
+        role="menu"
+        hidden
+        data-dropdown-menu-target="menu"
+    >
+        {% for item in items %}
+            <twig:Admin:Dropdown:Item
+                :label="item.label"
+                :href="item.href|default(null)"
+                :turboFrame="item.turboFrame|default(null)"
+                :copyText="item.copyText|default(null)"
+            />
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,13 @@
+<section class="settings__panel" aria-labelledby="settings-general-title">
+    <h2 id="settings-general-title">Paramètres généraux</h2>
+    <p>Configurez le comportement général de l’application.</p>
+
+    {{ form_start(general_form, {attr: {class: 'settings__form'}}) }}
+        {{ form_errors(general_form) }}
+        {{ form_row(general_form.timezone, {
+            help: 'Ce fuseau est utilisé pour proposer les créneaux et sera enregistré sur chaque nouveau rendez-vous.',
+            row_attr: {class: 'settings__field'}
+        }) }}
+        {{ form_row(general_form.submit, {row_attr: {class: 'settings__form-actions'}}) }}
+    {{ form_end(general_form) }}
+</section>

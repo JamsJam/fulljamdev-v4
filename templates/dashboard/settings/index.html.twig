@@ -1,0 +1,48 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block html_class %}settings-page{% endblock %}
+
+{% block title %}Paramètres | FullJam Dev{% endblock %}
+
+{% block body %}
+    <section class="settings" aria-labelledby="settings-title">
+        <header class="settings__header">
+            <h1 id="settings-title">Paramètres</h1>
+            <p>Configurez les paramètres de votre espace d’administration.</p>
+        </header>
+
+        <twig:Admin:Tabs :navigation="true">
+            <twig:Admin:TabsList label="Sections des paramètres">
+                {% for section, label in {
+                    general: 'Général',
+                    reservation: 'Reservation',
+                    account: 'Compte'
+                } %}
+                    <a
+                        id="settings-tab-{{ section }}"
+                        class="tabs__trigger{{ active_section == section ? ' is-active' : '' }}"
+                        href="{{ path('app_dashboard_settings', {section: section}) }}"
+                        data-section="{{ section }}"
+                        data-turbo-frame="settings-section"
+                        data-turbo-action="advance"
+                        {{ stimulus_target('settings-navigation', 'link') }}
+                        {{ stimulus_action('settings-navigation', 'select') }}
+                        {% if active_section == section %}aria-current="page"{% endif %}
+                    >{{ label }}</a>
+                {% endfor %}
+            </twig:Admin:TabsList>
+        </twig:Admin:Tabs>
+
+        <turbo-frame id="settings-section">
+            <twig:Admin:TabsContent
+                id="settings-panel-{{ active_section }}"
+                labelledby="settings-tab-{{ active_section }}"
+                value="{{ active_section }}"
+                :active="true"
+                :managed="false"
+            >
+                {{ include(section_template) }}
+            </twig:Admin:TabsContent>
+        </turbo-frame>
+    </section>
+{% endblock %}

@@ -1,0 +1,17 @@
+<section class="settings__panel" aria-labelledby="settings-account-title">
+    <h2 id="settings-account-title">Compte</h2>
+    <p>Ces informations identifient le propriétaire du compte et sont utilisées pour les notifications de rendez-vous.</p>
+
+    {{ form_start(account_form, {attr: {class: 'settings__form'}}) }}
+        {{ form_errors(account_form) }}
+        <div class="settings__form-grid">
+            {{ form_row(account_form.firstName, {row_attr: {class: 'settings__field'}}) }}
+            {{ form_row(account_form.lastName, {row_attr: {class: 'settings__field'}}) }}
+            {{ form_row(account_form.email, {row_attr: {class: 'settings__field'}}) }}
+            {{ form_row(account_form.phoneNumber, {row_attr: {class: 'settings__field'}}) }}
+            {{ form_row(account_form.company, {row_attr: {class: 'settings__field'}}) }}
+            {{ form_row(account_form.jobTitle, {row_attr: {class: 'settings__field'}}) }}
+        </div>
+        {{ form_row(account_form.submit, {row_attr: {class: 'settings__form-actions'}}) }}
+    {{ form_end(account_form) }}
+</section>

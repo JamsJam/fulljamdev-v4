@@ -1,0 +1,7 @@
+Notre meeting va bientôt commencer
+
+Bonjour {{ appointment.contact.firstName }},
+
+Notre meeting va bientôt commencer. Nous nous retrouvons dans une heure, à {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} ({{ appointment.timezone }}).
+
+Rejoindre le meeting : {{ appointment.link }}

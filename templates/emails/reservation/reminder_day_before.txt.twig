@@ -1,0 +1,9 @@
+Notre rendez-vous est demain
+
+Bonjour {{ appointment.contact.firstName }},
+
+Notre rendez-vous de demain approche.
+{{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}
+De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} ({{ appointment.timezone }})
+
+Rejoindre le meeting : {{ appointment.link }}

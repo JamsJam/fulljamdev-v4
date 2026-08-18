@@ -1,0 +1,29 @@
+<div class="public-booking__section">
+    <div hidden>
+        {{ form_widget(form.date.value) }}
+        {{ form_widget(form.time.value) }}
+        <input type="hidden" name="{{ form.time.timezone.vars.full_name }}" value="{{ form.time.timezone.vars.value }}">
+    </div>
+    <h2>Votre rendez-vous</h2>
+    <div class="public-booking__summary">
+        <p>📅 {{ selected_date|format_datetime(pattern='EEEE d MMMM yyyy', locale='fr')|capitalize }}</p>
+        <p>🕐 {{ selected_time_label }} — {{ selected_timezone }}</p>
+    </div>
+    <button class="public-booking__modify" type="button" data-action="public-booking#editTime">Modifier</button>
+
+    <hr>
+    <fieldset class="public-booking__contact">
+        <legend>Vos informations</legend>
+        <div class="public-booking__identity">
+            {{ form_row(form.contact.firstName, {errors: show_errors|default(false) ? form.contact.firstName.vars.errors : []}) }}
+            {{ form_row(form.contact.lastName, {errors: show_errors|default(false) ? form.contact.lastName.vars.errors : []}) }}
+        </div>
+        {{ form_row(form.contact.email, {errors: show_errors|default(false) ? form.contact.email.vars.errors : []}) }}
+        {{ form_row(form.contact.phoneNumber, {errors: show_errors|default(false) ? form.contact.phoneNumber.vars.errors : []}) }}
+        {{ form_row(form.contact.reason, {errors: show_errors|default(false) ? form.contact.reason.vars.errors : []}) }}
+    </fieldset>
+
+    <div class="public-booking__submit">
+        {{ form_widget(form.submit, {label: 'Confirmer le RDV  →', attr: {'data-action': 'public-booking#submitBooking'}}) }}
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<div id="booking-times" class="public-booking__times">
+    {% for choice in form.time.value %}
+        <label class="public-booking__choice">
+            {{ form_widget(choice) }}
+            <span>{{ choice.vars.label }}</span>
+        </label>
+    {% endfor %}
+</div>

@@ -1,0 +1,44 @@
+<header class="public-booking__header" style="--planning-color: {{ planning.color }}">
+    <h1>{{ planning.title }}</h1>
+    {% if planning.description %}
+        <div class="public-booking__description">
+            {{ planning.description|raw }}
+        </div>
+    {% endif %}
+    <p class="public-booking__duration">
+        Durée : {{ planning.duration }} minutes
+    </p>
+
+    {% set steps = {date: 1, time: 2, contact: 3} %}
+    {% set current = steps[step] %}
+    <twig:Admin:Stepper
+        :steps="['Date', 'Heure', 'Contact']"
+        :activeStep="current"
+        label="Étapes de la réservation"
+    />
+</header>
+
+{% if slots is empty %}
+    <p class="public-booking__empty">Aucun créneau n’est disponible pour le moment.</p>
+{% else %}
+    {{ form_start(form, {attr: {
+        class: 'public-booking__form',
+        'data-public-booking-target': 'form',
+        'data-turbo': 'true',
+        'data-turbo-stream': 'true'
+    }}) }}
+        <input type="hidden" name="_booking_step" value="{{ step == 'contact' ? 'submit' : step }}" data-public-booking-target="step">
+        {{ form_widget(form._token) }}
+        {% if show_errors|default(false) %}{{ form_errors(form) }}{% endif %}
+
+        {% if step == 'date' %}
+            {% include 'front/reservation/partial/_date_step.html.twig' %}
+        {% elseif step == 'time' %}
+            {% include 'front/reservation/partial/_time_step.html.twig' %}
+        {% else %}
+            {% include 'front/reservation/partial/_contact_step.html.twig' %}
+        {% endif %}
+
+        {# Les champs des prochaines étapes existent dans le FormType mais ne sont rendus qu'au bon moment. #}
+    {{ form_end(form, {render_rest: false}) }}
+{% endif %}

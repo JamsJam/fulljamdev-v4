@@ -1,0 +1,18 @@
+<h1>Votre demande de rendez-vous a bien été reçue</h1>
+
+<p>Bonjour {{ appointment.contact.firstName }},</p>
+
+<p>
+    Votre demande pour « {{ appointment.planning.title }} » a bien été enregistrée.
+    Vous recevrez un nouvel email lorsqu’elle aura été traitée.
+</p>
+
+<h2>Créneau demandé</h2>
+<p>
+    <strong>{{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}</strong><br>
+    De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+    à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+    ({{ appointment.timezone }})
+</p>
+
+<p><strong>Objet :</strong> {{ appointment.title }}</p>

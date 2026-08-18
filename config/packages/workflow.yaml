@@ -1,0 +1,41 @@
+framework:
+    workflows:
+        appointment:
+            type: state_machine
+            supports:
+                - App\Entity\Reservation\Appointment
+            marking_store:
+                type: method
+                property: status
+            initial_marking: requested
+            places:
+                - requested
+                - proposed
+                - confirmed
+                - rejected
+                - occurred
+                - complete
+                - cancelled
+                - no_show
+            transitions:
+                confirm:
+                    from: [requested, proposed]
+                    to: confirmed
+                reject:
+                    from: [requested, proposed]
+                    to: rejected
+                reschedule:
+                    from: confirmed
+                    to: confirmed
+                mark_held:
+                    from: confirmed
+                    to: occurred
+                no_show:
+                    from: confirmed
+                    to: no_show
+                cancel:
+                    from: [requested, proposed, confirmed]
+                    to: cancelled
+                complete:
+                    from: occurred
+                    to: complete

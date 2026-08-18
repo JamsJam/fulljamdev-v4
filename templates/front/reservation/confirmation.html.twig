@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande envoyée — {{ planning.title }}{% endblock %}
+
+{% block body %}
+    <section class="public-booking public-booking--confirmation">
+        <h1>Votre demande a bien été envoyée</h1>
+        <p>Le rendez-vous est en attente de confirmation.</p>
+        <a href="{{ path('app_front_planning_appointment', {slug: planning.slug}) }}">Revenir au planning</a>
+    </section>
+{% endblock %}

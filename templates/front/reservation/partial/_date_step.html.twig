@@ -1,0 +1,13 @@
+<fieldset class="public-booking__section public-booking__calendar-step">
+    {# <legend>Choisir une date</legend> #}
+    <input type="hidden" name="{{ form.time.timezone.vars.full_name }}" value="{{ form.time.timezone.vars.value }}">
+    {% if show_errors|default(false) %}{{ form_errors(form.date.value) }}{% endif %}
+    <twig:Form:DatePicker
+        :field="form.date.value"
+        :calendar="calendar"
+        :previousUrl="path('app_front_planning_calendar', {slug: planning.slug, month: calendar.previous})"
+        :nextUrl="path('app_front_planning_calendar', {slug: planning.slug, month: calendar.next})"
+        id="booking-calendar"
+        label="Choisir une date de rendez-vous"
+    />
+</fieldset>

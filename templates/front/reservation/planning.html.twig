@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réserver — {{ planning.title }}{% endblock %}
+
+{% block body %}
+    <section id="public-booking-flow" class="public-booking" {{ stimulus_controller('public-booking') }}>
+        {% include 'front/reservation/partial/_booking.html.twig' %}
+    </section>
+{% endblock %}

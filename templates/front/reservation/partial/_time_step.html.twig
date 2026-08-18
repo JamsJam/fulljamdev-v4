@@ -1,0 +1,20 @@
+<fieldset class="public-booking__section">
+    {# <legend>Choisir une heure</legend> #}
+    <div hidden>{{ form_widget(form.date.value) }}</div>
+    <p class="public-booking__selection">📅 {{ selected_date|format_datetime(pattern='EEEE d MMMM yyyy', locale='fr')|capitalize }}</p>
+    <button class="public-booking__modify" type="button" data-action="public-booking#editDate">Modifier la date</button>
+    {% if show_errors|default(false) %}{{ form_errors(form.time.value) }}{% endif %}
+
+    <div class="public-booking__timezone">
+        {{ form_row(form.time.timezone, {
+            errors: show_errors|default(false) ? form.time.timezone.vars.errors : [],
+            attr: {
+                'data-action': 'change->public-booking#selectTimezone',
+                'data-times-url': path('app_front_planning_times', {slug: planning.slug, date: selected_date})
+            }
+        }) }}
+        <p>Les horaires sont affichés dans le fuseau sélectionné.</p>
+    </div>
+
+    {% include 'front/reservation/partial/_time_choices.html.twig' %}
+</fieldset>

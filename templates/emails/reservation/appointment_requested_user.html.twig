@@ -1,0 +1,20 @@
+<h1>Nouvelle demande de rendez-vous</h1>
+
+<p>
+    {{ appointment.contact.firstName }} {{ appointment.contact.lastName }} vient de demander un rendez-vous
+    pour « {{ appointment.planning.title }} ».
+</p>
+
+<h2>Informations</h2>
+<ul>
+    <li><strong>Objet :</strong> {{ appointment.title }}</li>
+    <li><strong>Email :</strong> <a href="mailto:{{ appointment.contact.email }}">{{ appointment.contact.email }}</a></li>
+    <li><strong>Téléphone :</strong> {{ appointment.contact.phoneNumber }}</li>
+    <li>
+        <strong>Créneau :</strong>
+        {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }},
+        de {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+        à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+        ({{ appointment.timezone }})
+    </li>
+</ul>

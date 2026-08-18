@@ -1,0 +1,128 @@
+<section
+    class="reservation-calendar"
+    aria-labelledby="reservation-calendar-title"
+    {{ stimulus_controller('reservation-calendar') }}
+>
+    <div class="reservation-calendar__toolbar">
+        <div>
+            <h2 id="reservation-calendar-title">Calendrier</h2>
+            <p>{{ monthLabel }}</p>
+        </div>
+
+        <div class="reservation-calendar__controls">
+            <div class="planning-filter">
+                <button
+                    class="button button--secondary planning-filter__trigger"
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    {{ stimulus_action('reservation-calendar', 'toggleDropdown') }}
+                    {{ stimulus_target('reservation-calendar', 'trigger') }}
+                >
+                    {{ ux_icon('material-symbols:filter-list-rounded', {class: 'button__icon', 'aria-hidden': 'true'}) }}
+                    <span {{ stimulus_target('reservation-calendar', 'filterLabel') }}>Planning</span>
+                    {{ ux_icon('material-symbols:keyboard-arrow-down-rounded', {class: 'button__icon', 'aria-hidden': 'true'}) }}
+                </button>
+
+                <div
+                    class="planning-filter__dropdown"
+                    hidden
+                    {{ stimulus_target('reservation-calendar', 'dropdown') }}
+                >
+                    <label class="planning-filter__option planning-filter__option--all">
+                        <input
+                            type="checkbox"
+                            checked
+                            {{ stimulus_target('reservation-calendar', 'allCheckbox') }}
+                            {{ stimulus_action('reservation-calendar', 'toggleAll', 'change') }}
+                        >
+                        <span>Tous les plannings</span>
+                    </label>
+
+                    <div class="planning-filter__separator"></div>
+
+                    {% for planning in plannings %}
+                        <label class="planning-filter__option">
+                            <input
+                                type="checkbox"
+                                value="{{ planning.id }}"
+                                checked
+                                {{ stimulus_target('reservation-calendar', 'planningCheckbox') }}
+                                {{ stimulus_action('reservation-calendar', 'filter', 'change') }}
+                            >
+                            <span class="planning-filter__color" style="--planning-color: {{ planning.color }}"></span>
+                            <span>{{ planning.title }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <nav class="calendar-navigation" aria-label="Navigation du calendrier">
+                <a
+                    class="calendar-navigation__button"
+                    href="{{ path('app_dashboard_reservation_calendar', {month: previousMonth}) }}"
+                    aria-label="Mois précédent"
+                    title="Mois précédent"
+                >
+                    {{ ux_icon('material-symbols:chevron-left-rounded', {'aria-hidden': 'true'}) }}
+                </a>
+                <a class="calendar-navigation__today" href="{{ path('app_dashboard_reservation_calendar') }}">Aujourd’hui</a>
+                <a
+                    class="calendar-navigation__button"
+                    href="{{ path('app_dashboard_reservation_calendar', {month: nextMonth}) }}"
+                    aria-label="Mois suivant"
+                    title="Mois suivant"
+                >
+                    {{ ux_icon('material-symbols:chevron-right-rounded', {'aria-hidden': 'true'}) }}
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="reservation-calendar__viewport">
+        <div class="calendar-grid" role="grid" aria-label="Calendrier de {{ monthLabel }}">
+            {% for dayName in ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}
+                <div class="calendar-grid__weekday" role="columnheader">{{ dayName }}</div>
+            {% endfor %}
+
+            {% for week in calendarWeeks %}
+                {% for day in week %}
+                    <div
+                        class="calendar-day{{ day.isCurrentMonth ? '' : ' calendar-day--outside' }}{{ day.isToday ? ' calendar-day--today' : '' }}"
+                        role="gridcell"
+                        aria-label="Jour du {{ day.date|date('d/m/Y') }}"
+                    >
+                        <time datetime="{{ day.date|date('Y-m-d') }}">{{ day.date|date('j') }}</time>
+                        <span class="calendar-day__mobile-label">
+                            {{ ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'][day.date|date('N') - 1] }} {{ day.date|date('d/m') }}
+                        </span>
+                        <div class="calendar-day__events">
+                            {% for appointment in day.appointments %}
+                                <a
+                                    class="calendar-event"
+                                    href="{{ path('app_dashboard_reservation_appointment_show', {id: appointment.id}) }}"
+                                    style="--planning-color: {{ appointment.planning.color }}"
+                                    title="{{ appointment.title }} — {{ appointment.startAt|date('H:i') }}"
+                                    data-planning-id="{{ appointment.planning.id }}"
+                                    data-turbo-stream="true"
+                                    {{ stimulus_target('reservation-calendar', 'event') }}
+                                >
+                                    <time>{{ appointment.startAt|date('H:i') }}</time>
+                                    <span>{{ appointment.title }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <p
+        class="reservation-calendar__empty"
+        {% if calendarWeeks|filter(week => week|filter(day => day.appointments is not empty)) is not empty %}hidden{% endif %}
+        {{ stimulus_target('reservation-calendar', 'empty') }}
+    >
+        Aucun rendez-vous pour cette période.
+    </p>
+</section>

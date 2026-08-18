@@ -1,0 +1,49 @@
+<article class="appointment-request-card" style="--planning-color: {{ appointment.planning.color }}">
+    <header class="appointment-request-card__header">
+        <span class="appointment-request-card__planning">
+            <span aria-hidden="true"></span>
+            {{ appointment.planning.title }}
+        </span>
+        <span class="appointment-request-card__status appointment-request-card__status--{{ appointment.status.value }}">
+            {{ status_label }}
+        </span>
+    </header>
+
+    <div class="appointment-request-card__body">
+        <div class="appointment-request-card__contact">
+            <span class="appointment-request-card__avatar" aria-hidden="true">
+                {{ appointment.contact.firstName|first|upper }}{{ appointment.contact.lastName|first|upper }}
+            </span>
+            <div>
+                <h3>{{ appointment.contact.firstName }} {{ appointment.contact.lastName }}</h3>
+                <a href="mailto:{{ appointment.contact.email }}">{{ appointment.contact.email }}</a>
+            </div>
+        </div>
+
+        <div class="appointment-request-card__subject">
+            <span>Objet du rendez-vous</span>
+            <strong>{{ appointment.title }}</strong>
+        </div>
+
+        <div class="appointment-request-card__schedule">
+            <span class="appointment-request-card__date-badge" aria-hidden="true">
+                <strong>{{ appointment.startAt|format_datetime(pattern: 'dd', timezone: appointment.timezone) }}</strong>
+                <small>{{ appointment.startAt|format_datetime(pattern: 'MMM', locale: 'fr', timezone: appointment.timezone)|upper }}</small>
+            </span>
+            <div>
+                <strong>{{ appointment.startAt|format_datetime(pattern: 'EEE d MMM', locale: 'fr', timezone: appointment.timezone)|capitalize }}</strong>
+                <span>{{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}–{{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="appointment-request-card__footer">
+        <span>{{ appointment.timezone }}</span>
+        <twig:Admin:Button
+            variant="primary"
+            label="{{ action_label }}"
+            href="{{ path('app_dashboard_reservation_appointment_show', {id: appointment.id}) }}"
+            data-turbo-frame="appointment-dialog-frame"
+        />
+    </footer>
+</article>

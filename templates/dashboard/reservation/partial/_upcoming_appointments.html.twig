@@ -1,0 +1,63 @@
+<section class="reservation-upcoming" aria-labelledby="upcoming-appointments-title">
+    <div class="reservation-section-heading">
+        <div>
+            <h2 id="upcoming-appointments-title">Les prochains rendez-vous</h2>
+            <p>Vos rendez-vous confirmés pour les trois prochains jours.</p>
+        </div>
+        <twig:Admin:Button
+            variant="secondary"
+            icon="material-symbols:calendar-month-outline-rounded"
+            label="Voir le calendrier"
+            href="{{ path('app_dashboard_reservation_calendar') }}"
+        />
+    </div>
+
+    <div class="reservation-upcoming__days">
+        {% for day in upcomingDays %}
+            <section class="reservation-day" aria-labelledby="upcoming-day-{{ day.date|date('Y-m-d') }}">
+                <header class="reservation-day__heading">
+                    <h3 id="upcoming-day-{{ day.date|date('Y-m-d') }}">
+                        {% if loop.first %}
+                            Aujourd’hui
+                        {% elseif loop.index == 2 %}
+                            Demain
+                        {% else %}
+                            {{ day.date|format_datetime(pattern='EEEE', locale='fr')|capitalize }}
+                        {% endif %}
+                    </h3>
+                    <time datetime="{{ day.date|date('Y-m-d') }}">
+                        {{ day.date|format_datetime(pattern='d MMMM', locale='fr') }}
+                    </time>
+                </header>
+
+                {% if day.appointments is empty %}
+                    <p class="reservation-day__empty">Aucun rendez-vous.</p>
+                {% else %}
+                    <div class="reservation-upcoming__list">
+                        {% for appointment in day.appointments %}
+                            <article class="appointment-card" style="--planning-color: {{ appointment.planning.color }}">
+                                <div class="appointment-card__content">
+                                    <div class="appointment-card__identity">
+                                        <h3>{{ appointment.title }}</h3>
+                                        <p>{{ appointment.planning.title }}</p>
+                                    </div>
+                                    <div class="appointment-card__date">
+                                        <strong>{{ appointment.startAt|date('H:i') }}</strong>
+                                        <span>jusqu’à {{ appointment.endAt|date('H:i') }}</span>
+                                    </div>
+                                    <twig:Admin:Button
+                                        variant="ghost"
+                                        label="Voir les détails"
+                                        href="{{ path('app_dashboard_reservation_appointment_show', {id: appointment.id}) }}"
+                                        data-turbo-frame="appointment-dialog-frame"
+                                        class="appointment-card__link"
+                                    />
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </section>
+        {% endfor %}
+    </div>
+</section>

@@ -1,0 +1,70 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Réservations | FullJam Dev{% endblock %}
+
+{% block body %}
+    <section class="reservation-dashboard" aria-labelledby="reservation-dashboard-title">
+        <header class="reservation-dashboard__header">
+            <div>
+                <h1 id="reservation-dashboard-title">Réservations</h1>
+                <p>Consultez et gérez l’ensemble de vos rendez-vous.</p>
+            </div>
+
+            <twig:Admin:ButtonGroup
+                class="reservation-dashboard__actions"
+                aria-label="Actions de la page"
+            >
+                <twig:Admin:Button
+                    variant="destructive"
+                    icon="material-symbols:arrow-back-rounded"
+                    :onlyIcon="true"
+                    label="Retour au tableau de bord"
+                    href="{{ path('app_dashboard') }}"
+                    title="Retour au tableau de bord"
+                />
+                <twig:Admin:Dropdown
+                    variant="secondary"
+                    icon="mage:dots"
+                    :onlyIcon="true"
+                    label="Options"
+                    :items="[
+                        {label: 'Voir le calendrier', href: path('app_dashboard_reservation_calendar')},
+                        {label: 'Gérer les plannings', href: path('app_dashboard_reservation_plannings')},
+                        {label: 'Générer un lien'}
+                    ]"
+                />
+                <twig:Admin:Button
+                    variant="secondary"
+                    icon="ic:round-settings"
+                    :onlyIcon="true"
+                    label="Paramètres de réservation"
+                    href="{{ path('app_dashboard_settings', {section: 'reservation'}) }}"
+                    title="Paramètres de réservation"
+                />
+            </twig:Admin:ButtonGroup>
+        </header>
+
+        {% if plannings is empty %}
+            <div class="reservation-empty-state">
+                {{ ux_icon('material-symbols:calendar-month-outline-rounded', {
+                    class: 'reservation-empty-state__icon',
+                    'aria-hidden': 'true'
+                }) }}
+                <h2>Aucun planning disponible</h2>
+                <p>Créez votre premier planning pour définir vos disponibilités et commencer à recevoir des rendez-vous.</p>
+                <twig:Admin:Button
+                    variant="primary"
+                    label="Créer un planning"
+                    icon="material-symbols:add-rounded"
+                    href="{{ path('app_dashboard_reservation_plannings') }}"
+                />
+            </div>
+        {% else %}
+            {% include 'dashboard/reservation/partial/_requests.html.twig' %}
+            {% include 'dashboard/reservation/partial/_upcoming_appointments.html.twig' %}
+            {% include 'dashboard/reservation/partial/_to_process.html.twig' %}
+        {% endif %}
+
+        <turbo-frame id="appointment-dialog-frame"></turbo-frame>
+    </section>
+{% endblock %}

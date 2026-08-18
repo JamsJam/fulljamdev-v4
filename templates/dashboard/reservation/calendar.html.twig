@@ -1,0 +1,23 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Calendrier des rendez-vous | FullJam Dev{% endblock %}
+
+{% block body %}
+    <section class="reservation-dashboard" aria-labelledby="reservation-calendar-page-title">
+        <header class="reservation-dashboard__header">
+            <div>
+                <h1 id="reservation-calendar-page-title">Calendrier des rendez-vous</h1>
+                <p>Consultez tous vos rendez-vous mois par mois.</p>
+            </div>
+            <twig:Admin:Button
+                variant="secondary"
+                icon="material-symbols:arrow-back-rounded"
+                label="Retour aux réservations"
+                href="{{ path('app_dashboard_reservation') }}"
+            />
+        </header>
+
+        {% include 'dashboard/reservation/partial/_calendar.html.twig' %}
+        <turbo-frame id="appointment-dialog-frame"></turbo-frame>
+    </section>
+{% endblock %}

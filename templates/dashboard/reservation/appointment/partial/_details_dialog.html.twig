@@ -1,0 +1,138 @@
+{% set status_labels = {
+    requested: 'Demande reçue',
+    proposed: 'Créneau proposé',
+    confirmed: 'Confirmé',
+    rejected: 'Refusé',
+    occurred: 'Réalisé',
+    complete: 'Terminé',
+    cancelled: 'Annulé',
+    no_show: 'Absent'
+} %}
+
+<twig:Admin:Dialog title="Détails du rendez-vous" description="{{ appointment.planning.title }}">
+    <article class="appointment-details" style="--planning-color: {{ appointment.planning.color }}">
+        <header class="appointment-details__summary">
+            <div class="appointment-details__summary-topline">
+                <span class="appointment-details__planning">
+                    <span aria-hidden="true"></span>
+                    {{ appointment.planning.title }}
+                </span>
+                <span class="appointment-details__status appointment-details__status--{{ appointment.status.value }}">
+                    {{ status_labels[appointment.status.value] }}
+                </span>
+            </div>
+
+            <h3>{{ appointment.title }}</h3>
+
+            <div class="appointment-details__schedule">
+                <div class="appointment-details__date-badge" aria-hidden="true">
+                    <strong>{{ appointment.startAt|format_datetime(pattern: 'dd', timezone: appointment.timezone) }}</strong>
+                    <span>{{ appointment.startAt|format_datetime(pattern: 'MMM', locale: 'fr', timezone: appointment.timezone)|upper }}</span>
+                </div>
+                <div>
+                    <strong>
+                        {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}
+                    </strong>
+                    <span>
+                        {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}–{{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+                        · {{ appointment.timezone }}
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <section class="appointment-details__section" aria-labelledby="appointment-contact-title">
+            <h3 id="appointment-contact-title">Contact</h3>
+            <div class="appointment-details__contact">
+                <span class="appointment-details__avatar" aria-hidden="true">
+                    {{ appointment.contact.firstName|first|upper }}{{ appointment.contact.lastName|first|upper }}
+                </span>
+                <div class="appointment-details__contact-identity">
+                    <strong>{{ appointment.contact.firstName }} {{ appointment.contact.lastName }}</strong>
+                    {% if appointment.contact.company %}
+                        <span>{{ appointment.contact.jobTitle ? appointment.contact.jobTitle ~ ' · ' : '' }}{{ appointment.contact.company }}</span>
+                    {% endif %}
+                </div>
+                <div class="appointment-details__contact-links">
+                    <a href="mailto:{{ appointment.contact.email }}">{{ appointment.contact.email }}</a>
+                    <a href="tel:{{ appointment.contact.phoneNumber }}">{{ appointment.contact.phoneNumber }}</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="appointment-details__section" aria-labelledby="appointment-reason-title">
+            <h3 id="appointment-reason-title">Objet de la demande</h3>
+            <p class="appointment-details__description">
+                {{ appointment.description ?: 'Aucune description renseignée pour ce rendez-vous.' }}
+            </p>
+        </section>
+
+        {% if appointment.link %}
+            <a class="appointment-details__meeting" href="{{ appointment.link }}" target="_blank" rel="noopener noreferrer">
+                <span>
+                    <strong>Rejoindre le rendez-vous</strong>
+                    <small>Le lien s’ouvrira dans un nouvel onglet</small>
+                </span>
+                {{ ux_icon('material-symbols:arrow-outward-rounded', {'aria-hidden': 'true'}) }}
+            </a>
+        {% endif %}
+
+        <footer class="appointment-details__actions">
+            <span>Demande reçue le {{ appointment.createdAt|format_datetime(pattern: 'd MMM y à HH:mm', locale: 'fr') }}</span>
+            {% if appointment.status.value == 'requested' %}
+                <div>
+                    <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: 'reject'}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                        <twig:Admin:Button type="submit" variant="destructive" label="Refuser" />
+                    </form>
+                    <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: 'confirm'}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                        <twig:Admin:Button type="submit" variant="primary" label="Confirmer le rendez-vous" />
+                    </form>
+                </div>
+            {% elseif appointment.status.value == 'proposed' %}
+                <div>
+                    <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: 'cancel'}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                        <twig:Admin:Button type="submit" variant="destructive" label="Annuler" />
+                    </form>
+                </div>
+            {% elseif appointment.status.value == 'confirmed' %}
+                {{ form_start(reschedule_form, {attr: {class: 'appointment-details__action-form'}}) }}
+                    {{ form_row(reschedule_form.startAt) }}
+                    {{ form_row(reschedule_form.endAt) }}
+                    <twig:Admin:Button type="submit" variant="secondary" label="Reprogrammer" />
+                {{ form_end(reschedule_form) }}
+                <div>
+                    {% if appointment.endAt < date() %}
+                        <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: 'no_show'}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                            <twig:Admin:Button type="submit" variant="secondary" label="Signaler une absence" />
+                        </form>
+                    {% endif %}
+                    <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: 'cancel'}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                        <twig:Admin:Button type="submit" variant="destructive" label="Annuler" />
+                    </form>
+                    {% if appointment.endAt < date() %}
+                        <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: 'mark_held'}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                            <twig:Admin:Button type="submit" variant="primary" label="Marquer comme réalisé" />
+                        </form>
+                    {% endif %}
+                </div>
+            {% elseif appointment.status.value == 'occurred' %}
+                {{ form_start(summary_form, {attr: {class: 'appointment-details__action-form'}}) }}
+                    {{ form_row(summary_form.content) }}
+                    {{ form_row(summary_form.internalNotes) }}
+                    {{ form_row(summary_form.recordingLink) }}
+                    <twig:Admin:Button type="submit" variant="primary" label="Enregistrer le compte rendu" />
+                {{ form_end(summary_form) }}
+            {% else %}
+                <p class="appointment-details__closed-status">
+                    Aucune action disponible pour ce rendez-vous.
+                </p>
+            {% endif %}
+        </footer>
+    </article>
+</twig:Admin:Dialog>

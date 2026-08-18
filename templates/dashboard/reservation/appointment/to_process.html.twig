@@ -1,0 +1,63 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Rendez-vous à traiter | FullJam Dev{% endblock %}
+
+{% block body %}
+    {% set processing_groups = {
+        requested: {title: 'Demandes à confirmer', label: 'À confirmer', action: 'Examiner la demande'},
+        confirmed: {title: 'Rendez-vous passés', label: 'Rendez-vous passé', action: 'Traiter le rendez-vous'},
+        occurred: {title: 'Comptes rendus attendus', label: 'Compte rendu attendu', action: 'Ajouter un compte rendu'}
+    } %}
+
+    <section class="reservation-dashboard" aria-labelledby="processing-title">
+        <header class="reservation-dashboard__header">
+            <div>
+                <h1 id="processing-title">Rendez-vous à traiter</h1>
+                <p>Traitez les demandes, les rendez-vous passés et les comptes rendus en attente.</p>
+            </div>
+            <twig:Admin:Button
+                variant="secondary"
+                icon="material-symbols:arrow-back-rounded"
+                label="Retour aux réservations"
+                href="{{ path('app_dashboard_reservation') }}"
+            />
+        </header>
+
+        {% if appointments is empty %}
+            <div class="reservation-empty-state">
+                {{ ux_icon('material-symbols:calendar-month-outline-rounded', {
+                    class: 'reservation-empty-state__icon',
+                    'aria-hidden': 'true'
+                }) }}
+                <h2>Tout est à jour</h2>
+                <p>Aucun rendez-vous passé n’attend de traitement.</p>
+            </div>
+        {% else %}
+            <div class="reservation-processing-list">
+                {% for status, group in processing_groups %}
+                    {% set status_appointments = appointments|filter(appointment => appointment.status.value == status) %}
+                    <details class="reservation-processing-group" {% if status_appointments is not empty %}open{% endif %}>
+                        <summary class="reservation-processing-group__summary">
+                            <span>{{ group.title }}</span>
+                            <span class="reservation-processing-group__count">{{ status_appointments|length }}</span>
+                            {{ ux_icon('material-symbols:keyboard-arrow-down-rounded', {'aria-hidden': 'true'}) }}
+                        </summary>
+                        <div class="reservation-processing-group__content">
+                            {% for appointment in status_appointments %}
+                                {% include 'dashboard/reservation/appointment/partial/_processing_card.html.twig' with {
+                                    appointment,
+                                    status_label: group.label,
+                                    action_label: group.action
+                                } only %}
+                            {% else %}
+                                <p class="reservation-processing-group__empty">Aucun rendez-vous dans cette section.</p>
+                            {% endfor %}
+                        </div>
+                    </details>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <turbo-frame id="appointment-dialog-frame"></turbo-frame>
+    </section>
+{% endblock %}

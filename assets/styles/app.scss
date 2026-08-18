@@ -1,5 +1,7 @@
 @use 'base' as *;
+@use 'components/admin/stepper/stepper' as *;
+@use 'components/form/date-picker' as *;
 @forward 'layout/header';
 @forward 'layout/footer';
 @forward 'layout/navigation';
-
+@forward 'pages/front/booking';

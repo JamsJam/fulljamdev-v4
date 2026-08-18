@@ -25,3 +25,7 @@ body.admin .layout__container {
     border: 1px solid var(--border-muted);
     border-radius: 0.75rem;
 }
+
+body.admin .layout__container h1 {
+    font-size: var(--h1);
+}

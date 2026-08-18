@@ -2,7 +2,15 @@
 // @use 'base' as *;
 @use 'layout/admin' as *;
 @use 'components/admin/breadcrumb' as *;
+@use 'components/admin/button/button' as *;
+@use 'components/admin/button-group/button-group' as *;
+@use 'components/admin/dropdown/dropdown' as *;
+@use 'components/admin/dialog' as *;
+@use 'components/admin/slider/slider' as *;
+@use 'components/admin/stepper/stepper' as *;
 @use 'pages/back/settings' as *;
+@use 'pages/back/reservation' as *;
+@use 'pages/back/planning' as *;
 @use 'animations/turbo' as *;
 // @forward 'components/table';
 // @forward 'components/tabs';

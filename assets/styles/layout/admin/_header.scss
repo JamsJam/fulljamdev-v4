@@ -1,18 +1,17 @@
+@use "../../abstract/" as *;
+
 body.admin .admin-header {
     grid-area: header;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @extend %flex-row-space-between-center;
     min-width: 0;
     gap: 1.5rem;
     padding-inline: 1.5rem;
-    color: var(--card-foreground);
-    background: var(--card);
+    color: var(--bg-foreground);
+    background: var(--bg-light);
     border-block-end: 1px solid var(--border-muted);
 
     &__navigation {
-        display: flex;
-        align-items: center;
+        @extend %flex-row-start-center;
         min-width: 0;
         gap: 0.75rem;
     }
@@ -24,7 +23,7 @@ body.admin .admin-header {
         height: 2.25rem;
         padding: 0.5rem;
         place-items: center;
-        color: var(--text);
+        color: var(--text-muted);
         background: transparent;
         border: 0;
         border-radius: 0.5rem;
@@ -55,7 +54,7 @@ body.admin .admin-header {
     }
 
     &__actions {
-        display: flex;
+        @extend %flex-row-start-center;
         flex: 0 0 auto;
         align-items: center;
         gap: 0.5rem;
@@ -63,9 +62,7 @@ body.admin .admin-header {
 
     &__action,
     &__profile {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @extend %flex-row-center-center;
         color: var(--text);
         background: transparent;
         border: 0;
@@ -110,14 +107,14 @@ body.admin .admin-header {
         color: var(--primary-foreground);
         background: var(--primary);
         border-radius: 50%;
-        font-size: 0.75rem;
+        font-size: var(--annotation);
         font-weight: 700;
     }
 
     &__profile-name {
         max-width: 10rem;
         overflow: hidden;
-        font-size: 0.875rem;
+        font-size: var(--text-s);
         font-weight: 600;
         text-overflow: ellipsis;
         white-space: nowrap;

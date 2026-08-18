@@ -114,7 +114,7 @@ $dark-mode__success-foreground: oklch(0.12 0.04 160);
 $dark-mode__info: oklch(0.7 0.2 260);
 $dark-mode__info-foreground: oklch(0.12 0.04 260);
 //*--------- card
-$dark-mode__card: oklch(0.2 0.05 293);
+$dark-mode__card: $dark-mode__highlight;
 $dark-mode__card-foreground: $dark-mode__text;
 //*--------- popover
 $dark-mode__popover: oklch(0.2 0.05 293);
@@ -173,7 +173,7 @@ $light-mode__info-foreground: oklch(0.98 0.02 260);
 $light-mode__accent: oklch(0.88 0.09 191);
 $light-mode__accent-foreground: oklch(0.22 0.08 191);
 //*--------- card
-$light-mode__card: oklch(0.985 0.025 293);
+$light-mode__card: $light-mode__highlight;
 $light-mode__card-foreground: $light-mode__text;
 //*--------- popover
 $light-mode__popover: oklch(0.995 0.015 293);

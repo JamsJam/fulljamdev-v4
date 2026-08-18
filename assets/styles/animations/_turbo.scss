@@ -6,6 +6,10 @@ html {
     view-transition-name: dashboard-content;
 }
 
+html.settings-page .layout__container {
+    view-transition-name: none;
+}
+
 html[data-turbo-visit-direction="forward"]::view-transition-old(dashboard-content) {
     animation: dashboard-content-out var(--animation-page-out-duration)
         var(--animation-page-easing) both;

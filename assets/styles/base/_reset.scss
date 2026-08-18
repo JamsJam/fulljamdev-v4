@@ -66,20 +66,27 @@ html,body{
   overflow-x: hidden;
 }
 body{
-
-  a{
-    text-decoration: none;
-  }
+    font-family: var(--font-text);
     
     & h1, & h2, & h3, & h4, & h5, & h6{
 
       font-family: var(--font-title);
     }
     
-    & p,& a,& span,& strong {
-      font-family: var(--font-text);
+    a{
+      text-decoration: none;
     }
     
+    h1{
+      font-size: var(--h1);
+    }
+    h2{
+      font-size: var(--h2);
+    }
+    h3{
+      font-size: var(--h3);
+    }
+
 
     &.front{
       background: $bg-linear ;
@@ -88,6 +95,22 @@ body{
       main{
         position: relative;
         padding-block: clamp(1rem, -1.8626rem + 9.1603vw, 4rem);
+      }
+    }
+
+    &.admin{
+
+
+      background: var(--bg-light);
+
+      h1{
+        font-size: var(--h2);
+      }
+      h2{
+        font-size: var(--h3);
+      }
+      h3{
+        font-size: var(--text-l);
       }
     }
 }

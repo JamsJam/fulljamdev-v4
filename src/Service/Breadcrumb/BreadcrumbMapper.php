@@ -18,6 +18,15 @@ final class BreadcrumbMapper
         'reservation' => [
             'label' => 'Réservations',
         ],
+        'calendar' => [
+            'label' => 'Calendrier',
+        ],
+        'processing' => [
+            'label' => 'À traiter',
+        ],
+        'plannings' => [
+            'label' => 'Plannings',
+        ],
         'settings' => [
             'label' => 'Paramètres',
         ],

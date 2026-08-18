@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Reservation;
 
-use App\Repository\UnavailabilityRepository;
+use App\Repository\Reservation\UnavailabilityRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UnavailabilityRepository::class)]

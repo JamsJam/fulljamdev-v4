@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Reservation;
 
-use App\Repository\AppointmentRepository;
+use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
+use App\Entity\Contact;
+use App\Repository\Reservation\AppointmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 class Appointment
@@ -13,6 +16,14 @@ class Appointment
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'appointments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Planning $planning = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Contact $contact = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -26,6 +37,10 @@ class Appointment
     #[ORM\Column]
     private ?\DateTimeImmutable $endAt = null;
 
+    #[ORM\Column(length: 64)]
+    #[Assert\Timezone(message: 'Ce fuseau horaire n’est pas valide.')]
+    private string $timezone = 'Europe/Paris';
+
     #[ORM\Column(length: 70)]
     private ?string $title = null;
 
@@ -35,12 +50,42 @@ class Appointment
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $transcription = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $link = null;
+
+    #[ORM\OneToOne(mappedBy: 'appointment', targetEntity: Summary::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private ?Summary $summary = null;
+
+    #[ORM\Column(length: 20, enumType: AppointmentStatus::class)]
+    private AppointmentStatus $status = AppointmentStatus::REQUESTED;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getPlanning(): ?Planning
+    {
+        return $this->planning;
+    }
+
+    public function setPlanning(?Planning $planning): static
+    {
+        $this->planning = $planning;
+
+        return $this;
+    }
+
+    public function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contact $contact): static
+    {
+        $this->contact = $contact;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -91,6 +136,18 @@ class Appointment
         return $this;
     }
 
+    public function getTimezone(): string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(string $timezone): static
+    {
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -132,9 +189,37 @@ class Appointment
         return $this->link;
     }
 
-    public function setLink(string $link): static
+    public function setLink(?string $link): static
     {
         $this->link = $link;
+
+        return $this;
+    }
+
+    public function getSummary(): ?Summary
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(?Summary $summary): static
+    {
+        $this->summary = $summary;
+
+        if (null !== $summary && $summary->getAppointment() !== $this) {
+            $summary->setAppointment($this);
+        }
+
+        return $this;
+    }
+
+    public function getStatus(): AppointmentStatus
+    {
+        return $this->status;
+    }
+
+    public function setStatus(AppointmentStatus $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }

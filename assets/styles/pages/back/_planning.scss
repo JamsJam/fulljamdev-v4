@@ -1,0 +1,593 @@
+.planning-dashboard {
+    display: grid;
+    gap: 1.5rem;
+    min-width: 0;
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+
+        h1,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: var(--h1);
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: var(--text-m);
+        }
+    }
+
+    &__empty {
+        padding: 3rem 1rem;
+        color: var(--text-muted);
+        font-size: var(--text-m);
+        text-align: center;
+        background: var(--bg-light);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.75rem;
+    }
+}
+
+.planning-datatable {
+    display: grid;
+    gap: 0.75rem;
+    min-width: 0;
+
+    &__toolbar,
+    &__footer,
+    &__pagination {
+        display: flex;
+        align-items: center;
+    }
+
+    &__toolbar {
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+
+    &__search {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: min(22rem, 100%);
+
+        svg {
+            position: absolute;
+            left: 0.75rem;
+            width: 1.125rem;
+            height: 1.125rem;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        input {
+            width: 100%;
+            min-height: 2.5rem;
+            padding: 0.55rem 0.75rem 0.55rem 2.4rem;
+            color: var(--text);
+            font: inherit;
+            font-size: var(--text-s);
+            background: var(--bg-light);
+            border: 1px solid var(--input);
+            border-radius: 0.5rem;
+
+            &::placeholder {
+                color: var(--text-muted);
+            }
+
+            &:focus-visible {
+                border-color: var(--ring);
+                outline: 2px solid color-mix(in srgb, var(--ring) 30%, transparent);
+                outline-offset: 1px;
+            }
+        }
+    }
+
+    &__status-filter select {
+        min-height: 2.5rem;
+        padding: 0.55rem 2.25rem 0.55rem 0.75rem;
+        color: var(--text);
+        font: inherit;
+        font-size: var(--text-s);
+        background-color: var(--bg-light);
+        border: 1px solid var(--input);
+        border-radius: 0.5rem;
+        cursor: pointer;
+    }
+
+    &__viewport {
+        width: 100%;
+        min-width: 0;
+        overflow-x: auto;
+        background: var(--bg-light);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.625rem;
+        scrollbar-color: var(--border) transparent;
+    }
+
+    &__table {
+        width: 100%;
+        min-width: 60rem;
+        font-size: var(--text-s);
+        border-collapse: collapse;
+
+        th {
+            height: 3.5rem;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        td {
+            height: 3.5rem;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        thead th {
+            height: 3rem;
+            color: var(--text-muted);
+            font-size: var(--annotation);
+            font-weight: 600;
+            white-space: nowrap;
+            background: color-mix(in srgb, var(--muted) 55%, transparent);
+        }
+
+        tbody {
+            tr:last-child:not(.planning-datatable__no-result) th,
+            tr:last-child:not(.planning-datatable__no-result) td {
+                border-bottom: 0;
+            }
+
+            tr:hover:not(.planning-datatable__no-result) {
+                background: color-mix(in srgb, var(--muted) 45%, transparent);
+            }
+
+            tr[hidden] {
+                display: none;
+            }
+
+            th {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                font-weight: 400;
+            }
+        }
+
+        input[type='checkbox'] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+    }
+
+    &__selection {
+        width: 3rem;
+        padding-inline: 1rem 0 !important;
+    }
+
+    &__actions-column {
+        width: 3.5rem;
+        padding-inline: 0.25rem 0.75rem !important;
+
+        .button {
+            width: 2rem;
+            min-width: 2rem;
+            min-height: 2rem;
+        }
+    }
+
+    &__color {
+        flex: 0 0 auto;
+        width: 0.5rem;
+        height: 2.25rem;
+        background: var(--planning-color);
+        border-radius: 999px;
+    }
+
+    &__identity {
+        display: grid;
+        gap: 0.15rem;
+        min-width: 0;
+
+        strong {
+            color: var(--text);
+            font-size: var(--text-s);
+            font-weight: 600;
+        }
+
+        small {
+            max-width: 22rem;
+            overflow: hidden;
+            color: var(--text-muted);
+            font-size: var(--annotation);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    &__no-result td {
+        height: 6rem;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+    &__footer {
+        justify-content: space-between;
+        gap: 1rem;
+        min-height: 2.5rem;
+
+        p,
+        span {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: var(--annotation);
+        }
+    }
+
+    &__pagination {
+        gap: 0.4rem;
+
+        > span {
+            margin-inline-end: 0.35rem;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            color: var(--text);
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 0.4rem;
+
+            &:disabled {
+                cursor: not-allowed;
+                opacity: 0.45;
+            }
+
+            svg {
+                width: 1rem;
+                height: 1rem;
+            }
+        }
+    }
+}
+
+.planning-status {
+    display: inline-flex;
+    padding: 0.3rem 0.55rem;
+    font-size: var(--annotation);
+    font-weight: 600;
+    border-radius: 999px;
+
+    &--active {
+        color: var(--success-foreground);
+        background: var(--success);
+    }
+
+    &--inactive {
+        color: var(--muted-foreground);
+        background: var(--muted);
+    }
+}
+
+.planning-form {
+    display: grid;
+    gap: 1.5rem;
+
+    &__fields {
+        display: grid;
+        gap: 1rem;
+
+        > div,
+        .planning-form__row > div {
+            display: grid;
+            gap: 0.4rem;
+            min-width: 0;
+        }
+
+        label {
+            color: var(--text);
+            font-size: var(--text-s);
+            font-weight: 600;
+        }
+
+        input:not([type='checkbox']):not([type='color']):not([type='range']),
+        textarea {
+            width: 100%;
+            min-height: 2.5rem;
+            padding: 0.6rem 0.75rem;
+            color: var(--text);
+            font: inherit;
+            font-size: var(--text-s);
+            background: var(--bg-light);
+            border: 1px solid var(--input);
+            border-radius: 0.5rem;
+
+            &:focus-visible {
+                border-color: var(--ring);
+                outline: 2px solid color-mix(in srgb, var(--ring) 30%, transparent);
+                outline-offset: 1px;
+            }
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type='color'] {
+            width: 4rem;
+            height: 2.5rem;
+            padding: 0.2rem;
+            background: var(--bg-light);
+            border: 1px solid var(--input);
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        input[type='checkbox'] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--primary);
+        }
+
+        .help-text,
+        .form-error-message,
+        ul {
+            margin: 0;
+            font-size: var(--annotation);
+        }
+
+        .help-text {
+            color: var(--text-muted);
+        }
+
+        .form-error-message,
+        ul {
+            color: var(--danger);
+        }
+    }
+
+    &__row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+
+        &--compact {
+            align-items: end;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-muted);
+    }
+}
+
+.planning-availability-form {
+    &__days {
+        display: grid;
+        gap: 0.625rem;
+    }
+
+    &__day {
+        display: grid;
+        grid-template-columns: minmax(5.5rem, 0.7fr) auto minmax(0, 2fr);
+        align-items: center;
+        gap: 1rem;
+        margin: 0;
+        padding: 0.75rem;
+        border: 1px solid var(--border-muted);
+        border-radius: 0.5rem;
+
+        legend {
+            float: left;
+            width: 100%;
+            padding: 0;
+            font-size: var(--text-s);
+            font-weight: 600;
+        }
+    }
+
+    &__toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+
+        input {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--primary);
+        }
+
+        label {
+            font-size: var(--annotation);
+        }
+    }
+
+    &__hours {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+
+        > div {
+            display: grid;
+            gap: 0.3rem;
+            min-width: 0;
+        }
+
+        label {
+            color: var(--text-muted);
+            font-size: var(--annotation);
+        }
+
+        input {
+            width: 100%;
+            min-height: 2.25rem;
+            padding: 0.4rem 0.5rem;
+            color: var(--text);
+            font: inherit;
+            font-size: var(--text-s);
+            color-scheme: light dark;
+            background: var(--bg-light);
+            border: 1px solid var(--input);
+            border-radius: 0.4rem;
+        }
+
+        .form-error-message,
+        ul {
+            margin: 0;
+            color: var(--danger);
+            font-size: var(--annotation);
+        }
+    }
+}
+
+.planning-color-check {
+    &__feedback {
+        display: flex;
+        align-items: center;
+        min-height: 1.5rem;
+        gap: 0.5rem;
+        font-size: var(--annotation);
+    }
+
+    &__spinner {
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid var(--border-muted);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: planning-color-spinner 700ms linear infinite;
+    }
+
+    &__message {
+        &.is-available {
+            color: var(--success);
+        }
+
+        &.is-unavailable {
+            color: var(--danger);
+        }
+    }
+}
+
+.planning-availability-summary {
+    &__list {
+        display: grid;
+        gap: 0.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            min-height: 3rem;
+            padding: 0.625rem 0.75rem;
+            border: 1px solid var(--border-muted);
+            border-radius: 0.5rem;
+        }
+
+        strong,
+        span {
+            font-size: var(--text-s);
+        }
+
+        .is-unavailable {
+            color: var(--text-muted);
+        }
+    }
+}
+
+@keyframes planning-color-spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+}
+
+@container dashboard (max-width: 789px) {
+    .planning-dashboard__header {
+        align-items: stretch;
+        flex-direction: column;
+
+        .button-group {
+            align-self: flex-start;
+        }
+    }
+
+    .planning-datatable {
+        &__toolbar,
+        &__footer {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        &__search,
+        &__status-filter,
+        &__status-filter select {
+            width: 100%;
+        }
+
+        &__pagination {
+            justify-content: space-between;
+            width: 100%;
+        }
+    }
+}
+
+@container dashboard (max-width: 500px) {
+    .planning-dashboard {
+        gap: 1rem;
+    }
+
+    .planning-datatable__table {
+        th,
+        td {
+            padding: 0.65rem 0.75rem;
+        }
+    }
+
+    .planning-form__row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .planning-availability-form {
+        &__day {
+            grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        &__hours {
+            grid-column: 1 / -1;
+        }
+    }
+}

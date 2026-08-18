@@ -1,0 +1,198 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Gestion des plannings | FullJam Dev{% endblock %}
+
+{% block body %}
+    <section class="planning-dashboard" aria-labelledby="planning-dashboard-title">
+        <header class="planning-dashboard__header">
+            <div>
+                <h1 id="planning-dashboard-title">Gestion des plannings</h1>
+                <p>Créez et gérez les plannings proposés pour les réservations.</p>
+            </div>
+
+            <twig:Admin:ButtonGroup aria-label="Actions de la page">
+                <twig:Admin:Button
+                    variant="destructive"
+                    icon="material-symbols:arrow-back-rounded"
+                    :onlyIcon="true"
+                    label="Retour aux réservations"
+                    href="{{ path('app_dashboard_reservation') }}"
+                    title="Retour aux réservations"
+                />
+                <twig:Admin:Button
+                    variant="secondary"
+                    icon="material-symbols:add-rounded"
+                    :onlyIcon="true"
+                    label="Ajouter un planning"
+                    href="{{ path('app_dashboard_reservation_planning_new') }}"
+                    title="Ajouter un planning"
+                    data-turbo-frame="planning-dialog-frame"
+                />
+                <twig:Admin:Dropdown
+                    variant="secondary"
+                    icon="mage:dots"
+                    :onlyIcon="true"
+                    label="Options"
+                    :items="[
+                        {label: 'Voir tous les RDV', href: path('app_dashboard_reservation') ~ '#reservation-calendar-title'},
+                        {label: 'Générer un lien'}
+                    ]"
+                />
+                <twig:Admin:Button
+                    variant="secondary"
+                    icon="ic:round-settings"
+                    :onlyIcon="true"
+                    label="Paramètres de réservation"
+                    href="{{ path('app_dashboard_settings', {section: 'reservation'}) }}"
+                    title="Paramètres de réservation"
+                />
+            </twig:Admin:ButtonGroup>
+        </header>
+
+        {% if plannings is empty %}
+            <div class="planning-dashboard__empty">
+                <p>Aucun planning n’a encore été créé.</p>
+            </div>
+        {% else %}
+            <div class="planning-datatable" {{ stimulus_controller('planning-datatable') }}>
+                <div class="planning-datatable__toolbar">
+                    <label class="planning-datatable__search">
+                        <span class="sr-only">Rechercher un planning</span>
+                        {{ ux_icon('material-symbols:search-rounded', {'aria-hidden': 'true'}) }}
+                        <input
+                            type="search"
+                            placeholder="Rechercher un planning…"
+                            autocomplete="off"
+                            {{ stimulus_action('planning-datatable', 'filter', 'input') }}
+                            {{ stimulus_target('planning-datatable', 'search') }}
+                        >
+                    </label>
+
+                    <label class="planning-datatable__status-filter">
+                        <span class="sr-only">Filtrer par statut</span>
+                        <select
+                            {{ stimulus_action('planning-datatable', 'filter', 'change') }}
+                            {{ stimulus_target('planning-datatable', 'status') }}
+                        >
+                            <option value="all">Tous les statuts</option>
+                            <option value="active">Actifs</option>
+                            <option value="inactive">Inactifs</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="planning-datatable__viewport" tabindex="0" aria-label="Liste des plannings">
+                    <table class="planning-datatable__table">
+                        <thead>
+                            <tr>
+                                <th class="planning-datatable__selection" scope="col">
+                                    <input
+                                        type="checkbox"
+                                        aria-label="Sélectionner tous les plannings visibles"
+                                        {{ stimulus_action('planning-datatable', 'toggleAll', 'change') }}
+                                        {{ stimulus_target('planning-datatable', 'selectAll') }}
+                                    >
+                                </th>
+                                <th scope="col">Planning</th>
+                                <th scope="col">Durée</th>
+                                <th scope="col">Délai</th>
+                                <th scope="col">Statut</th>
+                                <th class="planning-datatable__actions-column" scope="col">
+                                    <span class="sr-only">Actions</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for planning in plannings %}
+                                <tr
+                                    data-title="{{ planning.title|lower }}"
+                                    data-status="{{ planning.active ? 'active' : 'inactive' }}"
+                                    {{ stimulus_target('planning-datatable', 'row') }}
+                                >
+                                    <td class="planning-datatable__selection">
+                                        <input
+                                            type="checkbox"
+                                            aria-label="Sélectionner {{ planning.title }}"
+                                            {{ stimulus_action('planning-datatable', 'updateSelection', 'change') }}
+                                            {{ stimulus_target('planning-datatable', 'rowCheckbox') }}
+                                        >
+                                    </td>
+                                    <th scope="row">
+                                        <span
+                                            class="planning-datatable__color"
+                                            style="--planning-color: {{ planning.color }}"
+                                            aria-hidden="true"
+                                        ></span>
+                                        <span class="planning-datatable__identity">
+                                            <strong>{{ planning.title }}</strong>
+                                        </span>
+                                    </th>
+                                    <td>{{ planning.duration }} min</td>
+                                    <td>{{ planning.gap }} min</td>
+                                    <td>
+                                        <span class="planning-status planning-status--{{ planning.active ? 'active' : 'inactive' }}">
+                                            {{ planning.active ? 'Actif' : 'Inactif' }}
+                                        </span>
+                                    </td>
+                                    <td class="planning-datatable__actions-column">
+                                        <twig:Admin:Dropdown
+                                            variant="ghost"
+                                            icon="mage:dots"
+                                            :onlyIcon="true"
+                                            label="Actions pour {{ planning.title }}"
+                                            :items="[
+                                                {
+                                                    label: 'Voir les disponibilités',
+                                                    href: path('app_dashboard_reservation_planning_availabilities_show', {id: planning.id}),
+                                                    turboFrame: 'planning-dialog-frame'
+                                                },
+                                                {
+                                                    label: 'Copier le lien public',
+                                                    copyText: absolute_url(path('app_front_planning_appointment', {slug: planning.slug}))
+                                                },
+                                                {label: 'Voir les rendez-vous', href: path('app_dashboard_reservation') ~ '#reservation-calendar-title'},
+                                                {label: 'Gérer le planning'}
+                                            ]"
+                                        />
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td 
+                                    colspan="6"
+                                    hidden 
+                                    class="planning-datatable__empty"
+                                    {{ stimulus_target('planning-datatable', 'empty') }}
+                                    >
+                                    Aucun planning correspondant a votre recherche
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <footer class="planning-datatable__footer">
+                    <p>
+                        <span {{ stimulus_target('planning-datatable', 'selectedCount') }}>0</span>
+                        sur
+                        <span {{ stimulus_target('planning-datatable', 'visibleCount') }}>{{ plannings|length }}</span>
+                        ligne(s) sélectionnée(s).
+                    </p>
+                    <div class="planning-datatable__pagination" aria-label="Pagination">
+                        <span>Page 1 sur 1</span>
+                        <button type="button" disabled aria-label="Page précédente">
+                            {{ ux_icon('material-symbols:chevron-left-rounded', {'aria-hidden': 'true'}) }}
+                        </button>
+                        <button type="button" disabled aria-label="Page suivante">
+                            {{ ux_icon('material-symbols:chevron-right-rounded', {'aria-hidden': 'true'}) }}
+                        </button>
+                    </div>
+                </footer>
+            </div>
+        {% endif %}
+
+        <turbo-frame id="planning-dialog-frame"></turbo-frame>
+    </section>
+{% endblock %}

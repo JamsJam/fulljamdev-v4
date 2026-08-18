@@ -1,0 +1,41 @@
+<div id="planning-dialog-content">
+    {% if showStepper|default(true) %}
+        <twig:Admin:Stepper
+            :steps="['Créer le planning', 'Modifier les disponibilités']"
+            :activeStep="2"
+            label="Étapes de création du planning"
+        />
+    {% endif %}
+
+    {{ form_start(form, {
+        attr: {
+            class: 'planning-form planning-availability-form',
+            'data-turbo-stream': 'true'
+        }
+    }) }}
+        {{ form_errors(form) }}
+
+        <div class="planning-availability-form__days">
+            {% set dayNames = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] %}
+            {% for availability in form.availabilities %}
+                <fieldset class="planning-availability-form__day">
+                    <legend>{{ dayNames[loop.index0] }}</legend>
+                    <div class="planning-availability-form__toggle">
+                        {{ form_widget(availability.isAvailable) }}
+                        {{ form_label(availability.isAvailable) }}
+                    </div>
+                    <div class="planning-availability-form__hours">
+                        {{ form_row(availability.startHour) }}
+                        {{ form_row(availability.endHour) }}
+                    </div>
+                    <div class="sr-only">{{ form_row(availability.dow) }}</div>
+                </fieldset>
+            {% endfor %}
+        </div>
+
+        <div class="planning-form__actions">
+            <twig:Admin:Button variant="outline" label="Fermer" data-action="dialog#close" />
+            <twig:Admin:Button variant="primary" type="submit" label="Enregistrer les disponibilités" />
+        </div>
+    {{ form_end(form) }}
+</div>

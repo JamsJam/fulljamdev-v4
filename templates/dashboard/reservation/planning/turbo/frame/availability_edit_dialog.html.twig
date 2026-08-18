@@ -1,0 +1,8 @@
+<turbo-frame id="planning-dialog-frame">
+    <twig:Admin:Dialog title="Modifier les disponibilités" description="Planning : {{ planning.title }}">
+        {% include 'dashboard/reservation/planning/partial/_availability_form.html.twig' with {
+            form: form,
+            showStepper: false
+        } only %}
+    </twig:Admin:Dialog>
+</turbo-frame>

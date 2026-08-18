@@ -1,0 +1,54 @@
+<div id="planning-dialog-content">
+    <twig:Admin:Stepper
+        :steps="['Créer le planning', 'Modifier les disponibilités']"
+        :activeStep="1"
+        label="Étapes de création du planning"
+    />
+
+    {{ form_start(form, {
+        attr: {
+            class: 'planning-form',
+            'data-turbo-stream': 'true'
+        }
+    }) }}
+        {{ form_errors(form) }}
+
+        <div class="planning-form__fields">
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+
+            <div class="planning-form__row">
+                <twig:Admin:Slider :field="form.duration" :min="5" :max="60" :step="5" suffix=" min" />
+                <twig:Admin:Slider :field="form.gap" :min="10" :max="40" :step="5" suffix=" min" />
+            </div>
+
+            <div
+                class="planning-form__row planning-form__row--compact planning-color-check"
+                data-controller="planning-color-availability"
+                data-planning-color-availability-url-value="{{ path('app_dashboard_reservation_planning_check_color') }}"
+                data-planning-color-availability-loading-value="false"
+            >
+                {{ form_row(form.color) }}
+                <div class="planning-color-check__feedback" role="status" aria-live="polite">
+                    <span
+                        class="planning-color-check__spinner"
+                        data-planning-color-availability-target="spinner"
+                        aria-hidden="true"
+                        hidden
+                    ></span>
+                    <span
+                        id="planning-color-availability-message"
+                        class="planning-color-check__message"
+                        data-planning-color-availability-target="message"
+                        hidden
+                    ></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="planning-form__actions">
+            <twig:Admin:Button variant="outline" label="Annuler" data-action="dialog#close" />
+            <twig:Admin:Button variant="primary" type="submit" label="Continuer" />
+        </div>
+    {{ form_end(form) }}
+</div>

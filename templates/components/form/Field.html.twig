@@ -1,0 +1,22 @@
+{% set invalid = showErrors and field.vars.errors|length > 0 %}
+{% set control_attr = widgetAttr|merge({
+    class: (widgetAttr.class|default('') ~ ' field__control')|trim,
+    'aria-invalid': invalid ? 'true' : 'false'
+}) %}
+{% set field_description = description ?? field.vars.help %}
+
+<div
+    {{ attributes.defaults({class: 'field'}) }}
+    {% if invalid %}data-invalid="true"{% endif %}
+>
+    {{ form_label(field, label, {label_attr: {class: 'field__label'}}) }}
+    {{ form_widget(field, {attr: control_attr}) }}
+
+    {% if field_description %}
+        <p class="field__description">{{ field_description }}</p>
+    {% endif %}
+
+    {% if invalid %}
+        <div class="field__error">{{ form_errors(field) }}</div>
+    {% endif %}
+</div>

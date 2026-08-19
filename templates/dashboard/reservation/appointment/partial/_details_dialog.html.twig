@@ -99,8 +99,8 @@
                 </div>
             {% elseif appointment.status.value == 'confirmed' %}
                 {{ form_start(reschedule_form, {attr: {class: 'appointment-details__action-form'}}) }}
-                    {{ form_row(reschedule_form.startAt) }}
-                    {{ form_row(reschedule_form.endAt) }}
+                    <twig:Form:Field :field="reschedule_form.startAt" />
+                    <twig:Form:Field :field="reschedule_form.endAt" />
                     <twig:Admin:Button type="submit" variant="secondary" label="Reprogrammer" />
                 {{ form_end(reschedule_form) }}
                 <div>
@@ -123,9 +123,9 @@
                 </div>
             {% elseif appointment.status.value == 'occurred' %}
                 {{ form_start(summary_form, {attr: {class: 'appointment-details__action-form'}}) }}
-                    {{ form_row(summary_form.content) }}
-                    {{ form_row(summary_form.internalNotes) }}
-                    {{ form_row(summary_form.recordingLink) }}
+                    <twig:Form:Field :field="summary_form.content" />
+                    <twig:Form:Field :field="summary_form.internalNotes" />
+                    <twig:Form:Field :field="summary_form.recordingLink" />
                     <twig:Admin:Button type="submit" variant="primary" label="Enregistrer le compte rendu" />
                 {{ form_end(summary_form) }}
             {% else %}

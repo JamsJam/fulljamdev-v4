@@ -14,8 +14,8 @@
         {{ form_errors(form) }}
 
         <div class="planning-form__fields">
-            {{ form_row(form.title) }}
-            {{ form_row(form.description) }}
+            <twig:Form:Field :field="form.title" />
+            <twig:Form:Field :field="form.description" />
 
             <div class="planning-form__row">
                 <twig:Admin:Slider :field="form.duration" :min="5" :max="60" :step="5" suffix=" min" />
@@ -28,7 +28,7 @@
                 data-planning-color-availability-url-value="{{ path('app_dashboard_reservation_planning_check_color') }}"
                 data-planning-color-availability-loading-value="false"
             >
-                {{ form_row(form.color) }}
+                <twig:Form:Field :field="form.color" />
                 <div class="planning-color-check__feedback" role="status" aria-live="polite">
                     <span
                         class="planning-color-check__spinner"

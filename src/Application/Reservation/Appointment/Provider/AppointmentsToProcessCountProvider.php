@@ -3,25 +3,11 @@
 namespace App\Application\Reservation\Appointment\Provider;
 
 use App\Application\Reservation\Appointment\Provider\Abstract\AbstractAppointmentProvider;
-use App\Application\Reservation\Appointment\Provider\Interface\AppointmentProviderInterface;
 
-final readonly class AppointmentsToProcessCountProvider extends AbstractAppointmentProvider implements AppointmentProviderInterface
+final readonly class AppointmentsToProcessCountProvider extends AbstractAppointmentProvider
 {
-    /**
-     * Utiliser exclusivement l'argument nommé `date`.
-     * Cet argument est obligatoire et sert de date de référence au comptage.
-     */
-    public function provide(
-        ?int $id = null,
-        ?\DateTimeImmutable $startAt = null,
-        ?\DateTimeImmutable $endAt = null,
-        array $statuses = [],
-        ?\DateTimeImmutable $date = null,
-    ): int {
-        if (null === $date) {
-            throw new \InvalidArgumentException('La date de référence est obligatoire.');
-        }
-
+    public function provide(\DateTimeImmutable $date): int
+    {
         return $this->repository->countToProcess($date);
     }
 }

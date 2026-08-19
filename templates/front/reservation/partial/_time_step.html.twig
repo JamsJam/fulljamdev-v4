@@ -6,13 +6,14 @@
     {% if show_errors|default(false) %}{{ form_errors(form.time.value) }}{% endif %}
 
     <div class="public-booking__timezone">
-        {{ form_row(form.time.timezone, {
-            errors: show_errors|default(false) ? form.time.timezone.vars.errors : [],
-            attr: {
+        <twig:Form:Field
+            :field="form.time.timezone"
+            :showErrors="show_errors|default(false)"
+            :widgetAttr="{
                 'data-action': 'change->public-booking#selectTimezone',
                 'data-times-url': path('app_front_planning_times', {slug: planning.slug, date: selected_date})
-            }
-        }) }}
+            }"
+        />
         <p>Les horaires sont affichés dans le fuseau sélectionné.</p>
     </div>
 

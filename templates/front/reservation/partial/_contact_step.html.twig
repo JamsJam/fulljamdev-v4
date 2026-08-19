@@ -15,12 +15,12 @@
     <fieldset class="public-booking__contact">
         <legend>Vos informations</legend>
         <div class="public-booking__identity">
-            {{ form_row(form.contact.firstName, {errors: show_errors|default(false) ? form.contact.firstName.vars.errors : []}) }}
-            {{ form_row(form.contact.lastName, {errors: show_errors|default(false) ? form.contact.lastName.vars.errors : []}) }}
+            <twig:Form:Field :field="form.contact.firstName" :showErrors="show_errors|default(false)" />
+            <twig:Form:Field :field="form.contact.lastName" :showErrors="show_errors|default(false)" />
         </div>
-        {{ form_row(form.contact.email, {errors: show_errors|default(false) ? form.contact.email.vars.errors : []}) }}
-        {{ form_row(form.contact.phoneNumber, {errors: show_errors|default(false) ? form.contact.phoneNumber.vars.errors : []}) }}
-        {{ form_row(form.contact.reason, {errors: show_errors|default(false) ? form.contact.reason.vars.errors : []}) }}
+        <twig:Form:Field :field="form.contact.email" :showErrors="show_errors|default(false)" />
+        <twig:Form:Field :field="form.contact.phoneNumber" :showErrors="show_errors|default(false)" />
+        <twig:Form:Field :field="form.contact.reason" :showErrors="show_errors|default(false)" />
     </fieldset>
 
     <div class="public-booking__submit">

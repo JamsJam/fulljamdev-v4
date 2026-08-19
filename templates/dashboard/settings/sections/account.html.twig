@@ -5,12 +5,12 @@
     {{ form_start(account_form, {attr: {class: 'settings__form'}}) }}
         {{ form_errors(account_form) }}
         <div class="settings__form-grid">
-            {{ form_row(account_form.firstName, {row_attr: {class: 'settings__field'}}) }}
-            {{ form_row(account_form.lastName, {row_attr: {class: 'settings__field'}}) }}
-            {{ form_row(account_form.email, {row_attr: {class: 'settings__field'}}) }}
-            {{ form_row(account_form.phoneNumber, {row_attr: {class: 'settings__field'}}) }}
-            {{ form_row(account_form.company, {row_attr: {class: 'settings__field'}}) }}
-            {{ form_row(account_form.jobTitle, {row_attr: {class: 'settings__field'}}) }}
+            <twig:Form:Field :field="account_form.firstName" class="settings__field" />
+            <twig:Form:Field :field="account_form.lastName" class="settings__field" />
+            <twig:Form:Field :field="account_form.email" class="settings__field" />
+            <twig:Form:Field :field="account_form.phoneNumber" class="settings__field" />
+            <twig:Form:Field :field="account_form.company" class="settings__field" />
+            <twig:Form:Field :field="account_form.jobTitle" class="settings__field" />
         </div>
         {{ form_row(account_form.submit, {row_attr: {class: 'settings__form-actions'}}) }}
     {{ form_end(account_form) }}

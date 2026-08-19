@@ -25,8 +25,8 @@
                         {{ form_label(availability.isAvailable) }}
                     </div>
                     <div class="planning-availability-form__hours">
-                        {{ form_row(availability.startHour) }}
-                        {{ form_row(availability.endHour) }}
+                        <twig:Form:Field :field="availability.startHour" />
+                        <twig:Form:Field :field="availability.endHour" />
                     </div>
                     <div class="sr-only">{{ form_row(availability.dow) }}</div>
                 </fieldset>

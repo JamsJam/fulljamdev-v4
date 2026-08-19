@@ -12,10 +12,15 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ReservationController extends AbstractController
 {
     #[Route('/dashboard/reservations/', name: 'app_dashboard_reservation', methods: ['GET'])]
-    public function index(Request $request, BreadcrumbService $breadcrumbService, GetReservationDashboardService $service): Response
-    {
+    public function index(
+        Request $request,
+        BreadcrumbService $breadcrumbService,
+        GetReservationDashboardService $service,
+    ): Response {
+        $breadcrumb = $breadcrumbService->getBreadcrumb($request->attributes->getString('_route'));
+
         return $this->render('dashboard/reservation/index.html.twig', [
-            'breadcrumb' => $breadcrumbService->getBreadcrumb($request->attributes->getString('_route')),
+            'breadcrumb' => $breadcrumb,
             ...$service->getDashboard(),
         ]);
     }
@@ -23,8 +28,10 @@ final class ReservationController extends AbstractController
     #[Route('/dashboard/reservations/calendar/', name: 'app_dashboard_reservation_calendar', methods: ['GET'])]
     public function calendar(Request $request, BreadcrumbService $breadcrumbService, GetReservationDashboardService $service): Response
     {
+        $breadcrumb = $breadcrumbService->getBreadcrumb($request->attributes->getString('_route'));
+
         return $this->render('dashboard/reservation/calendar.html.twig', [
-            'breadcrumb' => $breadcrumbService->getBreadcrumb($request->attributes->getString('_route')),
+            'breadcrumb' => $breadcrumb,
             ...$service->getCalendar($request->query->getString('month')),
         ]);
     }

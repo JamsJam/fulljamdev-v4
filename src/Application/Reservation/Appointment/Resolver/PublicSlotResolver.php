@@ -3,7 +3,7 @@
 namespace App\Application\Reservation\Appointment\Resolver;
 
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
-use App\Application\Reservation\Appointment\Provider\Interface\AppointmentProviderInterface;
+use App\Application\Reservation\Appointment\Provider\AppointmentProvider;
 use App\Application\Reservation\Unavailability\Provider\Interface\UnavailabilityProviderInterface;
 use App\Entity\Reservation\Planning;
 use App\Service\ConfigurationService;
@@ -11,7 +11,7 @@ use App\Service\ConfigurationService;
 final readonly class PublicSlotResolver
 {
     public function __construct(
-        private AppointmentProviderInterface $appointmentProvider,
+        private AppointmentProvider $appointmentProvider,
         private UnavailabilityProviderInterface $unavailabilityProvider,
         private ConfigurationService $configuration,
     ) {

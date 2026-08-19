@@ -3,10 +3,10 @@
 namespace App\Application\Reservation\Service;
 
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
+use App\Application\Reservation\Appointment\Provider\AppointmentProvider;
 use App\Application\Reservation\Appointment\Provider\AppointmentsByPeriodAndStatusesProvider;
 use App\Application\Reservation\Appointment\Provider\AppointmentsByStatusesProvider;
 use App\Application\Reservation\Appointment\Provider\AppointmentsToProcessProvider;
-use App\Application\Reservation\Appointment\Provider\Interface\AppointmentProviderInterface;
 use App\Application\Reservation\Planner\Provider\Interface\PlannerProviderInterface;
 use App\Application\Reservation\Resolver\MonthResolver;
 use App\Entity\Reservation\Appointment;
@@ -16,7 +16,7 @@ final class GetReservationDashboardService
 {
     public function __construct(
         private readonly PlannerProviderInterface $plannerProvider,
-        private readonly AppointmentProviderInterface $appointmentsByPeriodProvider,
+        private readonly AppointmentProvider $appointmentsByPeriodProvider,
         private readonly AppointmentsByStatusesProvider $appointmentsByStatusesProvider,
         private readonly AppointmentsByPeriodAndStatusesProvider $appointmentsByPeriodAndStatusesProvider,
         private readonly AppointmentsToProcessProvider $appointmentsToProcessProvider,

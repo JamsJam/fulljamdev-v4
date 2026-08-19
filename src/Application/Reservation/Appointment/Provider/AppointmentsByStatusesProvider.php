@@ -4,25 +4,17 @@ namespace App\Application\Reservation\Appointment\Provider;
 
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
 use App\Application\Reservation\Appointment\Provider\Abstract\AbstractAppointmentProvider;
-use App\Application\Reservation\Appointment\Provider\Interface\AppointmentProviderInterface;
 use App\Entity\Reservation\Appointment;
 
-final readonly class AppointmentsByStatusesProvider extends AbstractAppointmentProvider implements AppointmentProviderInterface
+final readonly class AppointmentsByStatusesProvider extends AbstractAppointmentProvider
 {
     /**
-     * Utiliser exclusivement l'argument nommé `statuses`.
-     *
      * @param list<AppointmentStatus> $statuses
      *
      * @return Appointment[]
      */
-    public function provide(
-        ?int $id = null,
-        ?\DateTimeImmutable $startAt = null,
-        ?\DateTimeImmutable $endAt = null,
-        array $statuses = [],
-        ?\DateTimeImmutable $date = null,
-    ): array {
+    public function provide(array $statuses): array
+    {
         return $this->repository->findByStatuses($statuses);
     }
 }

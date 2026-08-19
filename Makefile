@@ -65,3 +65,10 @@ endif
 # ? Analyse statique PHP
 phpstan:
 	$(PHPSTAN) analyse --memory-limit=$(PHPSTAN_MEMORY_LIMIT)
+
+# ==============================================================================
+# * TESTS AUTOMATISÉS
+# ==============================================================================
+# ? Lance la suite de tests unitaires PHPUnit
+test:
+	$(PHPUNIT)

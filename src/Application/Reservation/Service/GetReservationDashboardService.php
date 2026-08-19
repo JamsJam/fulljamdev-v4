@@ -27,17 +27,10 @@ final class GetReservationDashboardService
     /**
      * @return array{
      *     plannings: Planning[],
-     *     upcomingAppointments: Appointment[],
-     *     calendarWeeks: array<int, array<int, array{
-     *         date: \DateTimeImmutable,
-     *         isCurrentMonth: bool,
-     *         isToday: bool,
-     *         appointments: Appointment[]
-     *     }>>,
-     *     month: \DateTimeImmutable,
-     *     monthLabel: string,
-     *     previousMonth: string,
-     *     nextMonth: string
+     *     requestedAppointments: list<Appointment>,
+     *     proposedAppointments: list<Appointment>,
+     *     upcomingDays: list<array{date: \DateTimeImmutable, appointments: Appointment[]}>,
+     *     appointmentsToProcess: Appointment[]
      * }
      */
     public function getDashboard(): array
@@ -69,6 +62,21 @@ final class GetReservationDashboardService
         ];
     }
 
+    /**
+     * @return array{
+     *     plannings: Planning[],
+     *     calendarWeeks: array<int, array<int, array{
+     *         date: \DateTimeImmutable,
+     *         isCurrentMonth: bool,
+     *         isToday: bool,
+     *         appointments: Appointment[]
+     *     }>>,
+     *     month: \DateTimeImmutable,
+     *     monthLabel: string,
+     *     previousMonth: string,
+     *     nextMonth: string
+     * }
+     */
     public function getCalendar(string $requestedMonth): array
     {
         $month = $this->monthResolver->resolve($requestedMonth);

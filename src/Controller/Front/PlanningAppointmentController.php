@@ -101,7 +101,7 @@ final class PlanningAppointmentController extends AbstractController
             'selected_date' => $dto->date->value,
             'selected_time' => $dto->time->value,
             'selected_timezone' => $dto->time->timezone,
-            'selected_time_label' => null !== $dto->date->value && null !== $dto->time->value && null !== $dto->time->timezone
+            'selected_time_label' => null !== $dto->date->value && null !== $dto->time->value
                 ? $timezoneConverter->formatTime($dto->date->value, $dto->time->value, $planningTimezone, $dto->time->timezone)
                 : null,
             'show_errors' => $form->isSubmitted() && 'submit' === $requestedStep,

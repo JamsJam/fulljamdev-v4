@@ -12,6 +12,8 @@ PHPUNIT := $(PHP) bin/phpunit
 BDI := vendor/bin/bdi
 PHPSTAN := vendor/bin/phpstan
 
+.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-db test-unit test-integration test-application test-page test-reservation test-settings test-shared test-ui
+
 # * Le scan de style est non modifiant par défaut
 DR ?= 1
 # ==============================================================================
@@ -69,6 +71,50 @@ phpstan:
 # ==============================================================================
 # * TESTS AUTOMATISÉS
 # ==============================================================================
-# ? Lance la suite de tests unitaires PHPUnit
+# ? Enchaîne les suites et s’arrête dès que l’une d’elles échoue
 test:
-	$(PHPUNIT)
+	$(MAKE) test-unit && \
+	$(MAKE) test-integration && \
+	$(MAKE) test-application
+
+# ? Lance uniquement les tests unitaires isolés
+test-unit:
+	$(PHPUNIT) --testsuite Unit
+
+# ? Lance uniquement les tests d’intégration Symfony et infrastructure
+test-integration: test-db
+	@TEST_STATUS=0; \
+	$(PHPUNIT) --testsuite Integration || TEST_STATUS=$$?; \
+	DROP_STATUS=0; \
+	$(CONSOLE) doctrine:database:drop --env=test --force --if-exists || DROP_STATUS=$$?; \
+	if [ $$TEST_STATUS -ne 0 ]; then exit $$TEST_STATUS; fi; \
+	exit $$DROP_STATUS
+
+# ? Prépare la base MySQL isolée utilisée par les tests Doctrine
+test-db:
+	$(CONSOLE) doctrine:database:create --env=test --if-not-exists
+	$(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
+
+# ? Lance uniquement les tests des cas d’usage applicatifs
+test-application:
+	$(PHPUNIT) --testsuite Application
+
+# ? Lance tous les tests du domaine Page
+test-page:
+	$(PHPUNIT) tests/Page
+
+# ? Lance tous les tests du domaine Reservation
+test-reservation:
+	$(PHPUNIT) tests/Reservation
+
+# ? Lance tous les tests du domaine Settings
+test-settings:
+	$(PHPUNIT) tests/Settings
+
+# ? Lance tous les tests des services partagés
+test-shared:
+	$(PHPUNIT) tests/Shared
+
+# ? Lance tous les tests des composants UI
+test-ui:
+	$(PHPUNIT) tests/UI

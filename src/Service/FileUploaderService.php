@@ -16,15 +16,15 @@ final class FileUploaderService
 
     public function upload(UploadedFile $file): string
     {
+        if (!is_dir($this->targetDirectory) && !mkdir($this->targetDirectory, 0775, true) && !is_dir($this->targetDirectory)) {
+            throw new FileException(sprintf('Le dossier d’upload « %s » ne peut pas être créé.', $this->targetDirectory));
+        }
+
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
-        try {
-            $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
-            // ... handle exception if something happens during file upload
-        }
+        $file->move($this->getTargetDirectory(), $fileName);
 
         return $fileName;
     }

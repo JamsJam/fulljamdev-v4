@@ -30,11 +30,11 @@
                     </time>
                 </header>
 
-                {% if day.appointments is empty %}
+                {% if day.items is empty %}
                     <p class="reservation-day__empty">Aucun rendez-vous.</p>
                 {% else %}
                     <div class="reservation-upcoming__list">
-                        {% for appointment in day.appointments %}
+                        {% for appointment in day.items %}
                             <article class="appointment-card" style="--planning-color: {{ appointment.planning.color }}">
                                 <div class="appointment-card__content">
                                     <div class="appointment-card__identity">

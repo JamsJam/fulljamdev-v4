@@ -3,8 +3,8 @@
 namespace App\Application\Reservation\Appointment\Notification;
 
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
+use App\Application\Settings\Service\GetAccountSettingsService;
 use App\Entity\Reservation\Appointment;
-use App\Service\ConfigurationService;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -13,7 +13,7 @@ final readonly class RequestedAppointmentNotifier
 {
     public function __construct(
         private MailerInterface $mailer,
-        private ConfigurationService $configuration,
+        private GetAccountSettingsService $getAccountSettingsService,
     ) {
     }
 
@@ -24,7 +24,8 @@ final readonly class RequestedAppointmentNotifier
         }
 
         $contact = $appointment->getContact();
-        $accountEmail = (string) $this->configuration->get('account.email', '');
+        $account = $this->getAccountSettingsService->get();
+        $accountEmail = $account->email;
 
         if (null === $contact || null === $contact->getEmail() || '' === $accountEmail) {
             return;
@@ -34,8 +35,8 @@ final readonly class RequestedAppointmentNotifier
             $accountEmail,
             trim(sprintf(
                 '%s %s',
-                $this->configuration->get('account.first_name', ''),
-                $this->configuration->get('account.last_name', ''),
+                $account->firstName,
+                $account->lastName,
             )),
         );
         $context = [

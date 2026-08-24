@@ -2,8 +2,9 @@
 
 namespace App\Form;
 
-use App\Application\Settings\Dto\GeneralSettingsDto;
+use App\Application\Settings\General\Dto\GeneralSettingsDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,11 +20,21 @@ final class GeneralSettingsType extends AbstractType
                 'placeholder' => 'Sélectionnez un fuseau horaire',
                 'intl' => true,
             ])
+            ->add('homepagePageId', ChoiceType::class, [
+                'label' => 'Page d’accueil',
+                'placeholder' => 'Sélectionnez une page',
+                'choices' => $options['page_choices'],
+                'choice_translation_domain' => false,
+            ])
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => GeneralSettingsDto::class]);
+        $resolver->setDefaults([
+            'data_class' => GeneralSettingsDto::class,
+            'page_choices' => [],
+        ]);
+        $resolver->setAllowedTypes('page_choices', 'array');
     }
 }

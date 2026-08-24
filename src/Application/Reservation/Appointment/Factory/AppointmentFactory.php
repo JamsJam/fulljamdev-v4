@@ -4,20 +4,20 @@ namespace App\Application\Reservation\Appointment\Factory;
 
 use App\Application\Reservation\Appointment\Dto\PublicAppointmentDto;
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
+use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Entity\Contact;
 use App\Entity\Reservation\Appointment;
 use App\Entity\Reservation\Planning;
-use App\Service\ConfigurationService;
 
 final class AppointmentFactory
 {
-    public function __construct(private readonly ConfigurationService $configuration)
+    public function __construct(private readonly GetGeneralSettingsService $getGeneralSettingsService)
     {
     }
 
     public function createRequested(PublicAppointmentDto $dto, Planning $planning, Contact $contact): Appointment
     {
-        $timezoneName = (string) $this->configuration->get('parameters.timezone', 'Europe/Paris');
+        $timezoneName = $this->getGeneralSettingsService->get()->timezone;
         $timezone = new \DateTimeZone($timezoneName);
         $now = new \DateTimeImmutable('now', $timezone);
         $startAt = new \DateTimeImmutable(sprintf('%s %s', $dto->date->value, $dto->time->value), $timezone);

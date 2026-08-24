@@ -1,0 +1,32 @@
+<article class="page-builder__block" draggable="true" data-page-builder-target="block">
+    <header class="page-builder__block-header">
+        <twig:Admin:Button
+            variant="ghost"
+            label="↕"
+            title="Déplacer le bloc"
+            aria-label="Déplacer le bloc"
+            class="page-builder__drag"
+        />
+        <strong>{{ definition.label }}</strong>
+        <twig:Admin:Button
+            variant="ghost"
+            :label="expanded|default(true) ? '−' : '+'"
+            title="Afficher ou masquer les réglages"
+            aria-label="Afficher ou masquer les réglages"
+            data-action="page-builder#toggleBlock"
+        />
+        <twig:Admin:Button
+            variant="ghost"
+            label="×"
+            title="Supprimer le bloc"
+            aria-label="Supprimer le bloc"
+            class="page-builder__remove"
+            data-action="page-builder#removeBlock"
+        />
+    </header>
+    <div class="page-builder__block-content" data-page-builder-target="content"{% if not expanded|default(true) %} hidden{% endif %}>
+        {{ form_widget(block.id) }}{{ form_widget(block.type) }}
+        {% include definition.formTemplate with {data: block.data} only %}
+        {{ form_errors(block) }}
+    </div>
+</article>

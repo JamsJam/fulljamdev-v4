@@ -21,7 +21,7 @@
         <meta property="og:url" content="https://www.exemple.com/page">
         <meta property="og:image" content="https://www.exemple.com/images/og-image.jpg"> #}
         {# ? === robot === #}
-        <meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+        <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
         {# ? === json/ld === #}
 
         <script type="application/ld+json">{% block jsonLD %}{% endblock %}</script>
@@ -48,12 +48,11 @@
         <meta name="ahrefs-site-verification" content="78d1c4f2075e84aa1621f088021aa546e2d936c1b8e17791ebf187bafd4130c3">
 
     </head>
-    <body class="front" {{stimulus_controller("responsive_nav")}} >
-        {% include("partials/header/_header.html.twig") %}
+    <body class="front">
+        <twig:Front:Header />
         <main>
-            
-
             {% block body %}{% endblock %}
         </main>
+        <twig:Front:Footer />
     </body>
 </html>

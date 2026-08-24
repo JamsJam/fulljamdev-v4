@@ -1,153 +1,136 @@
-# Guide : Workflow GitHub et Gestion des Branches (Actionnable)
+# Fulljamdev Portfolio
 
-## 🎯 Objectif
+Application Symfony du site Fulljamdev. Elle regroupe le site public, un dashboard d’administration, un constructeur de pages par blocs et un système complet de réservation.
 
-Ce guide fournit **les actions concrètes à suivre** pour travailler proprement avec GitHub et éviter les conflits.
+## Fonctionnalités principales
 
----
+- pages publiques composées de blocs réutilisables ;
+- chemins racines ou imbriqués avec détection des conflits de routes ;
+- page d’accueil configurable ;
+- gestion des plannings, disponibilités et rendez-vous ;
+- interfaces dynamiques avec Turbo Frames, Turbo Streams et Stimulus ;
+- réglages YAML mis en cache ;
+- notifications et intégration facultative à Google Calendar.
 
-## 🌿 🧭 Schéma de branches
+## Stack
 
-```
-main
-  │
-  └───┐
-      │
-   develop
-      │
-      ├── feature/like
-      ├── feature/login
-      └── feature/register
-```
+PHP 8.3, Symfony 7.4, Doctrine ORM 3, MySQL 8, Twig, Symfony UX, Turbo 8, Stimulus 3, AssetMapper et SassBundle.
 
-### Rôles :
+## Prérequis
 
-* `main` → production (stable)
-* `develop` → intégration (doit etre stable)
-* `feature/*` → développement 
+- PHP 8.3 avec `pdo_mysql` ;
+- Composer ;
+- MySQL 8.0.32 ou Docker Compose ;
+- Symfony CLI recommandé ;
+- GNU Make pour les commandes automatisées.
 
----
-
-## 🚀 🔁 Workflow COMPLET (Étapes à suivre)
-
-### 1. Creer les branches 
-
-A partir de main on cree la branche développe si ce n'est pas déja fait:
+## Installation
 
 ```bash
-git checkout -b develop
-git push -u origin develop  #mise en ligne de la branche develop
+composer install
+docker compose up -d database mailer
+php bin/console doctrine:database:create --if-not-exists
+php bin/console doctrine:migrations:migrate --no-interaction
 ```
-Si la branche est deja en ligne, il suffit de se déplacer sur la branche la récupérer
 
-C'est a partir de cette branche que les branche de développement seront créer
+Les valeurs spécifiques à la machine et les secrets doivent être placés dans `.env.local` ou `.env.dev.local`.
 
----
+## Configuration minimale
 
-### 2. 🌱 Créer une branche de développement
+Configuration MySQL locale :
+
+```dotenv
+DATABASE_URL="mysql://root:root@127.0.0.1:3306/fulljamdev4?serverVersion=8.0.32&charset=utf8mb4"
+```
+
+Pour inspecter les emails dans Mailpit :
+
+```dotenv
+MAILER_DSN=smtp://127.0.0.1:1025
+```
+
+L’interface Mailpit est accessible sur `http://127.0.0.1:8025`.
+
+## Lancer l’application
 
 ```bash
-git checkout -b feature/ma-feature
+symfony server:start -d
 ```
 
-👉 Toujours partir de `develop`
-
-Le nom de la branche est arbittraire.
-
-
----
-
-### 3. 💻 Développer
-
-👉 Faire des commits petits et fréquents !
+Afficher l’état ou arrêter le serveur :
 
 ```bash
-git add .
-git commit -m "feat: ajout de ma feature"
+symfony server:status
+symfony server:stop
 ```
 
----
-
-### 4. 🔄 Se resynchroniser régulièrement
-
-👉  A faire obligatoirement avant de push !
+## Tests et qualité
 
 ```bash
-git checkout develop # se déplacer sur develop
-git pull origin develop # mettre a jour developp
+# Unitaires, intégration, puis applicatifs
+make test
 
-git checkout feature/ma-feature # se déplacer sur la branche de développement
-git merge develop # Amener le code de dévelope sur la branche en cours
+# Linters, PHP CS Fixer et PHPStan
+make quality
 ```
 
+La suite d’intégration crée `fulljamdev4_test`, applique les migrations, exécute les tests puis supprime automatiquement cette base.
 
----
+## Architecture courte
 
-### 5. Gérer les conflits
-
-Si des conflits apparaissent, il faudra choisir entre le code existant sur la branche et le code entrant
-
+```text
+src/
+├── Application/     Services et logique regroupés par domaine
+├── Controller/      Entrées HTTP Front et Dashboard
+├── Entity/          Entités Doctrine
+├── Repository/      Accès aux données
+├── Service/         Infrastructure partagée
+├── Twig/Components/ Composants Twig réutilisables
+└── UI/              Builders, resolvers et DTO d’interface
 ```
-<<<<<<< HEAD
-Votre code
-=======
-le code entrant
->>>>>>> branche
+
+Le flux applicatif habituel est :
+
+```text
+Controller → Service → Provider/Persister/Writer → Repository
 ```
-### Actions :
 
-1. Modifier le fichier
-2. Supprimer les marqueurs
-3. Garder le bon code
+## Documentation
 
-Puis :
+Le sommaire complet se trouve dans [docs/README.md](docs/README.md).
+
+1. [Installation et environnement](docs/installation.md)
+2. [Configuration applicative](docs/configuration.md)
+3. [Architecture](docs/architecture.md)
+4. [Constructeur de pages](docs/page-builder.md)
+5. [Réservations](docs/reservations.md)
+6. [Front-end et assets](docs/frontend.md)
+7. [Tests et qualité](docs/tests-and-quality.md)
+8. [Workflow Git](docs/git-workflow.md)
+9. [Déploiement](docs/deployment.md)
+
+## Commandes essentielles
 
 ```bash
-git add .
-git commit
+make test
+make quality
+make migrate
+make test-page
+make test-reservation
+make test-settings
 ```
 
----
+## Contribution
 
-### 6. 📤 Push la branche
+Les branches partent de `develop` et les commits suivent Conventional Commits avec la nomenclature Angular :
 
-Si c'est le premier push sur cette branche : 
-```bash
-    git push origin feature/ma-feature
+```text
+feat(page): ajoute un nouveau bloc
+fix(reservation): corrige le calcul des créneaux
+test(settings): couvre le cache de configuration
+docs(readme): complète l’installation
 ```
-sinon : 
 
-```bash
-    git push 
-```
----
+## Licence
 
-### 6. 🔍 Créer une Pull Request
-
-* Aller sur GitHub
-* Créer une PR vers `develop`
-* Vérifier les conflits
-* Attendre review
-
-Si les points précédents ont bien été respecter, il ne devrait pas y avoir de conflits, sinon répéter les étapes du `point 5`
----
-
-
-### 7. ✅ Merge
-
-* Une fois validée → Merge dans `develop`
-
----
-
-## 🔥 Règles IMPORTANTES
-
-* ❌ Ne jamais commit sur `main`
-* ❌ Ne jamais travailler directement sur `develop`
-* ✅ Toujours passer par une branche
-* ✅ Toujours pull avant de travailler
-* ✅ Toujours sync avant PR
-
-
-
-
-*Fin du guide*
+Projet propriétaire. Toute utilisation, reproduction ou redistribution nécessite l’autorisation du propriétaire.

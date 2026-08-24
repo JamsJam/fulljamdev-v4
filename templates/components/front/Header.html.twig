@@ -1,0 +1,25 @@
+<header class="header">
+    <div class="header__top">
+        <ul class="header__socials" aria-label="Réseaux sociaux">
+            <li><a href="https://github.com/JamsJam" target="_blank" rel="noopener noreferrer nofollow" aria-label="GitHub"><img src="{{ asset('icons/github_icn.svg') }}" width="17" height="16" alt=""></a></li>
+            <li><a href="https://www.malt.fr/profile/jeremyantoine" target="_blank" rel="noopener noreferrer nofollow" aria-label="Malt"><img src="{{ asset('icons/malt_icn.svg') }}" width="17" height="16" alt=""></a></li>
+            <li><a href="https://www.linkedin.com/in/jeremy-antoine-dwwm/" target="_blank" rel="noopener noreferrer nofollow" aria-label="LinkedIn"><img src="{{ asset('icons/linkedin_icn.svg') }}" width="17" height="16" alt=""></a></li>
+        </ul>
+
+        <a class="header__brand" href="{{ path('app_home') }}" aria-label="FullJam Dev — retour à l'accueil">
+            <img src="{{ asset('favicon/favicon.svg') }}" width="46" height="45" alt="">
+            <span>FullJam Dev</span>
+        </a>
+
+        <a class="header__cta" href="{{ path('app_home') }}#contact">Prenez rendez-vous</a>
+    </div>
+
+    <nav class="header__navigation" aria-label="Navigation principale">
+        <ul>
+            <li><a href="{{ path('app_home') }}">Accueil</a></li>
+            <li><a href="{{ path('app_home') }}#about">À propos</a></li>
+            <li><a href="{{ path('app_home') }}#resume">Parcours</a></li>
+            <li><a href="{{ path('app_home') }}#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>

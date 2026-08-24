@@ -8,3 +8,5 @@ account:
     phone_number: '0786646817'
     company: 'Fulljam dDev'
     job_title: 'Développeur Fullstack Php Symfony'
+pages:
+    homepage_id: 1

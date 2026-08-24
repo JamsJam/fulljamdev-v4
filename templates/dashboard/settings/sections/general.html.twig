@@ -9,6 +9,11 @@
             class="settings__field"
             description="Ce fuseau est utilisé pour proposer les créneaux et sera enregistré sur chaque nouveau rendez-vous."
         />
+        <twig:Form:Field
+            :field="general_form.homepagePageId"
+            class="settings__field"
+            description="Cette page sera affichée à la racine du site. Son chemin public redirigera automatiquement vers /."
+        />
         {{ form_row(general_form.submit, {row_attr: {class: 'settings__form-actions'}}) }}
     {{ form_end(general_form) }}
 </section>

@@ -6,7 +6,7 @@
     <div class="reservation-calendar__toolbar">
         <div>
             <h2 id="reservation-calendar-title">Calendrier</h2>
-            <p>{{ monthLabel }}</p>
+            <p>{{ calendar.label }}</p>
         </div>
 
         <div class="reservation-calendar__controls">
@@ -60,7 +60,7 @@
             <nav class="calendar-navigation" aria-label="Navigation du calendrier">
                 <a
                     class="calendar-navigation__button"
-                    href="{{ path('app_dashboard_reservation_calendar', {month: previousMonth}) }}"
+                    href="{{ path('app_dashboard_reservation_calendar', {month: calendar.previous}) }}"
                     aria-label="Mois précédent"
                     title="Mois précédent"
                 >
@@ -69,7 +69,7 @@
                 <a class="calendar-navigation__today" href="{{ path('app_dashboard_reservation_calendar') }}">Aujourd’hui</a>
                 <a
                     class="calendar-navigation__button"
-                    href="{{ path('app_dashboard_reservation_calendar', {month: nextMonth}) }}"
+                    href="{{ path('app_dashboard_reservation_calendar', {month: calendar.next}) }}"
                     aria-label="Mois suivant"
                     title="Mois suivant"
                 >
@@ -80,12 +80,12 @@
     </div>
 
     <div class="reservation-calendar__viewport">
-        <div class="calendar-grid" role="grid" aria-label="Calendrier de {{ monthLabel }}">
+        <div class="calendar-grid" role="grid" aria-label="Calendrier de {{ calendar.label }}">
             {% for dayName in ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'] %}
                 <div class="calendar-grid__weekday" role="columnheader">{{ dayName }}</div>
             {% endfor %}
 
-            {% for week in calendarWeeks %}
+            {% for week in calendar.weeks %}
                 {% for day in week %}
                     <div
                         class="calendar-day{{ day.isCurrentMonth ? '' : ' calendar-day--outside' }}{{ day.isToday ? ' calendar-day--today' : '' }}"
@@ -97,7 +97,7 @@
                             {{ ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'][day.date|date('N') - 1] }} {{ day.date|date('d/m') }}
                         </span>
                         <div class="calendar-day__events">
-                            {% for appointment in day.appointments %}
+                            {% for appointment in day.items %}
                                 <a
                                     class="calendar-event"
                                     href="{{ path('app_dashboard_reservation_appointment_show', {id: appointment.id}) }}"
@@ -120,7 +120,7 @@
 
     <p
         class="reservation-calendar__empty"
-        {% if calendarWeeks|filter(week => week|filter(day => day.appointments is not empty)) is not empty %}hidden{% endif %}
+        {% if calendar.weeks|filter(week => week|filter(day => day.items is not empty)) is not empty %}hidden{% endif %}
         {{ stimulus_target('reservation-calendar', 'empty') }}
     >
         Aucun rendez-vous pour cette période.

@@ -1,0 +1,5 @@
+<li class="key-value-collection__row" data-form-collection-item>
+    <twig:Form:Field :field="row.name" :label="key_label" />
+    <twig:Form:Field :field="row.value" :label="value_label" />
+    <twig:Admin:Button variant="destructive" label="Supprimer" data-action="form-collection#removeCollectionElement" />
+</li>

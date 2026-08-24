@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Application\Settings\Dto\AccountSettingsDto;
+use App\Application\Settings\Account\Dto\AccountSettingsDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -16,12 +16,12 @@ final class AccountSettingsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', TextType::class, ['label' => 'Prénom'])
-            ->add('lastName', TextType::class, ['label' => 'Nom'])
-            ->add('email', EmailType::class, ['label' => 'Email'])
-            ->add('phoneNumber', TelType::class, ['label' => 'Téléphone'])
-            ->add('company', TextType::class, ['label' => 'Entreprise'])
-            ->add('jobTitle', TextType::class, ['label' => 'Poste'])
+            ->add('firstName', TextType::class, ['label' => 'Prénom', 'empty_data' => ''])
+            ->add('lastName', TextType::class, ['label' => 'Nom', 'empty_data' => ''])
+            ->add('email', EmailType::class, ['label' => 'Email', 'empty_data' => ''])
+            ->add('phoneNumber', TelType::class, ['label' => 'Téléphone', 'empty_data' => ''])
+            ->add('company', TextType::class, ['label' => 'Entreprise', 'empty_data' => ''])
+            ->add('jobTitle', TextType::class, ['label' => 'Poste', 'empty_data' => ''])
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer']);
     }
 

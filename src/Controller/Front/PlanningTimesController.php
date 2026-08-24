@@ -5,8 +5,8 @@ namespace App\Controller\Front;
 use App\Application\Reservation\Appointment\Dto\PublicAppointmentDto;
 use App\Application\Reservation\Appointment\Resolver\PublicSlotResolver;
 use App\Application\Reservation\Planner\Service\FindPlanningService;
+use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Form\PublicAppointmentType;
-use App\Service\ConfigurationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ final class PlanningTimesController extends AbstractController
         Request $request,
         FindPlanningService $findPlanningService,
         PublicSlotResolver $slotResolver,
-        ConfigurationService $configuration,
+        GetGeneralSettingsService $getGeneralSettingsService,
     ): Response {
         $planning = $findPlanningService->findBySlug($slug);
         if (null === $planning || !$planning->isActive()) {
@@ -40,7 +40,7 @@ final class PlanningTimesController extends AbstractController
             throw $this->createNotFoundException('La date ou le fuseau horaire n’est pas valide.');
         }
 
-        $planningTimezone = (string) $configuration->get('parameters.timezone', 'Europe/Paris');
+        $planningTimezone = $getGeneralSettingsService->get()->timezone;
         $slots = $slotResolver->resolveMonth($planning, $selectedDate);
         $dto = new PublicAppointmentDto();
         $dto->date->value = $date;

@@ -2,12 +2,15 @@
 
 namespace App\Controller\Dashboard;
 
-use App\Application\Settings\Dto\AccountSettingsDto;
-use App\Application\Settings\Dto\GeneralSettingsDto;
+use App\Application\Page\Page\Service\GetPagesService;
+use App\Application\Settings\Service\GetAccountSettingsService;
+use App\Application\Settings\Service\GetGeneralSettingsService;
+use App\Application\Settings\Service\UpdateAccountSettingsService;
+use App\Application\Settings\Service\UpdateGeneralSettingsService;
+use App\Entity\Page\Page;
 use App\Form\AccountSettingsType;
 use App\Form\GeneralSettingsType;
 use App\Service\Breadcrumb\BreadcrumbService;
-use App\Service\ConfigurationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,13 +22,14 @@ final class SettingsController extends AbstractController
     private const SECTION_TEMPLATES = [
         'general' => 'dashboard/settings/sections/general.html.twig',
         'reservation' => 'dashboard/settings/sections/reservation.html.twig',
+        'pages' => 'dashboard/settings/sections/pages.html.twig',
         'account' => 'dashboard/settings/sections/account.html.twig',
     ];
 
     #[Route(
         '/dashboard/settings/{section}',
         name: 'app_dashboard_settings',
-        requirements: ['section' => 'general|reservation|account'],
+        requirements: ['section' => 'general|reservation|pages|account'],
         defaults: ['section' => 'general'],
         methods: ['GET', 'POST'],
     )]
@@ -33,20 +37,22 @@ final class SettingsController extends AbstractController
         string $section,
         Request $request,
         BreadcrumbService $breadcrumbService,
-        ConfigurationService $configuration,
+        GetPagesService $getPagesService,
+        GetGeneralSettingsService $getGeneralSettingsService,
+        UpdateGeneralSettingsService $updateGeneralSettingsService,
+        GetAccountSettingsService $getAccountSettingsService,
+        UpdateAccountSettingsService $updateAccountSettingsService,
     ): Response {
-        $settings = new GeneralSettingsDto();
-        $settings->timezone = (string) $configuration->get('parameters.timezone', 'Europe/Paris');
+        $pages = $getPagesService->get();
+        $settings = $getGeneralSettingsService->get();
         $form = $this->createForm(GeneralSettingsType::class, $settings, [
             'action' => $this->generateUrl('app_dashboard_settings', ['section' => 'general']),
+            'page_choices' => array_combine(
+                array_map(static fn (Page $page): string => sprintf('%s (/%s)', $page->getTitle(), $page->getPath()), $pages),
+                array_map(static fn (Page $page): int => (int) $page->getId(), $pages),
+            ),
         ]);
-        $account = new AccountSettingsDto();
-        $account->firstName = (string) $configuration->get('account.first_name', '');
-        $account->lastName = (string) $configuration->get('account.last_name', '');
-        $account->email = (string) $configuration->get('account.email', '');
-        $account->phoneNumber = (string) $configuration->get('account.phone_number', '');
-        $account->company = (string) $configuration->get('account.company', '');
-        $account->jobTitle = (string) $configuration->get('account.job_title', '');
+        $account = $getAccountSettingsService->get();
         $accountForm = $this->createForm(AccountSettingsType::class, $account, [
             'action' => $this->generateUrl('app_dashboard_settings', ['section' => 'account']),
         ]);
@@ -55,11 +61,11 @@ final class SettingsController extends AbstractController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 try {
-                    $configuration->set('parameters.timezone', $settings->timezone);
+                    $updateGeneralSettingsService->update($settings);
                     $this->addFlash('success', 'Les paramètres généraux ont été enregistrés.');
 
                     return $this->redirectToRoute('app_dashboard_settings', ['section' => 'general']);
-                } catch (\RuntimeException $exception) {
+                } catch (\RuntimeException|\DomainException $exception) {
                     $form->addError(new FormError($exception->getMessage()));
                 }
             }
@@ -67,14 +73,7 @@ final class SettingsController extends AbstractController
             $accountForm->handleRequest($request);
             if ($accountForm->isSubmitted() && $accountForm->isValid()) {
                 try {
-                    $configuration->set('account', [
-                        'first_name' => $account->firstName,
-                        'last_name' => $account->lastName,
-                        'email' => $account->email,
-                        'phone_number' => $account->phoneNumber,
-                        'company' => $account->company,
-                        'job_title' => $account->jobTitle,
-                    ]);
+                    $updateAccountSettingsService->update($account);
                     $this->addFlash('success', 'Les informations du compte ont été enregistrées.');
 
                     return $this->redirectToRoute('app_dashboard_settings', ['section' => 'account']);
@@ -90,6 +89,7 @@ final class SettingsController extends AbstractController
             'section_template' => self::SECTION_TEMPLATES[$section],
             'general_form' => $form,
             'account_form' => $accountForm,
+            'pages' => 'pages' === $section ? $pages : [],
         ]);
     }
 }

@@ -7,8 +7,8 @@ use App\Application\Reservation\Appointment\Resolver\PublicSlotResolver;
 use App\Application\Reservation\Appointment\Service\CreateRequestedAppointmentService;
 use App\Application\Reservation\Appointment\Service\SlotTimezoneConverter;
 use App\Application\Reservation\Planner\Service\FindPlanningService;
+use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Form\PublicAppointmentType;
-use App\Service\ConfigurationService;
 use App\UI\DatePicker\Service\DatePickerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -28,7 +28,7 @@ final class PlanningAppointmentController extends AbstractController
         PublicSlotResolver $slotResolver,
         DatePickerService $datePicker,
         CreateRequestedAppointmentService $createAppointmentService,
-        ConfigurationService $configuration,
+        GetGeneralSettingsService $getGeneralSettingsService,
         SlotTimezoneConverter $timezoneConverter,
     ): Response {
         $planning = $findPlanningService->findBySlug($slug);
@@ -39,7 +39,7 @@ final class PlanningAppointmentController extends AbstractController
         $slots = $slotResolver->resolve($planning);
         $submittedData = $request->request->all('public_appointment');
         $submittedDate = $submittedData['date']['value'] ?? null;
-        $planningTimezone = (string) $configuration->get('parameters.timezone', 'Europe/Paris');
+        $planningTimezone = $getGeneralSettingsService->get()->timezone;
         $submittedTimezone = $submittedData['time']['timezone'] ?? null;
         $displayTimezone = is_string($submittedTimezone) && in_array($submittedTimezone, timezone_identifiers_list(), true)
             ? $submittedTimezone

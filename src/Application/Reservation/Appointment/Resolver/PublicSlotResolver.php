@@ -5,22 +5,22 @@ namespace App\Application\Reservation\Appointment\Resolver;
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
 use App\Application\Reservation\Appointment\Provider\AppointmentProvider;
 use App\Application\Reservation\Unavailability\Provider\Interface\UnavailabilityProviderInterface;
+use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Entity\Reservation\Planning;
-use App\Service\ConfigurationService;
 
 final readonly class PublicSlotResolver
 {
     public function __construct(
         private AppointmentProvider $appointmentProvider,
         private UnavailabilityProviderInterface $unavailabilityProvider,
-        private ConfigurationService $configuration,
+        private GetGeneralSettingsService $getGeneralSettingsService,
     ) {
     }
 
     /** @return array<string, string[]> */
     public function resolve(Planning $planning, int $days = 30): array
     {
-        $timezone = new \DateTimeZone((string) $this->configuration->get('parameters.timezone', 'Europe/Paris'));
+        $timezone = new \DateTimeZone($this->getGeneralSettingsService->get()->timezone);
         $now = new \DateTimeImmutable('now', $timezone);
         $end = $now->modify(sprintf('+%d days', $days))->setTime(23, 59, 59);
 
@@ -30,7 +30,7 @@ final readonly class PublicSlotResolver
     /** @return array<string, string[]> */
     public function resolveMonth(Planning $planning, \DateTimeImmutable $month): array
     {
-        $timezone = new \DateTimeZone((string) $this->configuration->get('parameters.timezone', 'Europe/Paris'));
+        $timezone = new \DateTimeZone($this->getGeneralSettingsService->get()->timezone);
         $now = new \DateTimeImmutable('now', $timezone);
         $start = $month->setTimezone($timezone)->modify('first day of this month')->setTime(0, 0);
         $end = $start->modify('last day of this month')->setTime(23, 59, 59);

@@ -1,0 +1,76 @@
+<div class="page-builder__block-fields">
+    <div class="page-builder__grid page-builder__essentials">
+        <twig:Form:Field :field="data.title.content" label="Titre" />
+        <twig:Form:Field :field="data.text.content" label="Texte" />
+    </div>
+
+    <details class="page-builder__settings">
+        <summary>Réglages du titre et du texte</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.title.level" />
+            <div class="page-builder__grid">
+                <twig:Form:KeyValueCollection :field="data.title.attributes" />
+                <twig:Form:KeyValueCollection :field="data.text.attributes" />
+            </div>
+        </div>
+    </details>
+
+    <div class="page-builder__grid page-builder__compact-grid">
+        {% for cta in [data.cta1, data.cta2] %}
+            <details class="page-builder__settings" data-controller="link-target">
+                <summary>{{ loop.first ? 'CTA principal' : 'CTA secondaire' }}</summary>
+                <div class="page-builder__settings-content">
+                    <twig:Form:Field :field="cta.label" />
+                    <twig:Form:Field
+                        :field="cta.target"
+                        :widgetAttr="{'data-link-target-target': 'type', 'data-action': 'link-target#toggle'}"
+                    />
+                    <div data-link-target-target="route">
+                        <twig:Form:Field :field="cta.routeName" />
+                        <twig:Form:KeyValueCollection
+                            :field="cta.routeParameters"
+                            legend="Paramètres de route"
+                            keyLabel="Paramètre"
+                            valueLabel="Valeur"
+                            addLabel="Ajouter un paramètre"
+                        />
+                    </div>
+                    <div data-link-target-target="url"><twig:Form:Field :field="cta.href" /></div>
+                    <details class="page-builder__subsettings">
+                        <summary>Attributs HTML</summary>
+                        <twig:Form:KeyValueCollection :field="cta.attributes" />
+                    </details>
+                </div>
+            </details>
+        {% endfor %}
+    </div>
+
+    <details class="page-builder__settings" data-controller="image-source" data-image-source-current-media-value="{{ data.image.mediaId.vars.value|default('') }}">
+        <summary>Image</summary>
+        <div class="page-builder__settings-content">
+            <div data-action="change->image-source#change"><twig:Form:Field :field="data.image.source" /></div>
+            {{ form_widget(data.image.mediaId) }}
+            <div data-image-source-target="fileField"><twig:Form:Field :field="data.image.file" /></div>
+            <div data-image-source-target="urlField"><twig:Form:Field :field="data.image.url" /></div>
+            <div class="page-builder__image-preview" data-image-source-target="previewContainer" hidden>
+                <img data-image-source-target="preview" alt="Aperçu de l’image sélectionnée">
+            </div>
+            <div class="page-builder__grid"><twig:Form:Field :field="data.image.alt" /><twig:Form:Field :field="data.image.title" /></div>
+        </div>
+    </details>
+
+    {% set badge_prototype %}{% include 'dashboard/page/block/_badge_form.html.twig' with {badge: data.badges.vars.prototype} only %}{% endset %}
+    <details class="page-builder__settings">
+        <summary>Badges <span class="page-builder__count">{{ data.badges|length }}</span></summary>
+        <fieldset
+            class="page-builder__badges page-builder__settings-content"
+            data-controller="form-collection"
+            data-form-collection-index-value="{{ data.badges|length }}"
+            data-form-collection-prototype-value="{{ badge_prototype|e('html_attr') }}"
+        >
+            <legend class="visually-hidden">Badges</legend>
+            <ul data-form-collection-target="collectionContainer">{% for badge in data.badges %}{% include 'dashboard/page/block/_badge_form.html.twig' with {badge: badge} only %}{% endfor %}</ul>
+            <twig:Admin:Button variant="outline" label="Ajouter un badge" data-action="form-collection#addCollectionElement" />
+        </fieldset>
+    </details>
+</div>

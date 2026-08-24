@@ -1,0 +1,34 @@
+<section class="marketing-hero">
+    <div class="marketing-hero__content">
+        {% if data.badges %}
+            <ul class="marketing-hero__badges" aria-label="Points clés">
+                {% for badge in data.badges %}<li>{{ badge.label }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <{{ data.title.level.value }}{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+        <p class="marketing-hero__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+
+        {% if data.cta1 and data.cta1.label or data.cta2 and data.cta2.label %}
+            <div class="marketing-hero__actions">
+                {% if data.cta1 and data.cta1.label %}<a class="button button--primary" href="{{ this.ctaHref(data.cta1) }}"{{ this.safeAttributes(data.cta1.attributes)|raw }}>{{ data.cta1.label }}</a>{% endif %}
+                {% if data.cta2 and data.cta2.label %}<a class="button button--outline" href="{{ this.ctaHref(data.cta2) }}"{{ this.safeAttributes(data.cta2.attributes)|raw }}>{{ data.cta2.label }}</a>{% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="marketing-hero__visual">
+        {% set image_url = this.safeImageUrl(data.image.url) %}
+        {% set media_url = this.safeMediaUrl(data.image.mediaId) %}
+        <div class="marketing-hero__glow"></div>
+        <figure class="marketing-hero__media">
+            {% if data.image.source.value == 'url' and image_url %}
+                <img src="{{ image_url }}" alt="{{ data.image.alt }}"{% if data.image.title %} title="{{ data.image.title }}"{% endif %}>
+            {% elseif media_url %}
+                <img src="{{ media_url }}" alt="{{ data.image.alt }}"{% if data.image.title %} title="{{ data.image.title }}"{% endif %}>
+            {% else %}
+                <div class="marketing-hero__media-placeholder"><span>FullJam Dev</span></div>
+            {% endif %}
+        </figure>
+    </div>
+</section>

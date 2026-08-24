@@ -1,0 +1,76 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}{{ page.id ? 'Modifier ' ~ page.title : 'Créer une page' }}{% endblock %}
+
+{% block body %}
+    <section
+        class="page-builder"
+        data-controller="page-builder"
+        data-page-builder-index-value="{{ form.blocks|length }}"
+        data-page-builder-fragment-url-value="{{ path('app_dashboard_page_block_new', {type: 'block-type-placeholder', index: 999999}) }}"
+    >
+        {{ form_start(form, {attr: {id: 'page-builder-form', class: 'page-builder__form'}}) }}
+            <header class="page-builder__header">
+                <div><a href="{{ path('app_dashboard_settings', {section: 'pages'}) }}">← Pages</a><h1>{{ page.id ? page.title : 'Nouvelle page' }}</h1></div>
+                <twig:Admin:Button type="submit" label="Enregistrer" />
+            </header>
+
+            {{ form_errors(form) }}
+            <section class="page-builder__panel">
+                <h2>Informations générales</h2>
+                <div class="page-builder__grid"><twig:Form:Field :field="form.title" /><twig:Form:Field :field="form.path" /></div>
+            </section>
+
+            <details class="page-builder__panel">
+                <summary><h2>SEO</h2></summary>
+                <div class="page-builder__grid">
+                    <twig:Form:Field :field="form.seo.title" />
+                    <twig:Form:Field :field="form.seo.description" />
+                    <twig:Form:Field :field="form.seo.canonicalUrl" />
+                    <twig:Form:Field :field="form.seo.noIndex" />
+                </div>
+            </details>
+
+            <section class="page-builder__blocks-section">
+                <div class="page-builder__section-heading">
+                    <div><h2>Blocs</h2><p>Glissez les blocs pour modifier leur ordre.</p></div>
+                    <twig:Admin:Button
+                        variant="outline"
+                        label="Ajouter un bloc"
+                        data-action="page-builder#toggleLibrary"
+                    />
+                </div>
+                <p class="page-builder__feedback" data-page-builder-target="feedback" role="status" aria-live="polite"></p>
+                <div class="page-builder__blocks" data-page-builder-target="blocks">
+                    {% for block in form.blocks %}
+                        {% include 'dashboard/page/_block_form.html.twig' with {block: block, definition: definitions[block.vars.data.type], expanded: loop.first} only %}
+                    {% endfor %}
+                </div>
+                {% do form.blocks.setRendered %}
+            </section>
+            <aside class="page-builder__library" data-page-builder-target="library" hidden>
+                <div class="page-builder__library-header">
+                    <h2>Ajouter un bloc</h2>
+                    <twig:Admin:Button
+                        variant="ghost"
+                        label="Fermer"
+                        data-action="page-builder#toggleLibrary"
+                    />
+                </div>
+                {% for category, definitions in block_groups %}
+                    <section>
+                        <h3>{{ category|replace({'_': ' '})|title }}</h3>
+                        {% for definition in definitions %}
+                            <twig:Admin:Button
+                                variant="outline"
+                                label="{{ definition.label }}"
+                                data-type="{{ definition.type }}"
+                                data-action="page-builder#addBlock"
+                            />
+                        {% endfor %}
+                    </section>
+                {% endfor %}
+            </aside>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

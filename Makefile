@@ -6,6 +6,9 @@ COMPOSER ?= composer
 DEV_MEMORY_LIMIT ?= 512M
 PHPSTAN_MEMORY_LIMIT ?= 512M
 SYMFONY ?= symfony
+DOCKER_COMPOSE ?= docker compose
+TEST_DATABASE_PORT ?= 3307
+TEST_DATABASE_URL ?= mysql://root:root@127.0.0.1:$(TEST_DATABASE_PORT)/fulljamdev4?serverVersion=8.0.32&charset=utf8mb4
 CONSOLE := $(PHP) bin/console
 PHP_CS_FIXER := vendor/bin/php-cs-fixer
 PHPUNIT := $(PHP) bin/phpunit
@@ -83,20 +86,29 @@ test:
 test-unit:
 	$(PHPUNIT) --testsuite Unit $(TEST_OPTIONS)
 
-# ? Lance uniquement les tests d’intégration Symfony et infrastructure
-test-integration: test-db
+# ? Lance les tests d’intégration puis nettoie la base et le conteneur Docker
+test-integration:
 	@TEST_STATUS=0; \
-	$(PHPUNIT) --testsuite Integration $(TEST_OPTIONS) || TEST_STATUS=$$?; \
-	DROP_STATUS=0; \
-	$(CONSOLE) doctrine:database:drop --env=test --force --if-exists || DROP_STATUS=$$?; \
-	if [ $$TEST_STATUS -ne 0 ]; then exit $$TEST_STATUS; fi; \
-	exit $$DROP_STATUS
+	$(MAKE) test-db || TEST_STATUS=$$?; \
+	if [ $$TEST_STATUS -eq 0 ]; then \
+		DATABASE_URL='$(TEST_DATABASE_URL)' $(PHPUNIT) --testsuite Integration $(TEST_OPTIONS) || TEST_STATUS=$$?; \
+	fi; \
+	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists || { \
+		CLEANUP_STATUS=$$?; \
+		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
+	}; \
+	MYSQL_PORT=$(TEST_DATABASE_PORT) $(DOCKER_COMPOSE) rm --stop --force database || { \
+		CLEANUP_STATUS=$$?; \
+		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
+	}; \
+	exit $$TEST_STATUS
 
-# ? Prépare la base MySQL isolée utilisée par les tests Doctrine
+# ? Démarre MySQL avec Docker et prépare la base isolée utilisée par Doctrine
 test-db:
-	$(CONSOLE) doctrine:database:drop --env=test --force --if-exists
-	$(CONSOLE) doctrine:database:create --env=test
-	$(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
+	MYSQL_PORT=$(TEST_DATABASE_PORT) $(DOCKER_COMPOSE) up -d --wait database
+	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists
+	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:create --env=test
+	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
 
 # ? Lance uniquement les tests des cas d’usage applicatifs
 test-application:

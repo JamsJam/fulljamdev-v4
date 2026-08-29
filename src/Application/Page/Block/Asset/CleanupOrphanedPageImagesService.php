@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 final readonly class CleanupOrphanedPageImagesService
 {
-    private const int GRACE_PERIOD_SECONDS = 86400;
+    private const GRACE_PERIOD_SECONDS = 86400;
 
     public function __construct(
         private PageBlockDataProviderInterface $blockDataProvider,

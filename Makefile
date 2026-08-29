@@ -73,6 +73,7 @@ phpstan:
 # ==============================================================================
 # ? Lance les linters puis les suites de tests et s’arrête dès qu’une étape échoue
 test:
+	$(MAKE) quality && \
 	$(MAKE) lint && \
 	$(MAKE) test-unit && \
 	$(MAKE) test-integration && \

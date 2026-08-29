@@ -31,6 +31,6 @@ final class CreateArticleController extends AbstractController
             }
         }
 
-return $this->render('dashboard/content/blog/article_form.html.twig', ['form' => $form, 'creation' => true], new Response(status: $form->isSubmitted() ? 422 : 200));
+        return $this->render('dashboard/content/blog/article_form.html.twig', ['form' => $form, 'creation' => true], new Response(status: $form->isSubmitted() ? 422 : 200));
     }
 }

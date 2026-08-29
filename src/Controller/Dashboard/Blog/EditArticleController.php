@@ -33,6 +33,6 @@ final class EditArticleController extends AbstractController
             }
         }
 
-return $this->render('dashboard/content/blog/article_form.html.twig', ['form' => $form, 'creation' => false], new Response(status: $form->isSubmitted() ? 422 : 200));
+        return $this->render('dashboard/content/blog/article_form.html.twig', ['form' => $form, 'creation' => false], new Response(status: $form->isSubmitted() ? 422 : 200));
     }
 }

@@ -83,7 +83,7 @@ class Category
             $article->setCategory($this);
         }
 
-return $this;
+        return $this;
     }
 
     public function removeArticle(Article $article): static
@@ -92,6 +92,6 @@ return $this;
             $article->setCategory(null);
         }
 
-return $this;
+        return $this;
     }
 }

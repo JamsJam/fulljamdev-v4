@@ -32,7 +32,7 @@ migrate:
 # * VALIDATION SYMFONY ET PRÉSENTATION
 # ==============================================================================
 # ? Lance tous les linters Symfony disponibles
-lint: lint-container lint-twig lint-yaml
+lint: lint-container lint-twig lint-xliff lint-yaml
 
 # ? Vérifie la compilation du conteneur de services
 lint-container:
@@ -71,8 +71,9 @@ phpstan:
 # ==============================================================================
 # * TESTS AUTOMATISÉS
 # ==============================================================================
-# ? Enchaîne les suites et s’arrête dès que l’une d’elles échoue
+# ? Lance les linters puis les suites de tests et s’arrête dès qu’une étape échoue
 test:
+	$(MAKE) lint && \
 	$(MAKE) test-unit && \
 	$(MAKE) test-integration && \
 	$(MAKE) test-application

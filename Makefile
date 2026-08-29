@@ -16,7 +16,7 @@ TEST_OPTIONS ?=
 BDI := vendor/bin/bdi
 PHPSTAN := vendor/bin/phpstan
 
-.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-db test-unit test-integration test-application test-page test-reservation test-settings test-shared test-ui
+.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-assets test-db test-unit test-integration test-application test-page test-reservation test-settings test-shared test-ui
 
 # * Le scan de style est non modifiant par défaut
 DR ?= 1
@@ -86,8 +86,12 @@ test:
 test-unit:
 	$(PHPUNIT) --testsuite Unit $(TEST_OPTIONS)
 
+# ? Compile les feuilles Sass requises par les rendus Twig et AssetMapper
+test-assets:
+	$(CONSOLE) sass:build --env=test
+
 # ? Lance les tests d’intégration puis nettoie la base et le conteneur Docker
-test-integration:
+test-integration: test-assets
 	@TEST_STATUS=0; \
 	$(MAKE) test-db || TEST_STATUS=$$?; \
 	if [ $$TEST_STATUS -eq 0 ]; then \
@@ -111,7 +115,7 @@ test-db:
 	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
 
 # ? Lance les tests applicatifs puis nettoie la base et le conteneur Docker
-test-application:
+test-application: test-assets
 	@TEST_STATUS=0; \
 	$(MAKE) test-db || TEST_STATUS=$$?; \
 	if [ $$TEST_STATUS -eq 0 ]; then \

@@ -45,18 +45,19 @@ make test-application
 
 `make test-integration` :
 
-1. démarre le service MySQL `database` avec Docker Compose et attend qu’il soit prêt ;
-2. crée la base MySQL isolée `fulljamdev4_test` ;
-3. applique les migrations ;
-4. exécute les tests Symfony et Doctrine ;
-5. supprime la base de test, même si PHPUnit échoue ;
-6. arrête et supprime le conteneur MySQL de test sans supprimer son volume.
+1. compile les feuilles Sass requises par Twig et AssetMapper dans l’environnement de test ;
+2. démarre le service MySQL `database` avec Docker Compose et attend qu’il soit prêt ;
+3. crée la base MySQL isolée `fulljamdev4_test` ;
+4. applique les migrations ;
+5. exécute les tests Symfony et Doctrine ;
+6. supprime la base de test, même si PHPUnit échoue ;
+7. arrête et supprime le conteneur MySQL de test sans supprimer son volume.
 
 Le conteneur MySQL de test est exposé par défaut sur le port hôte `3307` afin de ne pas entrer en conflit avec une base locale sur `3306`. Ce port peut être remplacé avec `TEST_DATABASE_PORT`.
 
 Les tests Doctrine utilisent des transactions afin de rester indépendants.
 
-`make test-application` utilise le même cycle Docker pour permettre aux parcours HTTP d’accéder à une base isolée.
+`make test-application` compile également Sass et utilise le même cycle Docker pour permettre aux parcours HTTP d’accéder à une base isolée.
 
 ## Exécution par domaine
 

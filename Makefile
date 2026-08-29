@@ -8,7 +8,10 @@ PHPSTAN_MEMORY_LIMIT ?= 512M
 SYMFONY ?= symfony
 DOCKER_COMPOSE ?= docker compose
 TEST_DATABASE_PORT ?= 3307
-TEST_DATABASE_URL ?= mysql://root:root@127.0.0.1:$(TEST_DATABASE_PORT)/fulljamdev4?serverVersion=8.0.32&charset=utf8mb4
+TEST_DATABASE_HOST ?= 127.0.0.1
+TEST_DATABASE_USER ?= root
+TEST_DATABASE_PASSWORD ?= root
+TEST_DATABASE_URL ?= mysql://$(TEST_DATABASE_USER):$(TEST_DATABASE_PASSWORD)@$(TEST_DATABASE_HOST):$(TEST_DATABASE_PORT)/fulljamdev4?serverVersion=8.0.32&charset=utf8mb4
 CONSOLE := $(PHP) bin/console
 PHP_CS_FIXER := vendor/bin/php-cs-fixer
 PHPUNIT := $(PHP) bin/phpunit
@@ -92,12 +95,12 @@ test-assets:
 
 # ? Lance les tests d’intégration puis nettoie la base et le conteneur Docker
 test-integration: test-assets
-	@TEST_STATUS=0; \
-	$(MAKE) test-db || TEST_STATUS=$$?; \
+	@TEST_STATUS=0; DATABASE_READY=0; \
+	$(MAKE) test-db && DATABASE_READY=1 || TEST_STATUS=$$?; \
 	if [ $$TEST_STATUS -eq 0 ]; then \
 		DATABASE_URL='$(TEST_DATABASE_URL)' $(PHPUNIT) --testsuite Integration $(TEST_OPTIONS) || TEST_STATUS=$$?; \
 	fi; \
-	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists || { \
+	if [ $$DATABASE_READY -eq 1 ]; then DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists; fi || { \
 		CLEANUP_STATUS=$$?; \
 		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
 	}; \
@@ -110,18 +113,24 @@ test-integration: test-assets
 # ? Démarre MySQL avec Docker et prépare la base isolée utilisée par Doctrine
 test-db:
 	MYSQL_PORT=$(TEST_DATABASE_PORT) $(DOCKER_COMPOSE) up -d --wait database
+	@ATTEMPT=0; \
+	until $(PHP) -r 'try { new PDO("mysql:host=$(TEST_DATABASE_HOST);port=$(TEST_DATABASE_PORT)", "$(TEST_DATABASE_USER)", "$(TEST_DATABASE_PASSWORD)"); } catch (Throwable) { exit(1); }'; do \
+		ATTEMPT=$$((ATTEMPT + 1)); \
+		if [ $$ATTEMPT -ge 30 ]; then echo "MySQL Docker n’est pas accessible depuis PHP après 60 secondes." >&2; exit 1; fi; \
+		sleep 2; \
+	done
 	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists
 	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:create --env=test
 	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
 
 # ? Lance les tests applicatifs puis nettoie la base et le conteneur Docker
 test-application: test-assets
-	@TEST_STATUS=0; \
-	$(MAKE) test-db || TEST_STATUS=$$?; \
+	@TEST_STATUS=0; DATABASE_READY=0; \
+	$(MAKE) test-db && DATABASE_READY=1 || TEST_STATUS=$$?; \
 	if [ $$TEST_STATUS -eq 0 ]; then \
 		DATABASE_URL='$(TEST_DATABASE_URL)' $(PHPUNIT) --testsuite Application $(TEST_OPTIONS) || TEST_STATUS=$$?; \
 	fi; \
-	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists || { \
+	if [ $$DATABASE_READY -eq 1 ]; then DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists; fi || { \
 		CLEANUP_STATUS=$$?; \
 		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
 	}; \

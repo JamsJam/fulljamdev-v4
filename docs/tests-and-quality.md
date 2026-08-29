@@ -46,7 +46,7 @@ make test-application
 `make test-integration` :
 
 1. compile les feuilles Sass requises par Twig et AssetMapper dans l’environnement de test ;
-2. démarre le service MySQL `database` avec Docker Compose et attend qu’il soit prêt ;
+2. démarre le service MySQL `database` avec Docker Compose et attend que sa connexion soit réellement accessible depuis PHP ;
 3. crée la base MySQL isolée `fulljamdev4_test` ;
 4. applique les migrations ;
 5. exécute les tests Symfony et Doctrine ;

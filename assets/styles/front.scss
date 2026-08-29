@@ -1,0 +1,22 @@
+@use "base/front" as *;
+@use "components/front" as *;
+@use "layout/front" as *;
+@use "pages/front" as *;
+@forward "components/admin/stepper/stepper";
+@forward "components/form/date-picker";
+@forward "components/form/field";
+
+// @use "pages/front/booking";
+// @use "pages/front/accueil";
+// @use "pages/front/home" ;
+
+body.front {
+    main {
+        background-color: var(--background-dark);
+
+
+        & > section:first-child {
+            background: var(--gradient-vertical);
+        }
+    }
+}

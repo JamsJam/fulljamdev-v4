@@ -1,5 +1,11 @@
 @use "../../abstract/" as *;
 
+$color: var(--text);
+$color-muted: var(--text-mute);
+$border-primary: var(--border);
+$border-primary-muted: var(--border-mute);
+$shadow: var(--shadow);
+
 
 
 #landing{
@@ -8,9 +14,6 @@
     .landing__container{
 
         width:min( 83rem,80dvw );
-
-        padding-inline: clamp(1rem, 0.4681rem + 1.7021vw, 2rem);;
-        padding-block: 4rem;
 
         @extend %flex-column-start-center;
         gap: 2rem;
@@ -47,7 +50,7 @@
         }
     }
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: $screen-m) {
         .landing__container{
 
             h1,.intro{
@@ -58,8 +61,6 @@
 }
 #about{
 
-    padding-block: 4rem;
-    padding-inline: 2rem;
     display: grid;
     place-items: center;
 
@@ -129,7 +130,7 @@
         
     }
 
-    @media screen and (max-width:48rem) {
+    @media screen and (max-width: $screen-l) {
         .about{
             &__container{
                 flex-direction: column;
@@ -178,8 +179,6 @@
 
 }
 #resume{
-    padding-block: 4rem;
-    padding-inline:  clamp(1rem, -23rem + 80vw, 2rem);;
     @extend %flex-column-center-stretch;
     
 
@@ -261,7 +260,7 @@
                             width: clamp(2rem, -46rem + 160vw, 4rem);;
                             height: clamp(2rem, -46rem + 160vw, 4rem);;
                             border-radius: 50%;
-                            background-color:  $primary-05 ;
+                            background-color: var(--background-dark);
                             border: 0.25rem solid $border-primary;
                             @extend %flex-column-center-center;
                             
@@ -297,8 +296,6 @@
 }
 
 #contact{
-    padding-block: 4rem;
-    padding-inline: 2rem;
     @extend %flex-row-center-center;
     
 
@@ -328,7 +325,7 @@
 
 
             }
-            @media screen and (max-width:48rem) {
+            @media screen and (max-width: $screen-l) {
                 &{
 
                     border: none;

@@ -121,7 +121,7 @@ body.admin .admin-header {
     }
 }
 
-@media (max-width: 48rem) {
+@media (max-width: $screen-l) {
     body.admin .admin-header {
         padding-inline: 1rem;
 

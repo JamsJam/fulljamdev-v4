@@ -1,3 +1,5 @@
+@use "../../abstract/" as *;
+
 .planning-dashboard {
     display: grid;
     gap: 1.5rem;
@@ -535,7 +537,7 @@
     clip: rect(0, 0, 0, 0);
 }
 
-@container dashboard (max-width: 789px) {
+@container dashboard (max-width: $screen-l) {
     .planning-dashboard__header {
         align-items: stretch;
         flex-direction: column;
@@ -565,7 +567,7 @@
     }
 }
 
-@container dashboard (max-width: 500px) {
+@container dashboard (max-width: $screen-m) {
     .planning-dashboard {
         gap: 1rem;
     }

@@ -1,3 +1,5 @@
+@use "../../abstract/" as *;
+
 .reservation-dashboard {
     display: grid;
     gap: 1.5rem;
@@ -967,7 +969,7 @@
 }
 
 // Les composants du content s'adaptent à la largeur du container dashboard.
-@container dashboard (max-width: 789px) {
+@container dashboard (max-width: $screen-l) {
     .reservation-dashboard__header,
     .reservation-section-heading,
     .reservation-calendar__toolbar {
@@ -1051,7 +1053,7 @@
     }
 }
 
-@container dashboard (max-width: 500px) {
+@container dashboard (max-width: $screen-m) {
     .reservation-dashboard {
         gap: 1rem;
 

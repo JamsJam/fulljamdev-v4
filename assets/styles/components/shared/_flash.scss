@@ -11,7 +11,10 @@
     opacity: 1;
     transition: opacity 4s ease-out;
     font-weight: 700;
-    box-shadow: $shadow;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--border-muted);
+    box-shadow: var(--shadow1);
 
     &.hide{
         opacity: 0;
@@ -35,19 +38,13 @@
 
     }
 
-    &__success{
-
-
-        
-
+    &__success {
+        color: var(--success);
+        border-color: var(--success);
     }
 
-
-    @each $theme, $color in $themes{
-        &__success--#{$theme}{
-            border: 2px solid map-get( $color, border-muted );
-            background-color: map-get( $color, bg );
-            color: map-get( $color, success );
-        }
+    &__error {
+        color: var(--danger);
+        border-color: var(--danger);
     }
 }

@@ -1,3 +1,5 @@
+@use "../../abstract/" as *;
+
 .dialog {
     position: absolute;
     z-index: 9999;
@@ -154,7 +156,7 @@
     }
 }
 
-@container dashboard (max-width: 500px) {
+@container dashboard (max-width: $screen-m) {
     .dialog {
         width: calc(100% - 1rem);
 

@@ -36,6 +36,9 @@ final class PlanningAppointmentController extends AbstractController
             throw $this->createNotFoundException('Ce planning n’est pas disponible.');
         }
 
+        $bookingFrame = $this->resolveBookingFrame($request);
+        $bookingTarget = sprintf('%s-flow', $bookingFrame);
+
         $slots = $slotResolver->resolve($planning);
         $submittedData = $request->request->all('public_appointment');
         $submittedDate = $submittedData['date']['value'] ?? null;
@@ -85,6 +88,7 @@ final class PlanningAppointmentController extends AbstractController
 
                 return $this->redirectToRoute('app_front_planning_appointment_confirmation', [
                     'slug' => $planning->getSlug(),
+                    '_frame' => $bookingFrame,
                 ]);
             } catch (\DomainException $exception) {
                 $form->get('time')->get('value')->addError(new FormError($exception->getMessage()));
@@ -105,6 +109,8 @@ final class PlanningAppointmentController extends AbstractController
                 ? $timezoneConverter->formatTime($dto->date->value, $dto->time->value, $planningTimezone, $dto->time->timezone)
                 : null,
             'show_errors' => $form->isSubmitted() && 'submit' === $requestedStep,
+            'booking_frame' => $bookingFrame,
+            'booking_target' => $bookingTarget,
         ];
 
         if (str_contains((string) $request->headers->get('Accept'), TurboBundle::STREAM_MEDIA_TYPE)) {
@@ -112,6 +118,13 @@ final class PlanningAppointmentController extends AbstractController
         }
 
         return $this->render('front/reservation/planning.html.twig', $context);
+    }
+
+    private function resolveBookingFrame(Request $request): string
+    {
+        $frame = (string) $request->query->get('_frame', 'public-booking');
+
+        return 1 === preg_match('/^[a-z0-9-]+$/', $frame) ? $frame : 'public-booking';
     }
 
     /** @param array<string, string[]> $slots */

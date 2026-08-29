@@ -2,7 +2,7 @@
 
 namespace App\Tests\Page\Integration\Form;
 
-use App\Application\Page\Block\Hero\Main\HeroDTO;
+use App\Application\Page\Block\Library\Hero\Shared\HeroDTO;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\Page\Page\Dto\PageDTO;
 use App\Application\Page\Page\Form\PageBlockType;

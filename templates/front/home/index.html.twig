@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{# {% block title %}Hello HomeController!{% endblock %}
-{% block title %}Hello HomeController!{% endblock %} #}
-{% block title %}{{ parent()  ~ '' ~ metaTitle }}{% endblock %}
+{% block title %}{{ metaTitle }}{% endblock %}
 {% block metadescription %}{{ metaDescription}}{% endblock %}
 {% block openGraph %}
 
@@ -23,7 +21,7 @@
 
 {% block importmap %}
 
-    {{ importmap(['app','home']) }}
+    {{ importmap(['app', 'front']) }}
 {% endblock %}
 
 {% block body %}
@@ -67,52 +65,11 @@
         </div>
     </section>
 
-    <section id="resume" aria-labelledby="resume-header">
-
-        <div  class="resume__container">
-            <div class="resume__title">
-                <h2  id="resume-header" class="header-2">Comment j’ai évolué dans le web et le SEO au fil des années ?</h2>
-            </div>
-
-            <div class="resume__experiences">
-            
-
-                {% for experience in experiences %}
-                    
-                    <article class="experience" aria-label="experience au poste de {{ experience.title }}">
-                        <div class="experience__timeline">
-                            <div class="timeline__logo">
-                                {{ ux_icon('mynaui:briefcase') }}
-                            </div>
-                            <div class="timeline__line"></div>
-                        </div>
-                        <div class="experience__description">
-                            <div class="description__header" role="group" aria-label="Détails de l'expérience : {{experience.title}} chez {{experience.entreprise}}">
-                                <div class="header__poste">
-                                        <h3 class="header-3">
-                                            {{experience.title}}
-                                        </h3>
-                                    </div>
-                                <p class="header__location">{{experience.type}} - {{experience.entreprise}}</p>
-                                <p class="header__date">{{experience.beginAt|date('M-Y')}} - {{ experience.endAt is same as null ?  "Aujourd'hui" : experience.endAt|date('M-Y')}}</p>
-                            </div>
-                            <div class="description__infos" role="group" aria-label="Description de l'expérience : {{experience.title}} chez {{experience.entreprise}}">
-                                    <ul role="list" aria-label="Réalisations pour {{experience.title}} chez {{experience.entreprise}}">
-                                        {% for about in experience.about %}
-                                            <li>
-                                                <p class="infos__text">
-                                                    {{about}}.
-                                                </p>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                            </div>
-                        </div>
-                    </article>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
+    <twig:Front:ExperienceTimeline
+        id="resume"
+        title="Comment j’ai évolué dans le web et le SEO au fil des années ?"
+        :experiences="experiences"
+    />
 
     <section id="contact" aria-labelledby="contact-header">
         <div class="contact__container">

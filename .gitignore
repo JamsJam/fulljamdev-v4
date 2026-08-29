@@ -27,3 +27,7 @@
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+###> symfony/page-builder###
+/public/uploads/pages/*
+###< symfony/page-builder###

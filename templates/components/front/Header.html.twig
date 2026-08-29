@@ -1,3 +1,5 @@
+
+
 <header class="header">
     <div class="header__top">
         <ul class="header__socials" aria-label="Réseaux sociaux">
@@ -7,19 +9,19 @@
         </ul>
 
         <a class="header__brand" href="{{ path('app_home') }}" aria-label="FullJam Dev — retour à l'accueil">
-            <img src="{{ asset('favicon/favicon.svg') }}" width="46" height="45" alt="">
-            <span>FullJam Dev</span>
+            <img src="{{ asset(site.logoPath ?? 'favicon/favicon.svg') }}" width="46" height="45" alt="">
+            <span>{{ site.siteTitle }}</span>
         </a>
 
-        <a class="header__cta" href="{{ path('app_home') }}#contact">Prenez rendez-vous</a>
+        <a class="header__cta" href="{{ path('app_front_page', {path: 'contact'}) }}">Prenez rendez-vous</a>
     </div>
 
     <nav class="header__navigation" aria-label="Navigation principale">
         <ul>
-            <li><a href="{{ path('app_home') }}">Accueil</a></li>
-            <li><a href="{{ path('app_home') }}#about">À propos</a></li>
-            <li><a href="{{ path('app_home') }}#resume">Parcours</a></li>
-            <li><a href="{{ path('app_home') }}#contact">Contact</a></li>
+            <li><a href="{{ path('app_home') }}"{% if app.current_route == 'app_home' %} aria-current="page"{% endif %}>Accueil</a></li>
+            <li><a href="{{ path('app_front_page', {path: 'about'}) }}"{% if app.request and app.request.attributes.get('path') == 'about' %} aria-current="page"{% endif %}>À propos</a></li>
+            <li><a href="{{ path('app_front_page', {path: 'blog'}) }}"{% if app.request and app.request.attributes.get('path') == 'blog' %} aria-current="page"{% endif %}>Blog</a></li>
+            <li><a href="{{ path('app_front_page', {path: 'contact'}) }}"{% if app.request and app.request.attributes.get('path') == 'contact' %} aria-current="page"{% endif %}>Contact</a></li>
         </ul>
     </nav>
 </header>

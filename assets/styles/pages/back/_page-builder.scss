@@ -1,3 +1,5 @@
+@use "../../abstract/" as *;
+
 .page-builder,
 .page-list {
     display: grid;
@@ -214,6 +216,65 @@
         border: 0;
     }
 
+    &__display-cards {
+        display: grid;
+        gap: 0.75rem;
+        padding: 0;
+        border: 0;
+    }
+
+    &__display-cards ul {
+        display: grid;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__display-card {
+        display: grid;
+        gap: 0.875rem;
+        padding: 0.875rem;
+        background: var(--muted);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.625rem;
+    }
+
+    &__display-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    &__faq-items {
+        border: 0;
+    }
+
+    &__faq-items ul {
+        display: grid;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__faq-item {
+        display: grid;
+        gap: 0.875rem;
+        padding: 0.875rem;
+        background: var(--muted);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.625rem;
+    }
+
+    &__faq-item-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
     &__feedback {
         min-height: 1.25rem;
         margin: 0;
@@ -265,7 +326,7 @@
     }
 }
 
-@media (max-width: 48rem) {
+@media (max-width: $screen-l) {
     .page-builder__grid {
         grid-template-columns: 1fr;
     }

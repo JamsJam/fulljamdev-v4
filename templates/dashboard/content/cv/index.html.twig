@@ -1,0 +1,11 @@
+{% extends 'adminBase.html.twig' %}
+{% block title %}CV{% endblock %}
+{% block body %}
+<section class="content-manager" aria-labelledby="cv-title">
+    <header class="content-manager__header"><div><h1 id="cv-title">Expériences</h1><p>Gérez les expériences affichées dans la timeline du CV.</p></div><twig:Admin:Button icon="material-symbols:add-rounded" label="Ajouter une expérience" href="{{ path('app_dashboard_cv_new') }}" /></header>
+    {% if experiences is empty %}<p class="content-manager__empty">Aucune expérience enregistrée.</p>{% else %}
+    <div class="content-manager__table-wrapper"><table class="content-manager__table"><thead><tr><th>Poste</th><th>Entreprise</th><th>Période</th><th>Visibilité</th><th>Actions</th></tr></thead><tbody>
+    {% for experience in experiences %}<tr><th scope="row">{{ experience.title }}</th><td>{{ experience.company }}</td><td>{{ experience.beginAt|date('m/Y') }} — {{ experience.endAt ? experience.endAt|date('m/Y') : "Aujourd’hui" }}</td><td>{{ experience.visible ? 'Visible' : 'Masquée' }}</td><td><div class="content-manager__actions"><twig:Admin:Button variant="outline" label="Modifier" href="{{ path('app_dashboard_cv_edit', {id: experience.id}) }}" /><form method="post" action="{{ path('app_dashboard_cv_delete', {id: experience.id}) }}" onsubmit="return confirm('Supprimer cette expérience ?')"><input type="hidden" name="_token" value="{{ csrf_token('delete_experience_' ~ experience.id) }}"><twig:Admin:Button type="submit" variant="destructive" label="Supprimer" /></form></div></td></tr>{% endfor %}
+    </tbody></table></div>{% endif %}
+</section>
+{% endblock %}

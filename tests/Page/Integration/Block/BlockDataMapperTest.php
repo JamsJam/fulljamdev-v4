@@ -2,7 +2,7 @@
 
 namespace App\Tests\Page\Integration\Block;
 
-use App\Application\Page\Block\Hero\Main\HeroDTO;
+use App\Application\Page\Block\Library\Hero\Shared\HeroDTO;
 use App\Application\Page\Block\Mapper\BlockDataMapper;
 use App\Application\Page\Element\Heading\HeadingLevel;
 use App\Application\Page\Element\Image\ImageSource;
@@ -34,6 +34,7 @@ final class BlockDataMapperTest extends KernelTestCase
                 'attributes' => [],
             ],
             'image' => ['source' => 'url', 'mediaId' => null, 'url' => 'https://example.com/hero.jpg', 'alt' => 'Équipe au travail', 'title' => null],
+            'reverse' => true,
             'badges' => [['label' => 'Symfony']],
         ];
 
@@ -42,6 +43,7 @@ final class BlockDataMapperTest extends KernelTestCase
         self::assertInstanceOf(HeroDTO::class, $hero);
         self::assertSame(HeadingLevel::H1, $hero->title->level);
         self::assertSame(ImageSource::URL, $hero->image->source);
+        self::assertTrue($hero->reverse);
         self::assertSame('Symfony', $hero->badges[0]->label);
         self::assertSame($data, $mapper->normalize($hero));
     }

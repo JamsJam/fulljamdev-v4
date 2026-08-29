@@ -1,0 +1,8 @@
+<li class="page-builder__faq-item" data-form-collection-item>
+    <div class="page-builder__faq-item-header">
+        <strong>Question / réponse</strong>
+        <twig:Admin:Button variant="destructive" label="Supprimer" data-action="form-collection#removeCollectionElement" />
+    </div>
+    <twig:Form:Field :field="item.question" />
+    <twig:Form:Field :field="item.answer" />
+</li>

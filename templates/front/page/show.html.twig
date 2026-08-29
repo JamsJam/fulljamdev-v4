@@ -4,9 +4,10 @@
 {% block metadescription %}{{ page.seo.description }}{% endblock %}
 {% block canonical %}{{ page.seo.canonicalUrl }}{% endblock %}
 {% block robots %}{{ page.seo.noIndex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' }}{% endblock %}
+{% block main_attributes %} data-page="{{ page.path ?: 'accueil' }}"{% endblock %}
 
 {% block body %}
-    <div class="marketing-page">
-        {% for block in page.blocks %}<twig:Page:BlockRenderer :block="block" />{% endfor %}
-    </div>
+    {% for block in page.blocks %}
+        <twig:Page:BlockRenderer :block="block" />
+    {% endfor %}
 {% endblock %}

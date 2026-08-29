@@ -1,0 +1,53 @@
+// Surfaces du front
+$background-dark: hsl(249, 100%, 5%);
+$background-purple: hsl(276, 100%, 13%);
+$background-accent: hsl(176, 100%, 35%);
+
+// Texte et bordures du front
+$border: hsl(275, 40%, 55%);
+$border-mute: hsl(275, 20%, 25%);
+$text: hsl(249, 100%, 95%);
+$text-mute: hsl(240, 20%, 65%);
+
+// Bordures contextuelles et effets du front
+$border-primary: hsl(234, 92%, 30%);
+$border-primary-muted: hsl(247, 35%, 30%);
+$border-secondary: hsl(275, 40%, 55%);
+$border-secondary-muted: hsl(275, 20%, 25%);
+$border-accent: hsl(176, 50%, 35%);
+$border-accent-muted: hsl(176, 30%, 45%);
+$shadow: 0 4px 4px hsla(0, 0%, 0%, 0.3), 0 2px 2px hsla(0, 0%, 0%, 0.15);
+
+// Dégradés du front
+$gradient-vertical: linear-gradient(
+    180deg,
+    $background-purple 0%,
+    $background-dark 21%,
+    $background-dark 63%
+);
+
+$gradient-vertical-reverse: linear-gradient(
+    0deg,
+    $background-purple 0%,
+    $background-dark 21%,
+    $background-dark 63%
+);
+
+$gradient-cta: linear-gradient(
+    180deg,
+    hsl(249, 100%, 5%) 0%,
+    hsl(249, 77%, 11%) 10%,
+    #E9E2FF 50.96%,
+    hsl(249, 80%, 11%) 90%,
+    hsl(249, 100%, 5%) 100%
+);
+
+// Boutons du front
+$button-primary-border: hsl(265, 99%, 56%);
+$button-primary-background: hsl(265, 99%, 43%);
+
+$button-secondary-border: hsl(248, 29%, 16%);
+$button-secondary-background: hsl(249, 25%, 10%);
+
+$button-cta-background: $background-dark;
+$button-cta-color: #E9E2FF;

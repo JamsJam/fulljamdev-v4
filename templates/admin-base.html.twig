@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+	{% set site = site_settings() %}
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="shortcut icon" href="{{asset("favicon/favicon.svg")}}" type="image/x-icon">
-		<title>
-			{% block title %}
-				| FullJam Dev
-			{% endblock %}
-		</title>
+		<title>{% block title %}Administration{% endblock %} | {{ site.siteTitle }}</title>
 		{# ? === css global === #}
 		{% block stylesheets %}
 			{# <link rel="stylesheet" href="{{ asset('styles/admin.scss') }}"> #}

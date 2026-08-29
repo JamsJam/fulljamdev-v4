@@ -1,0 +1,9 @@
+<section class="cta-center" data-block-id="{{ blockId }}">
+    <div class="cta-center__content">
+        <{{ data.title.level.value }} class="cta-center__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+        <p class="cta-center__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+        {% if data.cta.label %}
+            <twig:Front:Button :cta="data.cta" variant="cta" class="cta-center__button" />
+        {% endif %}
+    </div>
+</section>

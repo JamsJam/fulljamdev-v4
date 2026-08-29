@@ -1,0 +1,20 @@
+<article{{ attributes.defaults({class: 'planning-card'}) }}>
+    <header class="planning-card__header">
+        <p class="planning-card__eyebrow">Prendre rendez-vous</p>
+        <h2 class="planning-card__title">{{ planning.title }}</h2>
+    </header>
+
+    {% if planning.description %}
+        <div class="planning-card__description">{{ planning.description|raw }}</div>
+    {% endif %}
+
+    <p class="planning-card__duration">
+        Durée du rendez-vous : <strong>{{ planning.duration }} minutes</strong>
+    </p>
+
+    <twig:Front:Button
+        :href="path('app_front_planning_appointment', {slug: planning.slug})"
+        label="Choisir un créneau"
+        variant="cta"
+    />
+</article>

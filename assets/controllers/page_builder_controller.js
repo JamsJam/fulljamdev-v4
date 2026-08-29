@@ -8,6 +8,7 @@ export default class extends Controller {
     connect() {
         this.dragged = null;
         this.blockTargets.forEach((block) => this.prepareDrag(block));
+        this.syncPositions();
     }
 
     toggleLibrary() {
@@ -36,6 +37,7 @@ export default class extends Controller {
 
             this.blocksTarget.appendChild(block);
             this.prepareDrag(block);
+            this.syncPositions();
             this.indexValue++;
             this.libraryTarget.hidden = true;
             if (this.hasFeedbackTarget) this.feedbackTarget.textContent = `${label} a été ajouté.`;
@@ -50,6 +52,7 @@ export default class extends Controller {
 
     removeBlock(event) {
         event.currentTarget.closest('[data-page-builder-target="block"]')?.remove();
+        this.syncPositions();
     }
 
     toggleBlock(event) {
@@ -64,19 +67,31 @@ export default class extends Controller {
     prepareDrag(block) {
         if (!block || block.dataset.dragReady) return;
         block.dataset.dragReady = 'true';
-        block.addEventListener('dragstart', () => {
+        const handle = block.querySelector('[data-page-builder-drag-handle]');
+        if (!handle) return;
+        handle.addEventListener('dragstart', (event) => {
             this.dragged = block;
             block.classList.add('is-dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', 'page-block');
         });
-        block.addEventListener('dragend', () => {
+        handle.addEventListener('dragend', () => {
             block.classList.remove('is-dragging');
             this.dragged = null;
+            this.syncPositions();
         });
         block.addEventListener('dragover', (event) => {
             event.preventDefault();
             if (!this.dragged || this.dragged === block) return;
             const after = event.clientY > block.getBoundingClientRect().top + block.offsetHeight / 2;
             block.parentNode.insertBefore(this.dragged, after ? block.nextSibling : block);
+        });
+    }
+
+    syncPositions() {
+        this.blockTargets.forEach((block, position) => {
+            const input = block.querySelector('[data-page-builder-position]');
+            if (input) input.value = String(position);
         });
     }
 }

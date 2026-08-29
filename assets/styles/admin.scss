@@ -1,5 +1,8 @@
 
-// @use 'base' as *;
+@use 'base/admin' as *;
+@use 'components/admin/stepper/stepper' as *;
+@use 'components/form/date-picker' as *;
+@use 'components/form/field' as *;
 @use 'layout/admin' as *;
 @use 'components/admin/breadcrumb' as *;
 @use 'components/admin/button/button' as *;
@@ -13,6 +16,8 @@
 @use 'pages/back/reservation' as *;
 @use 'pages/back/planning' as *;
 @use 'pages/back/page-builder' as *;
+@use 'pages/back/content-manager' as *;
 @use 'animations/turbo' as *;
+@use 'components/shared/flash' as *;
 // @forward 'components/table';
 // @forward 'components/tabs';

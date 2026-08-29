@@ -63,13 +63,22 @@ final class Aside
             'label' => 'Contenus',
             'items' => [
                 [
-                    'label' => 'Gestion des contenus',
+                    'label' => 'Projets',
+                    'route' => 'app_dashboard_project',
+                    'icon' => 'grommet-icons:projects',
+                    'activePrefixes' => ['app_dashboard_project_'],
+                ],
+                [
+                    'label' => 'Blog',
+                    'route' => 'app_dashboard_blog',
                     'icon' => 'iconoir:post',
-                    'children' => [
-                        ['label' => 'Projets', 'route' => 'app_dashboard'],
-                        ['label' => 'Blog', 'route' => 'app_dashboard'],
-                        ['label' => 'CV', 'route' => 'app_dashboard'],
-                    ],
+                    'activePrefixes' => ['app_dashboard_blog_'],
+                ],
+                [
+                    'label' => 'CV',
+                    'route' => 'app_dashboard_cv',
+                    'icon' => 'material-symbols:work-outline-rounded',
+                    'activePrefixes' => ['app_dashboard_cv_'],
                 ],
             ],
         ],

@@ -1,0 +1,9 @@
+<article{{ attributes.defaults({class: 'display-card display-card--with-image'}) }}>
+    {% if this.imageUrl %}
+        <div class="display-card__image-container">
+            <img class="display-card__image" src="{{ this.imageUrl }}" alt="{{ card.image.alt }}">
+        </div>
+    {% endif %}
+    <div class="display-card__body"><h3 class="display-card__title">{{ card.title }}</h3><p class="display-card__text">{{ card.text }}</p></div>
+    {% if card.cta and card.cta.label %}<twig:Front:Button :cta="card.cta" variant="secondary" class="display-card__cta" />{% endif %}
+</article>

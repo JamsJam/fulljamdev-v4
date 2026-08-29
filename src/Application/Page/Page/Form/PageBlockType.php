@@ -21,7 +21,10 @@ final class PageBlockType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('id', HiddenType::class)->add('type', HiddenType::class);
+        $builder
+            ->add('id', HiddenType::class)
+            ->add('type', HiddenType::class)
+            ->add('position', HiddenType::class);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             $block = $event->getData();
@@ -36,8 +39,11 @@ final class PageBlockType extends AbstractType
                 throw new \InvalidArgumentException('Le type du bloc est obligatoire.');
             }
 
-            $definition = $this->registry->get($submitted['type']);
             $current = $event->getForm()->getData();
+            $submitted['position'] ??= $current instanceof PageBlockDTO ? $current->position : 0;
+            $event->setData($submitted);
+
+            $definition = $this->registry->get($submitted['type']);
             $data = $current instanceof PageBlockDTO && $current->type === $definition->type()
                 ? $current->data
                 : $definition->createDefaultData();

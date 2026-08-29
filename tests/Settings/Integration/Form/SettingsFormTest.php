@@ -62,7 +62,12 @@ final class SettingsFormTest extends KernelTestCase
             'csrf_protection' => false,
             'page_choices' => ['Accueil' => 42, 'Services' => 84],
         ]);
-        $form->submit(['timezone' => 'Europe/Paris', 'homepagePageId' => '42', 'submit' => '']);
+        $form->submit([
+            'siteTitle' => 'FullJam Dev',
+            'timezone' => 'Europe/Paris',
+            'homepagePageId' => '42',
+            'submit' => '',
+        ]);
 
         self::assertTrue($form->isValid(), (string) $form->getErrors(true));
         self::assertSame('Europe/Paris', $settings->timezone);
@@ -75,7 +80,12 @@ final class SettingsFormTest extends KernelTestCase
             'csrf_protection' => false,
             'page_choices' => ['Accueil' => 42],
         ]);
-        $form->submit(['timezone' => 'Mars/Olympus', 'homepagePageId' => '999', 'submit' => '']);
+        $form->submit([
+            'siteTitle' => 'FullJam Dev',
+            'timezone' => 'Mars/Olympus',
+            'homepagePageId' => '999',
+            'submit' => '',
+        ]);
 
         self::assertFalse($form->isValid());
         self::assertFalse($form->get('timezone')->isValid());

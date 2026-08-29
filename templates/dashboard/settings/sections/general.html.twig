@@ -4,6 +4,61 @@
 
     {{ form_start(general_form, {attr: {class: 'settings__form'}}) }}
         {{ form_errors(general_form) }}
+
+        <fieldset class="settings__fieldset">
+            <legend>Identité du site</legend>
+
+            <twig:Form:Field
+                :field="general_form.siteTitle"
+                class="settings__field"
+                description="Ce titre est utilisé pour identifier le site dans le navigateur et les interfaces."
+            />
+
+            <div class="settings__assets">
+                <div>
+                    <twig:Form:Field :field="general_form.logoFile" class="settings__field" />
+                    {% if general_form.vars.data.logoPath %}
+                        <div class="settings__asset-preview">
+                            <span>Logo actuel</span>
+                            <img src="{{ asset(general_form.vars.data.logoPath) }}" alt="Logo actuel du site">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <twig:Form:Field :field="general_form.faviconSvgFile" class="settings__field" />
+                    {% if general_form.vars.data.faviconSvgPath %}
+                        <div class="settings__asset-preview settings__asset-preview--icon">
+                            <span>Favicon SVG actuel</span>
+                            <img src="{{ asset(general_form.vars.data.faviconSvgPath) }}" alt="Favicon SVG actuel">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <twig:Form:Field :field="general_form.faviconIcoFile" class="settings__field" />
+                    {% if general_form.vars.data.faviconIcoPath %}
+                        <div class="settings__asset-preview settings__asset-preview--icon">
+                            <span>Favicon ICO actuel</span>
+                            <img src="{{ asset(general_form.vars.data.faviconIcoPath) }}" alt="Favicon ICO actuel">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <twig:Form:Field :field="general_form.appleTouchIconFile" class="settings__field" />
+                    {% if general_form.vars.data.appleTouchIconPath %}
+                        <div class="settings__asset-preview settings__asset-preview--icon">
+                            <span>Icône Apple actuelle</span>
+                            <img src="{{ asset(general_form.vars.data.appleTouchIconPath) }}" alt="Icône Apple Touch actuelle">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="settings__fieldset">
+            <legend>Configuration</legend>
         <twig:Form:Field
             :field="general_form.timezone"
             class="settings__field"
@@ -14,6 +69,8 @@
             class="settings__field"
             description="Cette page sera affichée à la racine du site. Son chemin public redirigera automatiquement vers /."
         />
+        </fieldset>
+
         {{ form_row(general_form.submit, {row_attr: {class: 'settings__form-actions'}}) }}
     {{ form_end(general_form) }}
 </section>

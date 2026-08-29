@@ -21,7 +21,9 @@
 {% if slots is empty %}
     <p class="public-booking__empty">Aucun créneau n’est disponible pour le moment.</p>
 {% else %}
-    {{ form_start(form, {attr: {
+    {{ form_start(form, {
+        action: path('app_front_planning_appointment', {slug: planning.slug, _frame: booking_frame}),
+        attr: {
         class: 'public-booking__form',
         'data-public-booking-target': 'form',
         'data-turbo': 'true',

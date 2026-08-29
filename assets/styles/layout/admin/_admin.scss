@@ -1,3 +1,5 @@
+@use "../../abstract/" as *;
+
 body.admin {
     min-width: 0;
     overflow: hidden;
@@ -37,7 +39,7 @@ body.admin .layout__overlay {
     transition: opacity 200ms ease, visibility 200ms ease;
 }
 
-@media (max-width: 64rem) {
+@media (max-width: $screen-l) {
     body.admin .layout {
         grid-template-columns: 0 minmax(0, 1fr);
 

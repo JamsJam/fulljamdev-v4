@@ -3,7 +3,7 @@
 namespace App\Tests\Page\Integration\Writer;
 
 use App\Application\Page\Block\Asset\BlockAssetProcessor;
-use App\Application\Page\Block\Hero\Main\HeroDTO;
+use App\Application\Page\Block\Library\Hero\Shared\HeroDTO;
 use App\Application\Page\Block\Mapper\BlockDataMapper;
 use App\Application\Page\Block\Registry\BlockRegistry;
 use App\Application\Page\Element\Image\ImageSource;
@@ -34,17 +34,22 @@ final class PageWriterTest extends KernelTestCase
         $hero->image->source = ImageSource::URL;
         $hero->image->url = 'https://example.com/hero.jpg';
         $hero->image->alt = 'Hero';
+        $firstHero = clone $hero;
+        $firstHero->title = clone $hero->title;
+        $firstHero->title->content = 'Premier bloc';
         $dto = new PageDTO();
         $dto->title = 'Accueil';
         $dto->path = 'accueil';
-        $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $hero);
+        $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $hero, 1);
+        $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $firstHero, 0);
 
         $page = $writer->save($dto);
         $rebuilt = (new PageBuilder($mapper, $serializer))->build($page);
 
-        self::assertCount(1, $page->getBlocks());
+        self::assertCount(2, $page->getBlocks());
         self::assertSame(0, $page->getBlocks()->first()->getPosition());
         self::assertInstanceOf(HeroDTO::class, $rebuilt->blocks[0]->data);
-        self::assertSame('Accueil', $rebuilt->blocks[0]->data->title->content);
+        self::assertSame('Premier bloc', $rebuilt->blocks[0]->data->title->content);
+        self::assertSame('Accueil', $rebuilt->blocks[1]->data->title->content);
     }
 }

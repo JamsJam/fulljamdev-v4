@@ -16,8 +16,8 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
-    'home' => [
-        'path' => './assets/home.js',
+    'front' => [
+        'path' => './assets/front.js',
         'entrypoint' => true,
     ],
     'admin' => [

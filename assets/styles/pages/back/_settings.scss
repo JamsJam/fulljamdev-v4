@@ -76,6 +76,56 @@ body.admin .settings {
         margin-top: 1.5rem;
     }
 
+    &__fieldset {
+        display: grid;
+        gap: 1.25rem;
+        min-width: 0;
+        padding: var(--padding-lg);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.65rem;
+
+        legend {
+            padding-inline: var(--padding-sm);
+            color: var(--text);
+            font-weight: 700;
+        }
+    }
+
+    &__assets {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--padding-lg);
+    }
+
+    &__asset-preview {
+        display: grid;
+        gap: var(--padding-sm);
+        margin-top: var(--margin-sm);
+        padding: var(--padding-md);
+        background: var(--bg);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.55rem;
+
+        span {
+            color: var(--text-muted);
+            font-size: var(--annotation);
+        }
+
+        img {
+            display: block;
+            width: auto;
+            max-width: min(100%, 20rem);
+            height: 4rem;
+            object-fit: contain;
+            object-position: left center;
+        }
+
+        &--icon img {
+            width: 3rem;
+            height: 3rem;
+        }
+    }
+
     &__field {
         display: grid;
         align-content: start;
@@ -183,13 +233,17 @@ body.admin .settings {
     width: 100%;
 }
 
-@container dashboard (max-width: 500px) {
+@container dashboard (max-width: $screen-m) {
     body.admin .settings {
         .tabs__content {
             padding: var(--padding-lg);
         }
 
         &__form-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        &__assets {
             grid-template-columns: minmax(0, 1fr);
         }
 

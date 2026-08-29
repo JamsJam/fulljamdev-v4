@@ -1,0 +1,10 @@
+<section class="faq-block" data-block-id="{{ blockId }}">
+    <header class="faq-block__header">
+        <{{ data.title.level.value }} class="faq-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+        <p class="faq-block__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+    </header>
+
+    {% if data.items is not empty %}
+        <twig:Front:Accordion :items="data.items" name="faq-{{ blockId|default('new') }}" class="faq-block__accordion" />
+    {% endif %}
+</section>

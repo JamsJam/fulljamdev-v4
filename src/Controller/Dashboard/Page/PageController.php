@@ -34,12 +34,12 @@ final class PageController extends AbstractController
         return $this->editForm($request, $builder->build($page), $page, $saveService, $registry, $pathService);
     }
 
-    #[Route('/blocks/new/{type}/{index}', name: 'app_dashboard_page_block_new', requirements: ['type' => '[a-z0-9.-]+', 'index' => '\d+'], methods: ['GET'])]
+    #[Route('/blocks/new/{type}/{index}', name: 'app_dashboard_page_block_new', requirements: ['type' => '[a-z0-9._-]+', 'index' => '\d+'], methods: ['GET'])]
     public function newBlock(string $type, int $index, BlockRegistry $registry, FormFactoryInterface $forms): Response
     {
         $definition = $registry->get($type);
         $dto = new PageDTO();
-        $dto->blocks[$index] = new PageBlockDTO(null, $type, $definition->createDefaultData());
+        $dto->blocks[$index] = new PageBlockDTO(null, $type, $definition->createDefaultData(), $index);
         $form = $forms->create(PageType::class, $dto);
 
         return $this->render('dashboard/page/_block_form.html.twig', [

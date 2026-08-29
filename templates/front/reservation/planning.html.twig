@@ -3,7 +3,9 @@
 {% block title %}Réserver — {{ planning.title }}{% endblock %}
 
 {% block body %}
-    <section id="public-booking-flow" class="public-booking" {{ stimulus_controller('public-booking') }}>
-        {% include 'front/reservation/partial/_booking.html.twig' %}
-    </section>
+    <turbo-frame id="{{ booking_frame }}">
+        <section id="{{ booking_target }}" class="public-booking" {{ stimulus_controller('public-booking') }}>
+            {% include 'front/reservation/partial/_booking.html.twig' %}
+        </section>
+    </turbo-frame>
 {% endblock %}

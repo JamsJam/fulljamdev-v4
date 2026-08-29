@@ -1,0 +1,55 @@
+<div class="page-builder__block-fields">
+    <div class="page-builder__grid page-builder__essentials">
+        <twig:Form:Field :field="data.title.content" label="Titre" />
+        <twig:Form:Field :field="data.text.content" label="Texte" />
+    </div>
+
+    <details class="page-builder__settings">
+        <summary>Réglages du titre et du texte</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.title.level" />
+            <div class="page-builder__grid">
+                <twig:Form:KeyValueCollection :field="data.title.attributes" />
+                <twig:Form:KeyValueCollection :field="data.text.attributes" />
+            </div>
+        </div>
+    </details>
+
+    <section class="page-builder__settings-content" data-controller="card-data-source">
+        <div data-action="change->card-data-source#toggle"><twig:Form:Field :field="data.source" label="Origine des cartes" /></div>
+
+        <div data-card-data-source-target="dynamic">
+            <twig:Form:Field :field="data.sourceKey" />
+            <p class="page-builder__feedback">Les projets mis en avant seront disponibles après le développement du module Projets.</p>
+        </div>
+
+        {% set card_prototype %}{% include 'dashboard/page/block/_card_display_item_form.html.twig' with {card: data.cards.vars.prototype, mediaField: mediaField, mediaLabel: mediaLabel} only %}{% endset %}
+        <fieldset
+            class="page-builder__display-cards"
+            data-card-data-source-target="manual"
+            data-controller="form-collection"
+            data-form-collection-index-value="{{ data.cards|length }}"
+            data-form-collection-prototype-value="{{ card_prototype|e('html_attr') }}"
+        >
+            <legend>Cartes saisies manuellement</legend>
+            <ul data-form-collection-target="collectionContainer">
+                {% for card in data.cards %}{% include 'dashboard/page/block/_card_display_item_form.html.twig' with {card: card, mediaField: mediaField, mediaLabel: mediaLabel} only %}{% endfor %}
+            </ul>
+            <twig:Admin:Button variant="outline" label="Ajouter une carte" data-action="form-collection#addCollectionElement" />
+        </fieldset>
+    </section>
+
+    <details class="page-builder__settings" data-controller="link-target">
+        <summary>CTA sous les cartes</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.cta.label" />
+            <twig:Form:Field :field="data.cta.target" :widgetAttr="{'data-link-target-target': 'type', 'data-action': 'link-target#toggle'}" />
+            <div data-link-target-target="route">
+                <twig:Form:Field :field="data.cta.routeName" />
+                <twig:Form:KeyValueCollection :field="data.cta.routeParameters" legend="Paramètres de route" keyLabel="Paramètre" valueLabel="Valeur" addLabel="Ajouter un paramètre" />
+            </div>
+            <div data-link-target-target="url"><twig:Form:Field :field="data.cta.href" /></div>
+            <twig:Form:KeyValueCollection :field="data.cta.attributes" legend="Attributs HTML" />
+        </div>
+    </details>
+</div>

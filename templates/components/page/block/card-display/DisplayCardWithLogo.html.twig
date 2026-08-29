@@ -1,0 +1,16 @@
+<section class="card-display card-display--with-logo" data-block-id="{{ blockId }}">
+    <header class="card-display__header">
+        <{{ data.title.level.value }} class="card-display__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+        <p class="card-display__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+    </header>
+
+    {% if this.cards is not empty %}
+        <div class="card-display__grid">
+            {% for card in this.cards %}<twig:Front:CardWithLogo :card="card" />{% endfor %}
+        </div>
+    {% endif %}
+
+    {% if data.cta and data.cta.label %}
+        <div class="card-display__action"><twig:Front:Button :cta="data.cta" variant="primary" /></div>
+    {% endif %}
+</section>

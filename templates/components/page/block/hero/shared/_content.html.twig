@@ -1,0 +1,21 @@
+<div class="{{ hero_class }}__content">
+    <{{ data.title.level.value }} class="{{ hero_class }}__title"{{ this.safeAttributes(data.title.attributes)|raw }}>
+        {{ data.title.content }}
+    </{{ data.title.level.value }}>
+
+    <p class="{{ hero_class }}__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>
+        {{ data.text.content }}
+    </p>
+
+    {% if data.cta1 and data.cta1.label or data.cta2 and data.cta2.label %}
+        <div class="{{ hero_class }}__actions">
+            {% if data.cta1 and data.cta1.label %}
+                <twig:Front:Button :cta="data.cta1" variant="primary" />
+            {% endif %}
+
+            {% if data.cta2 and data.cta2.label %}
+                <twig:Front:Button :cta="data.cta2" variant="secondary" />
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

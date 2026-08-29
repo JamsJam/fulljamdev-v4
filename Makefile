@@ -92,7 +92,8 @@ test-integration: test-db
 
 # ? Prépare la base MySQL isolée utilisée par les tests Doctrine
 test-db:
-	$(CONSOLE) doctrine:database:create --env=test --if-not-exists
+	$(CONSOLE) doctrine:database:drop --env=test --force --if-exists
+	$(CONSOLE) doctrine:database:create --env=test
 	$(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
 
 # ? Lance uniquement les tests des cas d’usage applicatifs

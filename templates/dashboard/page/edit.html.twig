@@ -43,7 +43,7 @@
                 <p class="page-builder__feedback" data-page-builder-target="feedback" role="status" aria-live="polite"></p>
                 <div class="page-builder__blocks" data-page-builder-target="blocks">
                     {% for block in form.blocks %}
-                        {% include 'dashboard/page/_block_form.html.twig' with {block: block, definition: definitions[block.vars.data.type], expanded: loop.first} only %}
+                        {% include 'dashboard/page/_block_form.html.twig' with {block: block, definition: definitions[block.vars.data.type], expanded: false} only %}
                     {% endfor %}
                 </div>
                 {% do form.blocks.setRendered %}

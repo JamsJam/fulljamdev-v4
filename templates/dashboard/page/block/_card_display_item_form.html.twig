@@ -1,0 +1,28 @@
+{% set media = attribute(card, mediaField) %}
+<li class="page-builder__display-card" data-form-collection-item>
+    <div class="page-builder__display-card-header">
+        <strong>Carte</strong>
+        <twig:Admin:Button variant="destructive" label="Supprimer la carte" data-action="form-collection#removeCollectionElement" />
+    </div>
+    <div class="page-builder__grid"><twig:Form:Field :field="card.title" /><twig:Form:Field :field="card.text" /></div>
+    <details class="page-builder__subsettings" data-controller="image-source" data-image-source-current-media-value="{{ media.mediaId.vars.value|default('') }}">
+        <summary>{{ mediaLabel }}</summary>
+        <div class="page-builder__settings-content">
+            <div data-action="change->image-source#change"><twig:Form:Field :field="media.source" /></div>
+            {{ form_widget(media.mediaId) }}
+            <div data-image-source-target="fileField"><twig:Form:Field :field="media.file" /></div>
+            <div data-image-source-target="urlField"><twig:Form:Field :field="media.url" /></div>
+            <div class="page-builder__image-preview" data-image-source-target="previewContainer" hidden><img data-image-source-target="preview" alt="Aperçu"></div>
+            <div class="page-builder__grid"><twig:Form:Field :field="media.alt" /><twig:Form:Field :field="media.title" /></div>
+        </div>
+    </details>
+    <details class="page-builder__subsettings" data-controller="link-target">
+        <summary>CTA facultatif</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="card.cta.label" />
+            <twig:Form:Field :field="card.cta.target" :widgetAttr="{'data-link-target-target': 'type', 'data-action': 'link-target#toggle'}" />
+            <div data-link-target-target="route"><twig:Form:Field :field="card.cta.routeName" /></div>
+            <div data-link-target-target="url"><twig:Form:Field :field="card.cta.href" /></div>
+        </div>
+    </details>
+</li>

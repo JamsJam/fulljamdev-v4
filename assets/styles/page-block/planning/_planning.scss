@@ -1,0 +1,41 @@
+.planning-block {
+    display: grid;
+    gap: var(--padding-xl);
+    place-items: center;
+
+    &__header {
+        display: grid;
+        gap: var(--padding-m);
+        width: min(100%, 62rem);
+        justify-self: start;
+        text-align: left;
+    }
+
+    &__title {
+        font-size: var(--h2);
+        text-wrap: balance;
+    }
+
+    &__text {
+        color: var(--text-mute);
+        font-size: var(--text-m);
+        line-height: 1.6;
+        text-wrap: balance;
+    }
+
+    &__booking {
+        display: block;
+        width: 100%;
+    }
+
+    &__loading {
+        padding: var(--padding-xl);
+        color: var(--text-mute);
+        text-align: center;
+    }
+
+    .public-booking {
+        width: min(100%, 62rem);
+        margin-block: 0;
+    }
+}

@@ -1,0 +1,90 @@
+body.admin .content-manager {
+    display: grid;
+    gap: var(--margin-xl);
+    color: var(--text);
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--padding-lg);
+
+        p {
+            margin-top: var(--margin-xs);
+            color: var(--text-muted);
+        }
+    }
+
+    &__table-wrapper,
+    &__form,
+    &__empty {
+        padding: var(--padding-xl);
+        overflow-x: auto;
+        background: var(--card);
+        border: 1px solid var(--border-muted);
+        border-radius: 0.75rem;
+    }
+
+    &__table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: var(--padding-md);
+            text-align: left;
+            border-block-end: 1px solid var(--border-muted);
+        }
+
+        thead th {
+            color: var(--text-muted);
+            font-size: var(--text-s);
+        }
+    }
+
+    &__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--padding-sm);
+    }
+
+    &__subsection {
+        display: grid;
+        gap: var(--margin-lg);
+        margin-top: var(--margin-xl);
+    }
+
+    &__form {
+        display: grid;
+        gap: var(--padding-xl);
+    }
+
+    &__form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--padding-lg);
+
+        > :has(textarea),
+        > :has(.sun-editor) {
+            grid-column: 1 / -1;
+        }
+    }
+
+    &__form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--padding-sm);
+    }
+}
+
+@media (max-width: 48rem) {
+    body.admin .content-manager {
+        &__header {
+            flex-direction: column;
+        }
+
+        &__form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}

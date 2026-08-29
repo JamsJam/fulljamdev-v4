@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% set site = site_settings() %}
 <html lang="fr" data-theme="light" class="{% block html_class %}{% endblock %}">
     <head>
         <meta charset="UTF-8">
@@ -7,7 +8,7 @@
         <meta name="view-transition" content="same-origin">
         <meta name="turbo-refresh-method" content="morph">
 
-        <title>{% block title %}Administration | FullJam Dev{% endblock %}</title>
+        <title>{% block title %}Administration{% endblock %} | {{ site.siteTitle }}</title>
         <link rel="icon" href="{{ asset('favicon/favicon.svg') }}">
 
         {% block stylesheets %}{% endblock %}
@@ -40,6 +41,7 @@
 
             <main class="layout__content">
                 <div class="layout__container">
+                    {% include 'components/_flashes.html.twig' with {flashes: app.flashes} %}
                     {% block body %}{% endblock %}
                 </div>
             </main>

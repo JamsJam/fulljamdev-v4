@@ -1,12 +1,14 @@
+
+
 <footer class="footer">
     <div class="footer__container">
         <div class="footer__brand">
             <a class="footer__logo" href="{{ path('app_home') }}" aria-label="FullJam Dev — retour à l'accueil">
                 <img
-                    src="{{ asset('images/logos/logo-320.png') }}"
+                    src="{{ asset(site.logoPath ?? 'images/logos/logo-320.png') }}"
                     width="320"
                     height="49"
-                    alt="FullJam Dev"
+                    alt="{{ site.siteTitle }}"
                     loading="lazy"
                 >
             </a>
@@ -42,6 +44,6 @@
     </div>
 
     <div class="footer__bottom">
-        <p>&copy; {{ 'now'|date('Y') }} FullJam Dev. Tous droits réservés.</p>
+        <p>&copy; {{ 'now'|date('Y') }} {{ site.siteTitle }}. Tous droits réservés.</p>
     </div>
 </footer>

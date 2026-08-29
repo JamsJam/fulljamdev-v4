@@ -5,6 +5,10 @@ import lang from 'suneditor/src/lang';
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
+    static values = {
+        profile: { type: String, default: 'full' },
+    };
+
     connect() {
         this.initEditor();
     }
@@ -18,6 +22,8 @@ export default class extends Controller {
         if (this.editor) {
             return;
         }
+
+        const isBasic = this.profileValue === 'basic';
 
         this.editor = suneditor.create(this.element, {
             'mode': 'classic',
@@ -37,7 +43,7 @@ export default class extends Controller {
                 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72
             ],
             'fontSizeUnit': 'px',
-            'formats': [
+            'formats': isBasic ? ['p'] : [
                 'p', 
                 'h1', 
                 'h2', 
@@ -66,7 +72,9 @@ export default class extends Controller {
                     'tag': 'span'
                 }
             ],
-            'buttonList': [
+            'buttonList': isBasic ? [
+                ['undo', 'redo', 'bold', 'italic', 'list', 'removeFormat']
+            ] : [
                 [
                     'undo',
                     'redo',

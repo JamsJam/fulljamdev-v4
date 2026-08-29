@@ -28,6 +28,7 @@
             <directory>tests/Page/Integration</directory>
             <directory>tests/Reservation/Integration</directory>
             <directory>tests/Settings/Integration</directory>
+            <directory>tests/Content/Integration</directory>
         </testsuite>
         <testsuite name="Application">
             <directory>tests/Settings/Application</directory>

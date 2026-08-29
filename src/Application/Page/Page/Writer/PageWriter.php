@@ -36,8 +36,11 @@ final readonly class PageWriter
             }
         }
 
+        $blocks = array_values($dto->blocks);
+        usort($blocks, static fn ($left, $right): int => $left->position <=> $right->position);
+
         $kept = [];
-        foreach (array_values($dto->blocks) as $position => $blockDto) {
+        foreach ($blocks as $position => $blockDto) {
             $definition = $this->registry->get($blockDto->type);
             $dtoClass = $definition->dtoClass();
             if (!$blockDto->data instanceof $dtoClass) {

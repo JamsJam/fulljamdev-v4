@@ -1,0 +1,16 @@
+{% set image_url = this.safeImageUrl(data.image.url) %}
+{% set media_url = this.safeMediaUrl(data.image.mediaId) %}
+
+{% if with_glow|default(false) %}
+    <div class="{{ hero_class }}__glow"></div>
+{% endif %}
+
+<figure class="{{ hero_class }}__media">
+    {% if data.image.source.value == 'url' and image_url %}
+        <img src="{{ image_url }}" alt="{{ data.image.alt }}"{% if data.image.title %} title="{{ data.image.title }}"{% endif %}>
+    {% elseif media_url %}
+        <img src="{{ media_url }}" alt="{{ data.image.alt }}"{% if data.image.title %} title="{{ data.image.title }}"{% endif %}>
+    {% else %}
+        <div class="{{ hero_class }}__placeholder"><span>FullJam Dev</span></div>
+    {% endif %}
+</figure>

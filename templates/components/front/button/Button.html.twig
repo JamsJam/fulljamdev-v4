@@ -1,0 +1,11 @@
+{% set href = this.resolvedHref %}
+{% set tag = href is not null ? 'a' : 'button' %}
+
+<{{ tag }}
+    {{ attributes.defaults({class: 'button ' ~ this.variantClass}) }}
+    {% if href is not null %}href="{{ href }}"{% else %}type="{{ type }}"{% endif %}
+    {{- this.ctaAttributes|raw -}}
+>
+    <span class="button__label">{{ this.resolvedLabel }}</span>
+    {% block content %}{% endblock %}
+</{{ tag }}>

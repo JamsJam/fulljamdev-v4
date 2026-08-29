@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr">
+    {% set site = site_settings() %}
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         {# ? === title === #}
-        <title>{% block title %}FullJam Dev - {% endblock %}</title>
+        <title>{% block title %}Accueil{% endblock %} | {{ site.siteTitle }}</title>
         {# ? === metdescription === #}
         <meta name="description" content="{% block metadescription %}{% endblock %}">
         {# ? === jsonLD === #}
@@ -35,24 +36,37 @@
 
 
         {# ? === favicon === #}
-        <link rel="icon" href="{{absolute_url(asset('/favicon/favicon.svg'))}}">
+        {% if site.faviconSvgPath %}
+            <link rel="icon" type="image/svg+xml" href="{{ asset(site.faviconSvgPath) }}">
+        {% endif %}
+        {% if site.faviconIcoPath %}
+            <link rel="icon" href="{{ asset(site.faviconIcoPath) }}" sizes="any">
+        {% endif %}
+        {% if site.appleTouchIconPath %}
+            <link rel="apple-touch-icon" href="{{ asset(site.appleTouchIconPath) }}">
+        {% endif %}
+        {% if not site.faviconSvgPath and not site.faviconIcoPath %}
+            <link rel="icon" href="{{ asset('favicon/favicon.svg') }}">
+        {% endif %}
         {# ? === css global === #}
         {% block stylesheets %}
             {# <link rel="stylesheet" href="{{ asset('styles/app.css') }}"> #}
         {% endblock %}
         {# ? === js === #}
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            {% block importmap %}
+                {{ importmap(['app', 'front']) }}
+            {% endblock %}
         {% endblock %}
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="8/+2SjahgSwXty9ZjGAsyQ" async></script>
         <meta name="ahrefs-site-verification" content="78d1c4f2075e84aa1621f088021aa546e2d936c1b8e17791ebf187bafd4130c3">
 
     </head>
-    <body class="front">
-        <twig:Front:Header />
-        <main>
+    <body class="front{{ app.current_route == 'app_home' ? ' front--accueil' : '' }}">
+        <twig:Front:Header :site="site" />
+        <main{% block main_attributes %}{% endblock %}>
             {% block body %}{% endblock %}
         </main>
-        <twig:Front:Footer />
+        <twig:Front:Footer :site="site" />
     </body>
 </html>

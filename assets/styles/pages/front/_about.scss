@@ -1,0 +1,26 @@
+@use "../../abstract/" as *;
+@use "../../page-block/hero/with-fs-image" as *;
+@use "../../page-block/hero/with-xl-image" as *;
+
+main[data-page="about"] {
+    .hero-with-fs-image,
+    .hero-with-xl-image {
+        color: var(--text);
+        background: var(--background-dark);
+
+        &__title {
+            color: var(--text);
+        }
+
+        &__lead,
+        &__placeholder {
+            color: var(--text-mute);
+        }
+
+        &__media {
+            background: var(--background-purple);
+            border-color: var(--border);
+            box-shadow: var(--shadow);
+        }
+    }
+}

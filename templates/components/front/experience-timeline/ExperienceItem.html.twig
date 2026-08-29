@@ -1,0 +1,23 @@
+<article class="experience-item" aria-label="Expérience au poste de {{ experience.title }}">
+    <div class="experience-item__timeline" aria-hidden="true">
+        <div class="experience-item__logo">{{ ux_icon('mynaui:briefcase') }}</div>
+        <div class="experience-item__line"></div>
+    </div>
+
+    <div class="experience-item__content">
+        <header class="experience-item__header">
+            <h3 class="experience-item__title">{{ experience.title }}</h3>
+            <p class="experience-item__location">{{ experience.type }} - {{ experience.entreprise }}</p>
+            <p class="experience-item__date">
+                {{ experience.beginAt|date('M-Y') }} -
+                {{ experience.endAt is null ? "Aujourd'hui" : experience.endAt|date('M-Y') }}
+            </p>
+        </header>
+
+        {% if experience.about is not empty %}
+            <div class="experience-item__details" aria-label="Réalisations pour {{ experience.title }} chez {{ experience.entreprise }}">
+                {{ experience.about|raw }}
+            </div>
+        {% endif %}
+    </div>
+</article>

@@ -1,0 +1,30 @@
+.faq-block {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: clamp(2.5rem, 7vw, 6rem);
+
+    &__header {
+        display: grid;
+        gap: var(--padding-xl);
+    }
+
+    &__title {
+        color: var(--text);
+        font-size: var(--h2);
+        text-wrap: balance;
+    }
+
+    &__lead {
+        color: var(--text-mute);
+        font-size: var(--text-l);
+        line-height: 1.55;
+        text-wrap: pretty;
+    }
+}
+
+@media (max-width: 64rem) {
+    .faq-block {
+        grid-template-columns: 1fr;
+    }
+}

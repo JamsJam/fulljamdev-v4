@@ -1,0 +1,23 @@
+{% set planning = this.planning %}
+{% if planning %}
+    {% set bookingFrame = 'planning-booking-' ~ (blockId ?? planning.id) %}
+    <section
+        class="planning-block"
+        data-block-id="{{ blockId }}"
+        style="--planning-color: {{ planning.color }}"
+    >
+        <header class="planning-block__header">
+            <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+            <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+        </header>
+
+        <turbo-frame
+            id="{{ bookingFrame }}"
+            src="{{ path('app_front_planning_appointment', {slug: planning.slug, _frame: bookingFrame}) }}"
+            loading="lazy"
+            class="planning-block__booking"
+        >
+            <p class="planning-block__loading">Chargement du planning…</p>
+        </turbo-frame>
+    </section>
+{% endif %}

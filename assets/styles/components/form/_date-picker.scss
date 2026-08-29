@@ -1,3 +1,5 @@
+@use "../../abstract/" as *;
+
 .date-picker {
     --date-picker-accent: var(--booking-accent, var(--primary, #6750a4));
 
@@ -53,7 +55,7 @@
     }
 }
 
-@media (max-width: 40rem) {
+@media (max-width: $screen-l) {
     .date-picker {
         &__weekdays,
         &__grid { gap: 0.1rem; }

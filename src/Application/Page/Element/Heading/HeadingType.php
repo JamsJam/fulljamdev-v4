@@ -14,7 +14,12 @@ final class HeadingType extends AbstractType
     {
         $builder
             ->add('content', null, ['label' => 'Titre', 'empty_data' => ''])
-            ->add('level', EnumType::class, ['class' => HeadingLevel::class, 'label' => 'Niveau', 'expanded' => true])
+            ->add('level', EnumType::class, [
+                'class' => HeadingLevel::class,
+                'label' => 'Niveau',
+                'expanded' => true,
+                'empty_data' => HeadingLevel::H1->value,
+            ])
             ->add('attributes', HtmlAttributesType::class);
     }
 

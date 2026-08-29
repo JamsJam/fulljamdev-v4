@@ -28,6 +28,7 @@ final readonly class PageBuilder
                 $block->getId(),
                 $block->getType(),
                 $this->blockMapper->denormalize($block->getType(), $block->getData()),
+                $block->getPosition(),
             );
         }
 

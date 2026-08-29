@@ -1,0 +1,31 @@
+<div class="page-builder__block-fields">
+    <div class="page-builder__grid page-builder__essentials">
+        <twig:Form:Field :field="data.title.content" label="Titre" />
+        <twig:Form:Field :field="data.text.content" label="Texte" />
+    </div>
+
+    <details class="page-builder__settings">
+        <summary>Réglages du titre et du texte</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.title.level" />
+            <div class="page-builder__grid">
+                <twig:Form:KeyValueCollection :field="data.title.attributes" />
+                <twig:Form:KeyValueCollection :field="data.text.attributes" />
+            </div>
+        </div>
+    </details>
+
+    <details class="page-builder__settings" data-controller="link-target">
+        <summary>Bouton CTA</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.cta.label" />
+            <twig:Form:Field :field="data.cta.target" :widgetAttr="{'data-link-target-target': 'type', 'data-action': 'link-target#toggle'}" />
+            <div data-link-target-target="route">
+                <twig:Form:Field :field="data.cta.routeName" />
+                <twig:Form:KeyValueCollection :field="data.cta.routeParameters" legend="Paramètres de route" keyLabel="Paramètre" valueLabel="Valeur" addLabel="Ajouter un paramètre" />
+            </div>
+            <div data-link-target-target="url"><twig:Form:Field :field="data.cta.href" /></div>
+            <twig:Form:KeyValueCollection :field="data.cta.attributes" legend="Attributs HTML" />
+        </div>
+    </details>
+</div>

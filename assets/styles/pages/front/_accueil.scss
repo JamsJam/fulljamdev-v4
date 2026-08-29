@@ -1,0 +1,73 @@
+@use "../../abstract/" as *;
+@use "../../page-block/hero/classic-square" as *;
+@use "../../page-block/card-display" as *;
+@use "../../page-block/cta" as *;
+@use "../../page-block/faq" as *;
+@use "../../page-block/planning" as *;
+
+// .front--accueil main > section:first-child {
+//     background: var(--gradient-vertical);
+// }
+
+main[data-page="accueil"] {
+    .hero-classic-square {
+        &::before {
+            background: color-mix(in oklch, var(--background-accent) 28%, transparent);
+        }
+
+        &__title {
+            color: var(--text);
+        }
+
+        &__lead,
+        &__placeholder {
+            color: var(--text-mute);
+        }
+
+        &__glow {
+            background: linear-gradient(135deg, var(--background-accent), var(--button-primary-background));
+        }
+
+        &__media {
+            background: color-mix(in oklch, var(--background-purple) 72%, transparent);
+            border-color: color-mix(in oklch, var(--border) 75%, transparent);
+        }
+
+        &__placeholder {
+            background:
+                linear-gradient(
+                    145deg,
+                    color-mix(in oklch, var(--button-primary-background) 36%, var(--background-purple)),
+                    var(--background-dark)
+                );
+        }
+    }
+
+    .cta-center {
+        padding-block: clamp(6rem, 12vw, 10rem);
+        color: var(--background-dark);
+        background: linear-gradient(
+            180deg,
+            var(--background-dark) 0%,
+            #E9E2FF 18%,
+            #E9E2FF 82%,
+            var(--background-dark) 100%
+        );
+    }
+
+    .display-card {
+        background:
+            linear-gradient(145deg, color-mix(in oklch, var(--background-accent) 8%, transparent), transparent 4%),
+            color-mix(in oklch, var(--background-dark) 93%, var(--background-purple));
+
+        &__title {
+            font-size: var(--text-l);
+        }
+    }
+
+    @media (max-width: $screen-xl) {
+        .card-display__grid {
+            grid-template-columns: 1fr;
+        }
+    }
+}

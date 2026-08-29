@@ -1,0 +1,31 @@
+<div class="page-builder__block-fields">
+    <div class="page-builder__grid page-builder__essentials">
+        <twig:Form:Field :field="data.title.content" label="Titre" />
+        <twig:Form:Field :field="data.text.content" label="Texte" />
+    </div>
+
+    <details class="page-builder__settings">
+        <summary>Réglages du titre et du texte</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.title.level" />
+            <div class="page-builder__grid">
+                <twig:Form:KeyValueCollection :field="data.title.attributes" />
+                <twig:Form:KeyValueCollection :field="data.text.attributes" />
+            </div>
+        </div>
+    </details>
+
+    {% set item_prototype %}{% include 'dashboard/page/block/_faq_item_form.html.twig' with {item: data.items.vars.prototype} only %}{% endset %}
+    <fieldset
+        class="page-builder__faq-items page-builder__settings-content"
+        data-controller="form-collection"
+        data-form-collection-index-value="{{ data.items|length }}"
+        data-form-collection-prototype-value="{{ item_prototype|e('html_attr') }}"
+    >
+        <legend>Questions et réponses</legend>
+        <ul data-form-collection-target="collectionContainer">
+            {% for item in data.items %}{% include 'dashboard/page/block/_faq_item_form.html.twig' with {item: item} only %}{% endfor %}
+        </ul>
+        <twig:Admin:Button variant="outline" label="Ajouter une question" data-action="form-collection#addCollectionElement" />
+    </fieldset>
+</div>

@@ -1,0 +1,7 @@
+<section
+    class="hero-with-fs-image{% if data.reverse %} hero-with-fs-image--reverse{% endif %}"
+    data-block-id="{{ blockId }}"
+>
+    {% include 'components/page/block/hero/shared/_content.html.twig' with {hero_class: 'hero-with-fs-image'} %}
+    {% include 'components/page/block/hero/shared/_media.html.twig' with {hero_class: 'hero-with-fs-image'} %}
+</section>

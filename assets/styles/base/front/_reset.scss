@@ -1,0 +1,109 @@
+@use "../../abstract/" as *;
+@use "../../abstract/front" as front;
+@use "../../animations/variables" as animation;
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+:root {
+    font-size: 16px;
+
+    --background-dark: #{front.$background-dark};
+    --background-purple: #{front.$background-purple};
+    --background-accent: #{front.$background-accent};
+    --border: #{front.$border};
+    --border-mute: #{front.$border-mute};
+    --text: #{front.$text};
+    --text-mute: hsl(from var(--text) h s l / 0.75);
+    --shadow: #{front.$shadow};
+    --gradient-vertical: #{front.$gradient-vertical};
+    --gradient-vertical-reverse: #{front.$gradient-vertical-reverse};
+    --gradient-cta: #{front.$gradient-cta};
+    --button-primary-border: #{front.$button-primary-border};
+    --button-primary-background: #{front.$button-primary-background};
+    --button-secondary-border: #{front.$button-secondary-border};
+    --button-secondary-background: #{front.$button-secondary-background};
+    --button-cta-background: #{front.$button-cta-background};
+    --button-cta-color: #{front.$button-cta-color};
+
+    @each $key, $value in $fontfamily {
+        --font-#{$key}: #{$value};
+    }
+
+    @each $key, $value in map-get($fontsize, desktop) {
+        --#{$key}: #{$value};
+    }
+
+    @each $property, $scale in $spaces {
+        @each $key, $value in $scale {
+            --#{$property}-#{$key}: #{$value};
+        }
+    }
+
+    @each $key, $value in animation.$animations {
+        --animation-#{$key}: #{$value};
+    }
+
+    @media (max-width: $screen-l) {
+        @each $key, $value in map-get($fontsize, tablet) {
+            --#{$key}: #{$value};
+        }
+    }
+
+    @media (max-width: $screen-m) {
+        @each $key, $value in map-get($fontsize, mobile) {
+            --#{$key}: #{$value};
+        }
+    }
+}
+
+html,
+body {
+    min-width: 100dvw;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+body.front {
+    font-family: var(--font-text);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-title);
+    }
+
+    h1 {
+        font-size: var(--h1);
+    }
+
+    h2 {
+        font-size: var(--h2);
+    }
+
+    h3 {
+        font-size: var(--h3);
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    main {
+        position: relative;
+    }
+
+    section {
+        padding-block: 4rem;
+        padding-inline: clamp(1rem, -0.2353rem + 4.7059vw, 4rem);
+    }
+}

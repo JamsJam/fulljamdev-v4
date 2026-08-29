@@ -28,10 +28,14 @@
             <directory>tests/Page/Integration</directory>
             <directory>tests/Reservation/Integration</directory>
             <directory>tests/Settings/Integration</directory>
-            <directory>tests/Content/Integration</directory>
+            <directory>tests/Experience/Integration</directory>
+            <directory>tests/Project/Integration</directory>
         </testsuite>
         <testsuite name="Application">
             <directory>tests/Settings/Application</directory>
+            <directory>tests/Experience/Application</directory>
+            <directory>tests/Project/Application</directory>
+            <directory>tests/Blog/Application</directory>
         </testsuite>
     </testsuites>
 

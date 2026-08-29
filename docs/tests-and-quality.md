@@ -8,7 +8,10 @@ Les tests sont regroupés d’abord par domaine, puis par type :
 
 ```text
 tests/
+├── Blog/Application
+├── Experience/{Integration,Application}
 ├── Page/{Unit,Integration}
+├── Project/{Integration,Application}
 ├── Reservation/{Unit,Integration}
 ├── Settings/{Integration,Application}
 ├── Shared/Unit
@@ -19,7 +22,7 @@ tests/
 
 - `Unit` : classe isolée, sans kernel Symfony ;
 - `Integration` : combinaison de services avec `KernelTestCase`, conteneur ou infrastructure réelle ;
-- `Application` : application complète avec requêtes HTTP ;
+- `Application` : application complète avec requêtes HTTP et vérification des réponses ;
 - E2E : futurs parcours JavaScript/Turbo avec Panther.
 
 Les tests unitaires couvrent les succès, erreurs et limites pertinents.
@@ -52,6 +55,8 @@ make test-application
 Le conteneur MySQL de test est exposé par défaut sur le port hôte `3307` afin de ne pas entrer en conflit avec une base locale sur `3306`. Ce port peut être remplacé avec `TEST_DATABASE_PORT`.
 
 Les tests Doctrine utilisent des transactions afin de rester indépendants.
+
+`make test-application` utilise le même cycle Docker pour permettre aux parcours HTTP d’accéder à une base isolée.
 
 ## Exécution par domaine
 

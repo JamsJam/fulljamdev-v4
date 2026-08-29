@@ -110,9 +110,22 @@ test-db:
 	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:create --env=test
 	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:migrations:migrate --env=test --no-interaction
 
-# ? Lance uniquement les tests des cas d’usage applicatifs
+# ? Lance les tests applicatifs puis nettoie la base et le conteneur Docker
 test-application:
-	$(PHPUNIT) --testsuite Application $(TEST_OPTIONS)
+	@TEST_STATUS=0; \
+	$(MAKE) test-db || TEST_STATUS=$$?; \
+	if [ $$TEST_STATUS -eq 0 ]; then \
+		DATABASE_URL='$(TEST_DATABASE_URL)' $(PHPUNIT) --testsuite Application $(TEST_OPTIONS) || TEST_STATUS=$$?; \
+	fi; \
+	DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists || { \
+		CLEANUP_STATUS=$$?; \
+		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
+	}; \
+	MYSQL_PORT=$(TEST_DATABASE_PORT) $(DOCKER_COMPOSE) rm --stop --force database || { \
+		CLEANUP_STATUS=$$?; \
+		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
+	}; \
+	exit $$TEST_STATUS
 
 # ? Lance tous les tests du domaine Page
 test-page:

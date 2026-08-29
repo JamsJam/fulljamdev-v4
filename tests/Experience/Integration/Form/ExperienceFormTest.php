@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Tests\Content\Integration\Form;
+namespace App\Tests\Experience\Integration\Form;
 
 use App\Application\Experience\Dto\ExperienceDto;
 use App\Application\Experience\Factory\ExperienceFactory;
 use App\Application\Experience\Form\ExperienceType;
-use App\Application\Project\Dto\ProjectDto;
-use App\Application\Project\Form\ProjectType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 
-final class ContentFormTest extends KernelTestCase
+final class ExperienceFormTest extends KernelTestCase
 {
     public function testExperienceFormAcceptsFormattedRealizations(): void
     {
@@ -30,29 +28,6 @@ final class ContentFormTest extends KernelTestCase
 
         self::assertTrue($form->isValid(), (string) $form->getErrors(true));
         self::assertSame('<p><strong>API Platform</strong></p><ul><li>Tests automatisés</li></ul>', $dto->about);
-    }
-
-    public function testProjectFormConvertsTechnologiesToAList(): void
-    {
-        self::bootKernel();
-        $dto = new ProjectDto();
-        $form = self::getContainer()->get(FormFactoryInterface::class)->create(ProjectType::class, $dto, ['csrf_protection' => false]);
-        $form->submit([
-            'title' => 'Portfolio',
-            'slug' => 'portfolio',
-            'excerpt' => '',
-            'content' => 'Présentation du projet',
-            'featuredImage' => '',
-            'technologies' => "Symfony\nTwig",
-            'websiteUrl' => '',
-            'repositoryUrl' => '',
-            'isFeatured' => '1',
-            'status' => 'draft',
-            'publishedAt' => '',
-        ]);
-
-        self::assertTrue($form->isValid(), (string) $form->getErrors(true));
-        self::assertSame(['Symfony', 'Twig'], $dto->technologies);
     }
 
     public function testExperienceRealizationsAreSanitizedBeforePersistence(): void

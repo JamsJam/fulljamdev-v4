@@ -7,7 +7,7 @@ use Symfony\Component\Clock\ClockInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent]
+#[AsTwigComponent(name: 'Admin:Aside', template: 'components/admin/Aside.html.twig')]
 final class Aside
 {
     public string $brand = 'Fulljamdev';

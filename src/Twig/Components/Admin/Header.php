@@ -4,7 +4,7 @@ namespace App\Twig\Components\Admin;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent]
+#[AsTwigComponent(name: 'Admin:Header', template: 'components/admin/Header.html.twig')]
 final class Header
 {
     /** @var list<array{label: string, route: string}> */

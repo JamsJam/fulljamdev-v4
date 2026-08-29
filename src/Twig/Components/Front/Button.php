@@ -33,7 +33,11 @@ final class Button
 
     public function getResolvedLabel(): string
     {
-        return $this->cta?->label ?? $this->label ?? 'Action';
+        if (null !== $this->cta) {
+            return $this->cta->label;
+        }
+
+        return $this->label ?? 'Action';
     }
 
     public function getResolvedHref(): ?string
@@ -61,9 +65,6 @@ final class Button
 
         $html = '';
         foreach ($this->cta->attributes as $name => $value) {
-            if (!is_scalar($value) && null !== $value) {
-                continue;
-            }
             $normalizedName = strtolower($name);
             if (!in_array($normalizedName, ['id', 'target', 'rel', 'title'], true)
                 && !str_starts_with($normalizedName, 'aria-')

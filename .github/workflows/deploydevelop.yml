@@ -32,14 +32,8 @@ jobs:
       - name: Installer les dependances Composer
         run: composer install --no-interaction --no-progress --prefer-dist
 
-      - name: Executer les linters Symfony et PHP
-        run: make quality
-
-      - name: Executer PHPStan
-        run: vendor/bin/phpstan analyse --no-progress
-
-      - name: Executer les tests
-        run: php bin/phpunit --testdox
+      - name: Executer les controles qualite et les tests
+        run: make test TEST_OPTIONS=--testdox
 
   deploy:
     needs: quality

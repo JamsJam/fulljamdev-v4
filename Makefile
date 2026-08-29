@@ -9,6 +9,7 @@ SYMFONY ?= symfony
 CONSOLE := $(PHP) bin/console
 PHP_CS_FIXER := vendor/bin/php-cs-fixer
 PHPUNIT := $(PHP) bin/phpunit
+TEST_OPTIONS ?=
 BDI := vendor/bin/bdi
 PHPSTAN := vendor/bin/phpstan
 
@@ -74,19 +75,18 @@ phpstan:
 # ? Lance les linters puis les suites de tests et s’arrête dès qu’une étape échoue
 test:
 	$(MAKE) quality && \
-	$(MAKE) lint && \
 	$(MAKE) test-unit && \
 	$(MAKE) test-integration && \
 	$(MAKE) test-application
 
 # ? Lance uniquement les tests unitaires isolés
 test-unit:
-	$(PHPUNIT) --testsuite Unit
+	$(PHPUNIT) --testsuite Unit $(TEST_OPTIONS)
 
 # ? Lance uniquement les tests d’intégration Symfony et infrastructure
 test-integration: test-db
 	@TEST_STATUS=0; \
-	$(PHPUNIT) --testsuite Integration || TEST_STATUS=$$?; \
+	$(PHPUNIT) --testsuite Integration $(TEST_OPTIONS) || TEST_STATUS=$$?; \
 	DROP_STATUS=0; \
 	$(CONSOLE) doctrine:database:drop --env=test --force --if-exists || DROP_STATUS=$$?; \
 	if [ $$TEST_STATUS -ne 0 ]; then exit $$TEST_STATUS; fi; \
@@ -100,24 +100,24 @@ test-db:
 
 # ? Lance uniquement les tests des cas d’usage applicatifs
 test-application:
-	$(PHPUNIT) --testsuite Application
+	$(PHPUNIT) --testsuite Application $(TEST_OPTIONS)
 
 # ? Lance tous les tests du domaine Page
 test-page:
-	$(PHPUNIT) tests/Page
+	$(PHPUNIT) tests/Page $(TEST_OPTIONS)
 
 # ? Lance tous les tests du domaine Reservation
 test-reservation:
-	$(PHPUNIT) tests/Reservation
+	$(PHPUNIT) tests/Reservation $(TEST_OPTIONS)
 
 # ? Lance tous les tests du domaine Settings
 test-settings:
-	$(PHPUNIT) tests/Settings
+	$(PHPUNIT) tests/Settings $(TEST_OPTIONS)
 
 # ? Lance tous les tests des services partagés
 test-shared:
-	$(PHPUNIT) tests/Shared
+	$(PHPUNIT) tests/Shared $(TEST_OPTIONS)
 
 # ? Lance tous les tests des composants UI
 test-ui:
-	$(PHPUNIT) tests/UI
+	$(PHPUNIT) tests/UI $(TEST_OPTIONS)

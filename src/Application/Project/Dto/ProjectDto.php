@@ -3,8 +3,8 @@
 namespace App\Application\Project\Dto;
 
 use App\Entity\Project\Technology;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class ProjectDto
 {

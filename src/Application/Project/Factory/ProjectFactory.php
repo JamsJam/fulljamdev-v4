@@ -2,8 +2,8 @@
 
 namespace App\Application\Project\Factory;
 
-use App\Application\Project\Dto\ProjectDto;
 use App\Application\Project\Asset\ProjectImageUploader;
+use App\Application\Project\Dto\ProjectDto;
 use App\Entity\Project\Project;
 use App\Entity\Project\ProjectImage;
 use App\Service\HtmlSanitizerService;

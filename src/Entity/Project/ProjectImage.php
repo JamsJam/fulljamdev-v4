@@ -29,23 +29,54 @@ class ProjectImage
         $this->projects = new ArrayCollection();
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getPath(): string { return $this->path; }
-    public function setPath(string $path): static { $this->path = $path; return $this; }
-    public function getOriginalName(): string { return $this->originalName; }
-    public function setOriginalName(string $originalName): static { $this->originalName = $originalName; return $this; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): static
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function getOriginalName(): string
+    {
+        return $this->originalName;
+    }
+
+    public function setOriginalName(string $originalName): static
+    {
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
     /** @return Collection<int, Project> */
-    public function getProjects(): Collection { return $this->projects; }
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
 
     public function addProject(Project $project): static
     {
-        if (!$this->projects->contains($project)) { $this->projects->add($project); }
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+        }
+
         return $this;
     }
 
     public function removeProject(Project $project): static
     {
         $this->projects->removeElement($project);
+
         return $this;
     }
 }

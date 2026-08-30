@@ -30,6 +30,23 @@ final class BreadcrumbMapper
         'settings' => [
             'label' => 'Paramètres',
         ],
+        'blog' => [
+            'label' => 'Blog',
+        ],
+        'article' => [
+            'label' => 'Articles',
+            'route' => 'app_dashboard_blog',
+        ],
+        'category' => [
+            'label' => 'Catégories',
+            'route' => 'app_dashboard_blog',
+        ],
+        'new' => [
+            'label' => 'Ajouter',
+        ],
+        'edit' => [
+            'label' => 'Modifier',
+        ],
     ];
 
     /**

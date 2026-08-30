@@ -73,6 +73,9 @@
             ".php-cs-fixer.dist.php"
         ]
     },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.10.0"
+    },
     "nelmio/cors-bundle": {
         "version": "2.5",
         "recipe": {
@@ -264,6 +267,15 @@
         "files": [
             "config/packages/notifier.yaml"
         ]
+    },
+    "symfony/panther": {
+        "version": "2.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "eac1868f830a3e332764bb3919ab02311b3340c8"
+        }
     },
     "symfony/property-info": {
         "version": "7.3",

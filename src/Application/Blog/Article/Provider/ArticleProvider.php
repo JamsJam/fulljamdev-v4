@@ -2,8 +2,8 @@
 
 namespace App\Application\Blog\Article\Provider;
 
-use App\Entity\Content\Article;
-use App\Repository\Content\ArticleRepository;
+use App\Entity\Blog\Article;
+use App\Repository\Blog\ArticleRepository;
 
 final readonly class ArticleProvider
 {
@@ -22,8 +22,12 @@ final readonly class ArticleProvider
         return $this->repository->find($id);
     }
 
-    public function slugExists(string $slug, ?int $exceptId = null): bool
+    public function slugExists(?string $slug, ?int $exceptId = null): bool
     {
+        if (null === $slug || '' === trim($slug)) {
+            return false;
+        }
+
         $article = $this->repository->findOneBy(['slug' => $slug]);
 
         return null !== $article && $article->getId() !== $exceptId;

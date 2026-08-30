@@ -1,0 +1,2 @@
+{% extends 'adminBase.html.twig' %}{% block title %}{{ creation ? 'Ajouter une catégorie' : 'Modifier une catégorie' }}{% endblock %}{% block body %}<section class="content-manager content-manager--form"><header class="content-manager__header"><div><h1>{{ creation ? 'Ajouter une catégorie' : 'Modifier une catégorie' }}</h1><p>Une catégorie peut regrouper plusieurs articles.</p></div></header>{% include 'dashboard/_form.html.twig' with {form: form, cancel_path: path('app_dashboard_blog')} only %}</section>{% endblock %}
+{# Blog category form. #}

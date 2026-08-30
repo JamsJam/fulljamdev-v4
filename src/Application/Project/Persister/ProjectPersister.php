@@ -2,7 +2,7 @@
 
 namespace App\Application\Project\Persister;
 
-use App\Entity\Content\Project;
+use App\Entity\Project\Project;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class ProjectPersister

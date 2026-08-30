@@ -2,8 +2,8 @@
 
 namespace App\Application\Blog\Category\Provider;
 
-use App\Entity\Content\Category;
-use App\Repository\Content\CategoryRepository;
+use App\Entity\Blog\Category;
+use App\Repository\Blog\CategoryRepository;
 
 final readonly class CategoryProvider
 {

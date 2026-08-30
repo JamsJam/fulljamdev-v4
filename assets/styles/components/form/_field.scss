@@ -2,6 +2,7 @@
     display: grid;
     gap: 0.5rem;
     width: 100%;
+    justify-content: stretch;
 
     &__label {
         color: var(--foreground, var(--text));

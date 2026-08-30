@@ -1,0 +1,50 @@
+{% extends 'adminBase.html.twig' %}
+{% block title %}Projets{% endblock %}
+{% block body %}
+{% set counts = {all: projects|length, draft: 0, published: 0, featured: 0} %}
+{% for project in projects %}
+    {% set counts = counts|merge({(project.status): attribute(counts, project.status) + 1}) %}
+    {% if project.featured %}{% set counts = counts|merge({featured: counts.featured + 1}) %}{% endif %}
+{% endfor %}
+<section class="project-dashboard" aria-labelledby="projects-title" data-controller="project-dashboard">
+    <header class="project-dashboard__header">
+        <div><p class="project-dashboard__eyebrow">Portfolio</p><h1 id="projects-title">Projets</h1><p>Gérez vos réalisations, leurs technologies et leur visibilité.</p></div>
+        <twig:Admin:Button icon="material-symbols:add-rounded" label="Nouveau projet" href="{{ path('app_dashboard_project_new') }}" />
+    </header>
+    <div class="project-dashboard__stats">
+        {% for stat in [
+            {label: 'Total des projets', value: counts.all, icon: 'material-symbols:folder-open-outline-rounded'},
+            {label: 'Projets publiés', value: counts.published, icon: 'material-symbols:check-circle-outline-rounded', tone: 'success'},
+            {label: 'Brouillons', value: counts.draft, icon: 'material-symbols:edit-note-rounded'},
+            {label: 'Mis en avant', value: counts.featured, icon: 'material-symbols:star-outline-rounded', tone: 'featured'}
+        ] %}
+            <article class="project-dashboard__stat project-dashboard__stat--{{ stat.tone|default('neutral') }}"><span class="project-dashboard__stat-icon">{{ ux_icon(stat.icon) }}</span><div><span>{{ stat.label }}</span><strong>{{ stat.value }}</strong></div></article>
+        {% endfor %}
+    </div>
+    <div class="project-dashboard__card">
+        <div class="project-dashboard__card-header">
+            <div><h2>Tous les projets</h2><p>Consultez et organisez les projets de votre portfolio.</p></div>
+            <div class="project-dashboard__toolbar">
+                <label class="project-dashboard__search">{{ ux_icon('material-symbols:search-rounded') }}<input type="search" placeholder="Rechercher un projet…" aria-label="Rechercher un projet" data-project-dashboard-target="search" data-action="input->project-dashboard#filter"></label>
+                <label class="project-dashboard__filter"><span class="sr-only">Filtrer les projets</span><select data-project-dashboard-target="status" data-action="change->project-dashboard#filter"><option value="all">Tous les statuts</option><option value="published">Publiés</option><option value="draft">Brouillons</option><option value="featured">Mis en avant</option></select>{{ ux_icon('material-symbols:keyboard-arrow-down-rounded') }}</label>
+            </div>
+        </div>
+        {% if projects is empty %}
+            <div class="project-dashboard__empty">{{ ux_icon('material-symbols:folder-open-outline-rounded') }}<h2>Aucun projet</h2><p>Créez votre premier projet pour commencer à construire votre portfolio.</p></div>
+        {% else %}
+            <div class="project-dashboard__table-wrapper"><table class="project-dashboard__table">
+                <thead><tr><th>Projet</th><th>Technologies</th><th>Statut</th><th>Publication</th><th><span class="sr-only">Actions</span></th></tr></thead>
+                <tbody>{% for project in projects %}{% set main_image = project.images.first %}<tr data-project-dashboard-target="row" data-status="{{ project.status }}" data-featured="{{ project.featured ? 'true' : 'false' }}" data-search="{{ (project.title ~ ' ' ~ (project.excerpt ?? '') ~ ' ' ~ project.slug ~ ' ' ~ project.technologies|map(technology => technology.name)|join(' '))|lower }}">
+                    <td><div class="project-dashboard__project"><div class="project-dashboard__thumbnail">{% if main_image %}<img src="{{ asset(main_image.path) }}" alt="">{% else %}{{ ux_icon('material-symbols:image-outline-rounded') }}{% endif %}</div><div><div class="project-dashboard__title"><strong>{{ project.title }}</strong>{% if project.featured %}<span title="Mis en avant">{{ ux_icon('material-symbols:star-rounded') }}</span>{% endif %}</div><p>/{{ project.slug }}</p></div></div></td>
+                    <td><div class="project-dashboard__technologies">{% for technology in project.technologies|slice(0, 3) %}<span>{{ technology.name }}</span>{% endfor %}{% if project.technologies|length > 3 %}<span>+{{ project.technologies|length - 3 }}</span>{% endif %}</div></td>
+                    <td><span class="project-dashboard__status project-dashboard__status--{{ project.status }}"><i></i>{{ project.status == 'published' ? 'Publié' : 'Brouillon' }}</span></td>
+                    <td class="project-dashboard__date">{{ project.publishedAt ? project.publishedAt|date('d/m/Y') : 'Non publié' }}</td>
+                    <td><details class="project-dashboard__menu"><summary aria-label="Actions pour {{ project.title }}">{{ ux_icon('material-symbols:more-horiz') }}</summary><div class="project-dashboard__menu-content"><a href="{{ path('app_dashboard_project_edit', {id: project.id}) }}">{{ ux_icon('material-symbols:edit-outline-rounded') }} Modifier</a>{% if project.websiteUrl %}<a href="{{ project.websiteUrl }}" target="_blank" rel="noopener noreferrer">{{ ux_icon('material-symbols:open-in-new-rounded') }} Voir le site</a>{% endif %}<form method="post" action="{{ path('app_dashboard_project_delete', {id: project.id}) }}" onsubmit="return confirm('Supprimer ce projet ?')"><input type="hidden" name="_token" value="{{ csrf_token('delete_project_' ~ project.id) }}"><button class="is-destructive" type="submit">{{ ux_icon('material-symbols:delete-outline-rounded') }} Supprimer</button></form></div></details></td>
+                </tr>{% endfor %}</tbody>
+            </table></div>
+            <div class="project-dashboard__no-results" hidden data-project-dashboard-target="empty">Aucun projet ne correspond à votre recherche.</div>
+            <footer class="project-dashboard__footer"><span data-project-dashboard-target="resultCount">{{ projects|length }} projet{{ projects|length > 1 ? 's' : '' }}</span></footer>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

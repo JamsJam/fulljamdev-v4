@@ -37,6 +37,9 @@
             <directory>tests/Project/Application</directory>
             <directory>tests/Blog/Application</directory>
         </testsuite>
+        <testsuite name="EndToEnd">
+            <directory>tests/Blog/EndToEnd</directory>
+        </testsuite>
     </testsuites>
 
     <source ignoreSuppressionOfDeprecations="true"
@@ -56,5 +59,6 @@
     </source>
 
     <extensions>
+        <bootstrap class="Symfony\Component\Panther\ServerExtension" />
     </extensions>
 </phpunit>

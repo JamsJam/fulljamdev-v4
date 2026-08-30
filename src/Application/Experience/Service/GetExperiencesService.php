@@ -3,7 +3,7 @@
 namespace App\Application\Experience\Service;
 
 use App\Application\Experience\Provider\ExperienceProvider;
-use App\Entity\Content\Experience;
+use App\Entity\Experience\Experience;
 
 final readonly class GetExperiencesService
 {

@@ -3,12 +3,14 @@
 namespace App\Application\Project\Factory;
 
 use App\Application\Project\Dto\ProjectDto;
-use App\Entity\Content\Project;
+use App\Application\Project\Asset\ProjectImageUploader;
+use App\Entity\Project\Project;
+use App\Entity\Project\ProjectImage;
 use App\Service\HtmlSanitizerService;
 
 final readonly class ProjectFactory
 {
-    public function __construct(private HtmlSanitizerService $sanitizer)
+    public function __construct(private HtmlSanitizerService $sanitizer, private ProjectImageUploader $imageUploader)
     {
     }
 
@@ -16,11 +18,9 @@ final readonly class ProjectFactory
     {
         $dto = new ProjectDto();
         $dto->title = $project->getTitle();
-        $dto->slug = $project->getSlug();
         $dto->excerpt = $project->getExcerpt();
         $dto->content = $project->getContent();
-        $dto->featuredImage = $project->getFeaturedImage();
-        $dto->technologies = $project->getTechnologies();
+        $dto->technologies = $project->getTechnologies()->toArray();
         $dto->websiteUrl = $project->getWebsiteUrl();
         $dto->repositoryUrl = $project->getRepositoryUrl();
         $dto->isFeatured = $project->isFeatured();
@@ -32,6 +32,24 @@ final readonly class ProjectFactory
 
     public function create(ProjectDto $dto, ?Project $project = null): Project
     {
-        return ($project ?? new Project())->setTitle($dto->title)->setSlug($dto->slug)->setExcerpt($dto->excerpt)->setContent($this->sanitizer->sanitize($dto->content))->setFeaturedImage($dto->featuredImage)->setTechnologies($dto->technologies)->setWebsiteUrl($dto->websiteUrl)->setRepositoryUrl($dto->repositoryUrl)->setIsFeatured($dto->isFeatured)->setStatus($dto->status)->setPublishedAt($dto->publishedAt);
+        $project ??= new Project();
+        $selected = [];
+        foreach ($dto->technologies as $technology) {
+            $selected[$technology->getId() ?? spl_object_id($technology)] = $technology;
+            $project->addTechnology($technology);
+        }
+        foreach ($project->getTechnologies()->toArray() as $technology) {
+            if (!isset($selected[$technology->getId() ?? spl_object_id($technology)])) {
+                $project->removeTechnology($technology);
+            }
+        }
+
+        foreach ($dto->imageFiles as $file) {
+            $project->addImage((new ProjectImage())
+                ->setPath($this->imageUploader->upload($file))
+                ->setOriginalName($file->getClientOriginalName()));
+        }
+
+        return $project->setTitle($dto->title)->setExcerpt($dto->excerpt)->setContent($this->sanitizer->sanitize($dto->content))->setWebsiteUrl($dto->websiteUrl)->setRepositoryUrl($dto->repositoryUrl)->setIsFeatured($dto->isFeatured);
     }
 }

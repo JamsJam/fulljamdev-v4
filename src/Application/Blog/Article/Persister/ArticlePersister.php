@@ -2,7 +2,7 @@
 
 namespace App\Application\Blog\Article\Persister;
 
-use App\Entity\Content\Article;
+use App\Entity\Blog\Article;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class ArticlePersister

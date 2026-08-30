@@ -19,7 +19,7 @@ TEST_OPTIONS ?=
 BDI := vendor/bin/bdi
 PHPSTAN := vendor/bin/phpstan
 
-.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-assets test-db test-unit test-integration test-application test-page test-reservation test-settings test-shared test-ui
+.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-assets test-db test-unit test-integration test-application test-e2e test-page test-reservation test-settings test-shared test-ui
 
 # * Le scan de style est non modifiant par défaut
 DR ?= 1
@@ -92,6 +92,7 @@ test-unit:
 # ? Compile les feuilles Sass requises par les rendus Twig et AssetMapper
 test-assets:
 	$(CONSOLE) sass:build --env=test
+	$(CONSOLE) asset-map:compile --env=test
 
 # ? Lance les tests d’intégration puis nettoie la base et le conteneur Docker
 test-integration: test-assets
@@ -129,6 +130,23 @@ test-application: test-assets
 	$(MAKE) test-db && DATABASE_READY=1 || TEST_STATUS=$$?; \
 	if [ $$TEST_STATUS -eq 0 ]; then \
 		DATABASE_URL='$(TEST_DATABASE_URL)' $(PHPUNIT) --testsuite Application $(TEST_OPTIONS) || TEST_STATUS=$$?; \
+	fi; \
+	if [ $$DATABASE_READY -eq 1 ]; then DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists; fi || { \
+		CLEANUP_STATUS=$$?; \
+		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
+	}; \
+	MYSQL_PORT=$(TEST_DATABASE_PORT) $(DOCKER_COMPOSE) rm --stop --force database || { \
+		CLEANUP_STATUS=$$?; \
+		if [ $$TEST_STATUS -eq 0 ]; then TEST_STATUS=$$CLEANUP_STATUS; fi; \
+	}; \
+	exit $$TEST_STATUS
+
+# ? Lance les tests navigateur avec la même base MySQL isolée que les autres tests
+test-e2e: test-assets
+	@TEST_STATUS=0; DATABASE_READY=0; \
+	$(MAKE) test-db && DATABASE_READY=1 || TEST_STATUS=$$?; \
+	if [ $$TEST_STATUS -eq 0 ]; then \
+		DATABASE_URL='$(TEST_DATABASE_URL)' $(PHPUNIT) --testsuite EndToEnd $(TEST_OPTIONS) || TEST_STATUS=$$?; \
 	fi; \
 	if [ $$DATABASE_READY -eq 1 ]; then DATABASE_URL='$(TEST_DATABASE_URL)' $(CONSOLE) doctrine:database:drop --env=test --force --if-exists; fi || { \
 		CLEANUP_STATUS=$$?; \

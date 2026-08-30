@@ -4,7 +4,7 @@ namespace App\Application\Experience\Factory;
 
 use App\Application\Experience\Dto\ExperienceDto;
 use App\Application\Experience\Service\ExperienceContentSanitizer;
-use App\Entity\Content\Experience;
+use App\Entity\Experience\Experience;
 
 final readonly class ExperienceFactory
 {

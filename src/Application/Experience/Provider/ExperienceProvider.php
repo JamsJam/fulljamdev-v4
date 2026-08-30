@@ -2,8 +2,8 @@
 
 namespace App\Application\Experience\Provider;
 
-use App\Entity\Content\Experience;
-use App\Repository\Content\ExperienceRepository;
+use App\Entity\Experience\Experience;
+use App\Repository\Experience\ExperienceRepository;
 
 final readonly class ExperienceProvider
 {

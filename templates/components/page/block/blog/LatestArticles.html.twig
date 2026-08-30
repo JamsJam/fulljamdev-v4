@@ -1,0 +1,46 @@
+{% set articles = this.articles %}
+
+{% if articles is not empty %}
+    <section class="latest-articles" data-block-id="{{ blockId }}" aria-labelledby="latest-articles-title-{{ blockId|default('preview') }}">
+        <header class="latest-articles__header">
+            <{{ data.title.level.value }} id="latest-articles-title-{{ blockId|default('preview') }}" class="latest-articles__title">{{ data.title.content }}</{{ data.title.level.value }}>
+            <p class="latest-articles__intro">{{ data.text.content }}</p>
+        </header>
+
+        <div class="latest-articles__layout">
+            {% set featured = articles|first %}
+            <article class="latest-articles__featured">
+                <a class="latest-articles__featured-link" href="{{ path('app_front_article_show', {slug: featured.slug}) }}" aria-label="Lire l’article « {{ featured.title }} »">
+                    <figure class="latest-articles__featured-media">
+                        <img src="{{ asset(featured.coverImage) }}" alt="" loading="lazy">
+                    </figure>
+                    <div class="latest-articles__featured-content">
+                        <time datetime="{{ featured.publishedAt|date('c') }}">{{ featured.publishedAt|format_datetime(pattern='d MMMM yyyy', locale='fr') }}</time>
+                        <h3>{{ featured.title }}</h3>
+                        <p>{{ featured.summary }}</p>
+                        {% if featured.category %}<span class="latest-articles__badge">{{ featured.category.name }}</span>{% endif %}
+                    </div>
+                </a>
+            </article>
+
+            {% if articles|length > 1 %}
+                <div class="latest-articles__secondary">
+                    {% for article in articles|slice(1) %}
+                        <article class="latest-articles__item">
+                            <a class="latest-articles__item-link" href="{{ path('app_front_article_show', {slug: article.slug}) }}" aria-label="Lire l’article « {{ article.title }} »">
+                                <div class="latest-articles__item-content">
+                                    <time datetime="{{ article.publishedAt|date('c') }}">{{ article.publishedAt|format_datetime(pattern='d MMMM yyyy', locale='fr') }}</time>
+                                    <h3>{{ article.title }}</h3>
+                                    {% if article.category %}<span class="latest-articles__badge">{{ article.category.name }}</span>{% endif %}
+                                </div>
+                                <figure class="latest-articles__item-media"><img src="{{ asset(article.coverImage) }}" alt="" loading="lazy"></figure>
+                            </a>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <a class="button button--primary latest-articles__all" href="{{ path('app_front_blog') }}">Voir tous les articles</a>
+    </section>
+{% endif %}

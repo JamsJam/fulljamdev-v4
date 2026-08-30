@@ -12,6 +12,6 @@ final class ListExperiencesController extends AbstractController
     #[Route('/dashboard/cv', name: 'app_dashboard_cv', methods: ['GET'])]
     public function __invoke(GetExperiencesService $service): Response
     {
-        return $this->render('dashboard/content/cv/index.html.twig', ['experiences' => $service->get()]);
+        return $this->render('dashboard/cv/index.html.twig', ['experiences' => $service->get()]);
     }
 }

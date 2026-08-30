@@ -25,6 +25,6 @@ final class CreateExperienceController extends AbstractController
             return $this->redirectToRoute('app_dashboard_cv', status: Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('dashboard/content/cv/form.html.twig', ['form' => $form, 'creation' => true], new Response(status: $form->isSubmitted() ? 422 : 200));
+        return $this->render('dashboard/cv/form.html.twig', ['form' => $form, 'creation' => true], new Response(status: $form->isSubmitted() ? 422 : 200));
     }
 }

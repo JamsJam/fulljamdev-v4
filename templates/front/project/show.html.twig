@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% set main_image = project.images.first %}
+{% block title %}{{ project.title }}{% endblock %}
+{% block metadescription %}{{ project.excerpt }}{% endblock %}
+{% block canonical %}{{ url('app_front_project_show', {slug: project.slug}) }}{% endblock %}
+{% block main_attributes %} data-page="project-detail"{% endblock %}
+{% block openGraph %}<meta property="og:type" content="website"><meta property="og:title" content="{{ project.title }}"><meta property="og:description" content="{{ project.excerpt }}"><meta property="og:url" content="{{ url('app_front_project_show', {slug: project.slug}) }}">{% if main_image %}<meta property="og:image" content="{{ absolute_url(asset(main_image.path)) }}">{% endif %}{% endblock %}
+{% block body %}
+<article class="project-detail" aria-labelledby="project-title">
+    <nav class="project-detail__breadcrumb" aria-label="Fil d’Ariane"><a href="{{ path('app_front_projects') }}">Projets</a>{{ ux_icon('material-symbols:chevron-right-rounded') }}<span aria-current="page">{{ project.title }}</span></nav>
+    <header class="project-detail__hero">
+        <div class="project-detail__heading"><p class="project-detail__eyebrow">Étude de cas</p><h1 id="project-title">{{ project.title }}</h1><p class="project-detail__summary">{{ project.excerpt }}</p><div class="project-detail__technologies">{% for technology in project.technologies %}<a href="{{ path('app_front_projects', {technology: technology.id}) }}">{{ technology.name }}</a>{% endfor %}</div><div class="project-detail__actions">{% if project.websiteUrl %}<a class="button button--primary" href="{{ project.websiteUrl }}" target="_blank" rel="noopener noreferrer">Voir le site {{ ux_icon('material-symbols:open-in-new-rounded') }}</a>{% endif %}{% if project.repositoryUrl %}<a class="button button--outline" href="{{ project.repositoryUrl }}" target="_blank" rel="noopener noreferrer">Voir le code {{ ux_icon('material-symbols:code-rounded') }}</a>{% endif %}</div></div>
+        <figure class="project-detail__cover">{% if main_image %}<img src="{{ asset(main_image.path) }}" alt="Aperçu principal du projet {{ project.title }}">{% else %}<span>{{ ux_icon('material-symbols:devices-rounded') }}</span>{% endif %}</figure>
+    </header>
+    {% if project.images|length > 1 %}<section class="project-detail__gallery" aria-labelledby="gallery-title"><h2 id="gallery-title">Aperçus du projet</h2><div>{% for image in project.images %}<figure><img src="{{ asset(image.path) }}" alt="Aperçu {{ loop.index }} du projet {{ project.title }}" loading="lazy"></figure>{% endfor %}</div></section>{% endif %}
+    <div class="project-detail__content">{{ project.content|raw }}</div>
+    <aside class="project-detail__cta"><div><p>Un projet en tête&nbsp;?</p><h2>Construisons quelque chose d’utile.</h2></div><a class="button button--primary" href="{{ path('app_front_page', {path: 'contact'}) }}">Parler de votre projet</a></aside>
+</article>
+{% endblock %}

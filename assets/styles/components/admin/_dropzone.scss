@@ -8,7 +8,7 @@
         @extend %flex-row-center-center;
         padding: 2rem;
         border-radius: 10px;
-        border: dashed 2px $admin-nuance-w-87;
+        border: dashed 2px var(--border-muted);
         position:relative;
         min-height: 100px;
 
@@ -17,10 +17,10 @@
 
 
         &:hover{
-            background-color: $admin-nuance-b-30;
+            background-color: var(--muted);
         }
         &.draghover{
-            background-color: $admin-nuance-b-20;
+            background-color: color-mix(in srgb, var(--muted) 65%, var(--primary));
 
         }
 
@@ -30,7 +30,7 @@
         
         pointer-events: none;
         text-align: center;
-        color: $admin-nuance-w-87;
+        color: var(--text-muted);
         font-weight: 600;
 
         &.hide{
@@ -83,7 +83,7 @@
         &__filename{
             word-wrap: anywhere;
             text-align-last: center;
-            color: $admin-nuance-w-100;
+            color: var(--text);
         }
     }
 

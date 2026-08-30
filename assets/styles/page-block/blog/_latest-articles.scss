@@ -1,0 +1,118 @@
+@use "../../abstract/" as *;
+
+.latest-articles {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    color: var(--text);
+
+    &__header {
+        display: grid;
+        max-width: 64rem;
+        gap: 1rem;
+    }
+
+    &__title { font-size: var(--h1); }
+    &__intro { color: var(--text-mute); font-size: var(--text-m); line-height: 1.6; }
+
+    &__layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        align-items: stretch;
+        gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    &__featured,
+    &__secondary { min-width: 0; }
+
+    &__featured {
+        overflow: hidden;
+        background: color-mix(in srgb, var(--background-purple) 55%, var(--background-dark));
+        border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+        border-radius: 1rem;
+        transition: border-color 160ms ease, transform 160ms ease;
+
+        &:hover { border-color: var(--button-primary-border); transform: translateY(-0.15rem); }
+        &:focus-within { outline: 2px solid var(--button-primary-border); outline-offset: 3px; }
+    }
+
+    &__featured-link { display: flex; height: 100%; flex-direction: column; color: inherit; text-decoration: none; }
+    &__featured-media { margin: 0; overflow: hidden; aspect-ratio: 16 / 9; }
+    &__featured-media img,
+    &__item-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    &__featured-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: clamp(1.25rem, 3vw, 2rem);
+
+        time { color: var(--text-mute); font-size: var(--annotation); }
+        h3 { font-size: var(--h3); line-height: 1.2; text-wrap: pretty; }
+        p { color: var(--text-mute); font-size: var(--text-s); line-height: 1.6; }
+    }
+
+    &__badge {
+        display: inline-flex;
+        padding: 0.2rem 0.55rem;
+        color: var(--text);
+        border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+        border-radius: 999px;
+        font-size: var(--annotation);
+        font-weight: 600;
+    }
+
+    &__secondary { display: grid; grid-template-rows: repeat(3, minmax(0, 1fr)); }
+    &__item { min-width: 0; border-block-end: 1px solid var(--border-mute); }
+    &__item:first-child { border-block-start: 1px solid var(--border-mute); }
+    &__item-link {
+        display: grid;
+        height: 100%;
+        grid-template-columns: minmax(0, 1fr) clamp(7rem, 12vw, 10.5rem);
+        align-items: center;
+        gap: clamp(1rem, 3vw, 2rem);
+        padding-block: 1.25rem;
+        color: inherit;
+        text-decoration: none;
+
+        &:hover h3 { color: color-mix(in srgb, var(--text) 75%, var(--button-primary-border)); }
+        &:focus-visible { outline: 2px solid var(--button-primary-border); outline-offset: 3px; }
+    }
+
+    &__item-content {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.65rem;
+
+        time { color: var(--text-mute); font-size: var(--annotation); }
+        h3 { font-size: var(--text-l); line-height: 1.3; overflow-wrap: anywhere; transition: color 160ms ease; }
+    }
+
+    &__item-media { margin: 0; overflow: hidden; aspect-ratio: 1; border-radius: 0.75rem; }
+    &__all { justify-self: center; }
+
+    @media (max-width: $screen-xl) {
+        &__layout { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); gap: 2rem; }
+        &__item-link { grid-template-columns: 1fr; }
+        &__item-media { display: none; }
+    }
+
+    @media (max-width: $screen-l) {
+        &__layout { grid-template-columns: 1fr; }
+        &__secondary { grid-template-rows: none; }
+        &__item-link { min-height: 9rem; }
+    }
+
+    @media (max-width: $screen-m) {
+        &__featured-content { padding: 1rem; }
+        &__all { width: 100%; }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .latest-articles__featured,
+    .latest-articles__item-content h3 { transition: none; }
+}

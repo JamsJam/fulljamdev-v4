@@ -20,7 +20,8 @@
         <ul>
             <li><a href="{{ path('app_home') }}"{% if app.current_route == 'app_home' %} aria-current="page"{% endif %}>Accueil</a></li>
             <li><a href="{{ path('app_front_page', {path: 'about'}) }}"{% if app.request and app.request.attributes.get('path') == 'about' %} aria-current="page"{% endif %}>À propos</a></li>
-            <li><a href="{{ path('app_front_page', {path: 'blog'}) }}"{% if app.request and app.request.attributes.get('path') == 'blog' %} aria-current="page"{% endif %}>Blog</a></li>
+            <li><a href="{{ path('app_front_projects') }}"{% if app.current_route starts with 'app_front_project' %} aria-current="page"{% endif %}>Projets</a></li>
+            <li><a href="{{ path('app_front_blog') }}"{% if app.current_route starts with 'app_front_blog' or app.current_route == 'app_front_article_show' %} aria-current="page"{% endif %}>Blog</a></li>
             <li><a href="{{ path('app_front_page', {path: 'contact'}) }}"{% if app.request and app.request.attributes.get('path') == 'contact' %} aria-current="page"{% endif %}>Contact</a></li>
         </ul>
     </nav>

@@ -2,17 +2,18 @@
 
 namespace App\Application\Blog\Article\Dto;
 
-use App\Entity\Content\Category;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class ArticleDto
 {
-    #[Assert\NotBlank, Assert\Length(max: 180)] public string $title = '';
-    #[Assert\NotBlank, Assert\Regex(pattern: '/^[a-z0-9-]+$/'), Assert\Length(max: 200)] public string $slug = '';
-    public ?Category $category = null;
-    #[Assert\Length(max: 320)] public ?string $excerpt = null;
-    #[Assert\NotBlank] public string $content = '';
-    #[Assert\Length(max: 255)] public ?string $featuredImage = null;
-    #[Assert\Choice(choices: ['draft', 'published'])] public string $status = 'draft';
+    #[Assert\Length(max: 50)] public ?string $title = null;
+    #[Assert\Regex(pattern: '/^[a-z0-9-]+$/'), Assert\Length(max: 200)] public ?string $slug = null;
+    #[Assert\Length(max: 120)] public ?string $categoryName = null;
+    #[Assert\Length(max: 160)] public ?string $summary = null;
+    public ?string $content = null;
+    #[Assert\Length(max: 255)] public ?string $coverImage = null;
+    #[Assert\Image(maxSize: '5M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
+    public ?UploadedFile $coverImageFile = null;
     public ?\DateTimeImmutable $publishedAt = null;
 }

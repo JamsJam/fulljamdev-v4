@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block title %}Blog{% endblock %}
+{% block metadescription %}Conseils, retours d’expérience et ressources pour concevoir des projets web performants, accessibles et durables.{% endblock %}
+{% block canonical %}{{ url('app_front_blog') }}{% endblock %}
+{% block main_attributes %} data-page="blog-catalog"{% endblock %}
+{% block body %}
+<section class="blog-catalog" aria-labelledby="blog-catalog-title">
+    <header class="blog-catalog__hero">
+        <p class="blog-catalog__eyebrow">Ressources</p>
+        <h1 id="blog-catalog-title">Le blog</h1>
+        <p>Conseils pratiques, retours d’expérience et réflexions autour de la création de produits web.</p>
+    </header>
+
+    <form class="blog-catalog__filters" method="get" action="{{ path('app_front_blog') }}" role="search">
+        <label class="blog-catalog__search">
+            <span class="sr-only">Rechercher dans les articles</span>
+            {{ ux_icon('material-symbols:search-rounded') }}
+            <input type="search" name="q" value="{{ query }}" placeholder="Rechercher un article…" maxlength="100">
+        </label>
+        <label class="blog-catalog__select">
+            <span class="sr-only">Filtrer par catégorie</span>
+            <select name="category">
+                <option value="">Toutes les catégories</option>
+                {% for category in categories %}<option value="{{ category.slug }}"{{ selected_category == category.slug ? ' selected' : '' }}>{{ category.name }}</option>{% endfor %}
+            </select>
+            {{ ux_icon('material-symbols:keyboard-arrow-down-rounded') }}
+        </label>
+        <button class="button button--primary" type="submit">Rechercher</button>
+        {% if query or selected_category %}<a class="blog-catalog__reset" href="{{ path('app_front_blog') }}">Effacer les filtres</a>{% endif %}
+    </form>
+
+    <div class="blog-catalog__result-header"><h2>{{ articles.totalItemCount }} article{{ articles.totalItemCount > 1 ? 's' : '' }}</h2></div>
+    {% if articles is empty %}
+        <div class="blog-catalog__empty">{{ ux_icon('material-symbols:search-off-rounded') }}<h2>Aucun article trouvé</h2><p>Essayez une autre recherche ou retirez les filtres.</p><a class="button button--primary" href="{{ path('app_front_blog') }}">Voir tous les articles</a></div>
+    {% else %}
+        <div class="blog-catalog__grid">
+            {% for article in articles %}
+                <twig:Front:BlogArticleCard :article="article" />
+            {% endfor %}
+        </div>
+        <twig:Front:Pagination :pagination="articles" />
+    {% endif %}
+</section>
+{% endblock %}

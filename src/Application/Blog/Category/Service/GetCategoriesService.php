@@ -3,7 +3,7 @@
 namespace App\Application\Blog\Category\Service;
 
 use App\Application\Blog\Category\Provider\CategoryProvider;
-use App\Entity\Content\Category;
+use App\Entity\Blog\Category;
 
 final readonly class GetCategoriesService
 {

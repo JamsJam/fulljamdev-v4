@@ -2,8 +2,8 @@
 
 namespace App\Application\Project\Provider;
 
-use App\Entity\Content\Project;
-use App\Repository\Content\ProjectRepository;
+use App\Entity\Project\Project;
+use App\Repository\Project\ProjectRepository;
 
 final readonly class ProjectProvider
 {

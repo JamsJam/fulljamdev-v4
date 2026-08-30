@@ -2,7 +2,7 @@
 
 namespace App\Application\Blog\Category\Persister;
 
-use App\Entity\Content\Category;
+use App\Entity\Blog\Category;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class CategoryPersister

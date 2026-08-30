@@ -3,7 +3,7 @@
 namespace App\Application\Blog\Category\Factory;
 
 use App\Application\Blog\Category\Dto\CategoryDto;
-use App\Entity\Content\Category;
+use App\Entity\Blog\Category;
 
 final class CategoryFactory
 {

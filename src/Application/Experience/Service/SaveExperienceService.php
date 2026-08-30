@@ -5,7 +5,7 @@ namespace App\Application\Experience\Service;
 use App\Application\Experience\Dto\ExperienceDto;
 use App\Application\Experience\Factory\ExperienceFactory;
 use App\Application\Experience\Persister\ExperiencePersister;
-use App\Entity\Content\Experience;
+use App\Entity\Experience\Experience;
 
 final readonly class SaveExperienceService
 {

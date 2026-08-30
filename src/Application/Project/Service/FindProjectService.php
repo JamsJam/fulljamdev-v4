@@ -3,7 +3,7 @@
 namespace App\Application\Project\Service;
 
 use App\Application\Project\Provider\ProjectProvider;
-use App\Entity\Content\Project;
+use App\Entity\Project\Project;
 
 final readonly class FindProjectService
 {

@@ -1,0 +1,117 @@
+@use "../../abstract/" as *;
+
+main[data-page="article"] {
+    padding-block: clamp(2rem, 6vw, 5rem);
+    color: var(--text);
+
+    .blog-article {
+        margin-inline: auto;
+        padding: 4rem;
+
+        &__header {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+            align-items: center;
+            gap: clamp(2rem, 5vw, 5rem);
+        }
+
+        &__cover {
+            overflow: hidden;
+            margin: 0;
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            background: var(--background-purple);
+            box-shadow: var(--shadow);
+
+            img {
+                display: block;
+                width: 100%;
+                aspect-ratio: 16 / 10;
+                object-fit: cover;
+            }
+        }
+
+        &__category {
+            margin: 0 0 0.75rem;
+            color: var(--text-mute);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2.25rem, 5vw, 4.5rem);
+            line-height: 1.05;
+            text-wrap: balance;
+        }
+
+        &__summary {
+            margin-block: 1.5rem;
+            color: var(--text-mute);
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            line-height: 1.6;
+        }
+
+        &__dates {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+            margin: 0;
+
+            div {
+                display: flex;
+                gap: 0.35rem;
+            }
+
+            dt {
+                color: var(--text-mute);
+            }
+
+            dd {
+                margin: 0;
+            }
+        }
+
+        &__content {
+            margin: clamp(3rem, 8vw, 7rem) auto;
+            font-size: 1.08rem;
+            line-height: 1.8;
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            h2,
+            h3 {
+                margin-top: 2.5em;
+                line-height: 1.25;
+            }
+        }
+
+        &__cta {
+            padding: clamp(2rem, 6vw, 4rem);
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            background: var(--background-purple);
+
+            h2 {
+                margin-top: 0;
+                font-size: clamp(1.75rem, 4vw, 3rem);
+            }
+
+            p {
+                margin: 0 auto 1.5rem;
+                color: var(--text-mute);
+            }
+        }
+
+        @media (max-width: $screen-l) {
+            &__header {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}

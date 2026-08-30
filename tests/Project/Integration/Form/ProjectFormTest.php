@@ -9,26 +9,28 @@ use Symfony\Component\Form\FormFactoryInterface;
 
 final class ProjectFormTest extends KernelTestCase
 {
-    public function testProjectFormConvertsTechnologiesToAList(): void
+    public function testProjectFormUsesACreatableTechnologyAutocomplete(): void
     {
         self::bootKernel();
         $dto = new ProjectDto();
         $form = self::getContainer()->get(FormFactoryInterface::class)->create(ProjectType::class, $dto, ['csrf_protection' => false]);
         $form->submit([
             'title' => 'Portfolio',
-            'slug' => 'portfolio',
             'excerpt' => '',
             'content' => 'Présentation du projet',
-            'featuredImage' => '',
-            'technologies' => "Symfony\nTwig",
+            'technologies' => '',
             'websiteUrl' => '',
             'repositoryUrl' => '',
             'isFeatured' => '1',
-            'status' => 'draft',
-            'publishedAt' => '',
         ]);
 
         self::assertTrue($form->isValid(), (string) $form->getErrors(true));
-        self::assertSame(['Symfony', 'Twig'], $dto->technologies);
+        self::assertSame([], $dto->technologies);
+        self::assertSame('technology-select', $form->get('technologies')->getConfig()->getOption('attr')['data-controller']);
+        self::assertStringContainsString('/dashboard/projet/technologie/autocomplete', $form->get('technologies')->getConfig()->getOption('attr')['data-technology-select-url-value']);
+        self::assertFalse($form->has('slug'));
+        self::assertFalse($form->has('status'));
+        self::assertFalse($form->has('publishedAt'));
+        self::assertTrue($form->get('imageFiles')->getConfig()->getOption('multiple'));
     }
 }

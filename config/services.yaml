@@ -6,6 +6,8 @@
 parameters:
     page_upload_directory: '%kernel.project_dir%/public/uploads/pages'
     settings_upload_directory: '%kernel.project_dir%/public/uploads/settings'
+    blog_upload_directory: '%kernel.project_dir%/public/uploads/blog'
+    project_upload_directory: '%kernel.project_dir%/public/uploads/projects'
 
 services:
     # default configuration for services in *this* file
@@ -33,6 +35,14 @@ services:
     App\Application\Settings\General\Asset\SiteAssetUploader:
         arguments:
             $targetDirectory: '%settings_upload_directory%'
+
+    App\Application\Blog\Article\Asset\ArticleCoverImageUploader:
+        arguments:
+            $targetDirectory: '%blog_upload_directory%'
+
+    App\Application\Project\Asset\ProjectImageUploader:
+        arguments:
+            $targetDirectory: '%project_upload_directory%'
 
     App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator:
         arguments:

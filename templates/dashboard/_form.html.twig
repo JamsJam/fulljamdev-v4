@@ -1,0 +1,20 @@
+{{ form_start(form, {attr: {class: 'content-manager__form'}}) }}
+    {{ form_errors(form) }}
+    <div class="content-manager__form-grid">
+        {% for field in form %}
+            {% if field.vars.name != '_token' %}
+                {% if field.vars.name in dropzone_fields|default([]) %}
+                    <twig:Form:Dropzone :field="field" :currentImage="dropzone_current_images[field.vars.name]|default(null)" :currentImages="dropzone_current_image_lists[field.vars.name]|default([])" />
+                {% else %}
+                    <twig:Form:Field :field="field" />
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
+    {{ form_widget(form._token) }}
+    <div class="content-manager__form-actions">
+        <twig:Admin:Button variant="outline" label="Annuler" :href="cancel_path" />
+        <twig:Admin:Button type="submit" label="Enregistrer" />
+    </div>
+{{ form_end(form, {render_rest: false}) }}
+{# Shared dashboard form layout. #}

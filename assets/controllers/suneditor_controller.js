@@ -7,6 +7,7 @@ import lang from 'suneditor/src/lang';
 export default class extends Controller {
     static values = {
         profile: { type: String, default: 'full' },
+        maxCharacters: { type: Number, default: 1000 },
     };
 
     connect() {
@@ -33,8 +34,8 @@ export default class extends Controller {
             'katex': 'window.katex',
             'charCounter': true,
             'charCounterType': 'char',
-            'charCounterLabel': 'characteres',
-            'maxCharCount': '1000',
+            'charCounterLabel': 'caractères',
+            'maxCharCount': this.maxCharactersValue,
             'className': 'wysiwygEditor',
             'font': [
                 'Montserra'

@@ -24,10 +24,11 @@ final readonly class FeaturedProjectsProvider implements FeaturedProjectsProvide
             $card->cta->target = CtaTarget::URL;
             $card->cta->href = '/projet/'.$project->getSlug();
 
-            if (null !== $project->getFeaturedImage()) {
+            $mainImage = $project->getImages()->first();
+            if (false !== $mainImage) {
                 $card->image = new ImageDTO();
                 $card->image->source = ImageSource::MEDIA;
-                $card->image->mediaId = $project->getFeaturedImage();
+                $card->image->mediaId = $mainImage->getPath();
                 $card->image->alt = $project->getTitle();
             }
 

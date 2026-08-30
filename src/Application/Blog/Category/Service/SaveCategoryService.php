@@ -5,7 +5,7 @@ namespace App\Application\Blog\Category\Service;
 use App\Application\Blog\Category\Dto\CategoryDto;
 use App\Application\Blog\Category\Factory\CategoryFactory;
 use App\Application\Blog\Category\Persister\CategoryPersister;
-use App\Entity\Content\Category;
+use App\Entity\Blog\Category;
 
 final readonly class SaveCategoryService
 {

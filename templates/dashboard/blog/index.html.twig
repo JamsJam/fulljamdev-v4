@@ -1,0 +1,77 @@
+{% extends 'adminBase.html.twig' %}
+{% block title %}Blog{% endblock %}
+{% block body %}
+{% set counts = {all: articles|length, draft: 0, review: 0, scheduled: 0, published: 0, archived: 0} %}
+{% for article in articles %}
+    {% if article.archived %}{% set counts = counts|merge({archived: counts.archived + 1}) %}
+    {% else %}{% set status = article.status.value %}{% set counts = counts|merge({(status): attribute(counts, status) + 1}) %}{% endif %}
+{% endfor %}
+<section class="blog-dashboard" aria-labelledby="blog-title" data-controller="blog-dashboard">
+    <header class="blog-dashboard__header">
+        <div><p class="blog-dashboard__eyebrow">Contenu</p><h1 id="blog-title">Blog</h1><p>Créez, planifiez et publiez vos articles.</p></div>
+        <div class="blog-dashboard__header-actions">
+            <button class="button button--outline" type="button" data-action="blog-dashboard#openCategories">{{ ux_icon('material-symbols:category-outline-rounded', {class: 'button__icon'}) }}<span>Catégories</span></button>
+            <twig:Admin:Button icon="material-symbols:add-rounded" label="Nouvel article" href="{{ path('app_dashboard_blog_article_new') }}" />
+        </div>
+    </header>
+
+    <div class="blog-dashboard__stats">
+        {% for stat in [
+            {label: 'Articles', value: counts.all, icon: 'material-symbols:article-outline-rounded'},
+            {label: 'Brouillons', value: counts.draft, icon: 'material-symbols:edit-note-rounded'},
+            {label: 'Planifiés', value: counts.scheduled, icon: 'material-symbols:schedule-rounded', tone: 'info'},
+            {label: 'Publiés', value: counts.published, icon: 'material-symbols:check-circle-outline-rounded', tone: 'success'}
+        ] %}
+            <article class="blog-dashboard__stat blog-dashboard__stat--{{ stat.tone|default('neutral') }}"><span class="blog-dashboard__stat-icon">{{ ux_icon(stat.icon) }}</span><div><strong>{{ stat.value }}</strong><span>{{ stat.label }}</span></div></article>
+        {% endfor %}
+    </div>
+
+    <div class="blog-dashboard__card">
+        <div class="blog-dashboard__tabs" role="tablist">
+            {% for status, label in {all: 'Tous', draft: 'Brouillons', review: 'En relecture', scheduled: 'Planifiés', published: 'Publiés', archived: 'Archivés'} %}
+                <button class="blog-dashboard__tab{{ status == 'all' ? ' is-active' : '' }}" type="button" role="tab" aria-selected="{{ status == 'all' ? 'true' : 'false' }}" data-status="{{ status }}" data-action="blog-dashboard#selectStatus">{{ label }} <span>{{ attribute(counts, status) }}</span></button>
+            {% endfor %}
+        </div>
+        <div class="blog-dashboard__toolbar">
+            <label class="blog-dashboard__search">{{ ux_icon('material-symbols:search-rounded') }}<input type="search" aria-label="Rechercher" placeholder="Rechercher un article…" data-blog-dashboard-target="search" data-action="input->blog-dashboard#filter"></label>
+            <label class="blog-dashboard__select"><select aria-label="Filtrer par catégorie" data-blog-dashboard-target="category" data-action="change->blog-dashboard#filter"><option value="">Toutes les catégories</option>{% for category in categories %}<option value="{{ category.name|lower }}">{{ category.name }}</option>{% endfor %}</select>{{ ux_icon('material-symbols:keyboard-arrow-down-rounded') }}</label>
+        </div>
+
+        {% if articles is empty %}<div class="blog-dashboard__empty"><h2>Aucun article</h2><p>Créez votre premier article pour commencer.</p></div>
+        {% else %}
+        <div class="blog-dashboard__table-wrapper"><table class="blog-dashboard__table">
+            <thead><tr><th>Article</th><th>Catégorie</th><th aria-sort="none"><button class="blog-dashboard__sort" type="button" data-sort-key="status" data-action="blog-dashboard#sort">Statut {{ ux_icon('material-symbols:unfold-more-rounded') }}</button></th><th aria-sort="none"><button class="blog-dashboard__sort" type="button" data-sort-key="date" data-action="blog-dashboard#sort">Date {{ ux_icon('material-symbols:unfold-more-rounded') }}</button></th><th><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody>
+            {% set labels = {draft: 'Brouillon', review: 'En relecture', scheduled: 'Planifié', published: 'Publié'} %}
+            {% for article in articles %}
+                {% set effective_status = article.archived ? 'archived' : article.status.value %}
+                <tr data-blog-dashboard-target="row" data-article-id="{{ article.id }}" data-status="{{ effective_status }}" data-sort-status="{{ {draft: 1, review: 2, scheduled: 3, published: 4, archived: 5}[effective_status] }}" data-sort-date="{{ article.publishedAt ? article.publishedAt|date('U') : 0 }}" data-category="{{ article.category ? article.category.name|lower : '' }}" data-search="{{ ((article.title ?? '') ~ ' ' ~ (article.summary ?? ''))|lower }}">
+                    <td><div class="blog-dashboard__article"><div class="blog-dashboard__thumbnail">{% if article.coverImage %}<img src="{{ asset(article.coverImage) }}" alt="">{% else %}{{ ux_icon('material-symbols:image-outline-rounded') }}{% endif %}</div><div><strong>{{ article.title ?? 'Sans titre' }}</strong><p>{{ article.summary ?? 'Aucun résumé pour ce brouillon.' }}</p></div></div></td>
+                    <td><span class="blog-dashboard__category">{{ article.category ? article.category.name : 'Sans catégorie' }}</span></td>
+                    <td><span class="blog-dashboard__status blog-dashboard__status--{{ effective_status }}"><i></i>{{ article.archived ? 'Archivé' : labels[article.status.value] }}</span></td>
+                    <td class="blog-dashboard__date">{{ article.publishedAt ? article.publishedAt|date('d/m/Y') : '—' }}</td>
+                    <td><details class="blog-dashboard__menu"><summary aria-label="Actions">{{ ux_icon('material-symbols:more-horiz') }}</summary><div class="blog-dashboard__menu-content">
+                        <a href="{{ path('app_dashboard_blog_article_edit', {id: article.id}) }}">{{ ux_icon('material-symbols:edit-outline-rounded') }} Modifier</a>
+                        {% if article.status.value == 'published' and not article.archived %}<a href="{{ path('app_front_article_show', {slug: article.slug}) }}" target="_blank">{{ ux_icon('material-symbols:open-in-new-rounded') }} Voir en ligne</a>{% endif %}
+                        {% if not article.archived %}
+                            {% set transitions = article.status.value == 'draft' ? {submit: 'Envoyer en relecture'} : (article.status.value == 'review' ? {reject: 'Repasser en brouillon', publish: 'Publier'} : (article.status.value == 'scheduled' ? {unschedule: 'Annuler la planification', publish: 'Publier'} : {take_offline: 'Mettre hors ligne'})) %}
+                            {% for transition, label in transitions %}<form method="post" action="{{ path('app_dashboard_blog_article_transition', {id: article.id, transition: transition}) }}"><input type="hidden" name="_token" value="{{ csrf_token('article_transition_' ~ article.id) }}"><button type="submit">{{ ux_icon(transition == 'publish' ? 'material-symbols:publish-rounded' : 'material-symbols:swap-horiz-rounded') }} {{ label }}</button></form>{% endfor %}
+                            <form method="post" action="{{ path('app_dashboard_blog_article_archive', {id: article.id}) }}" onsubmit="return confirm('Archiver cet article ?')"><input type="hidden" name="_token" value="{{ csrf_token('archive_article_' ~ article.id) }}"><button class="is-destructive" type="submit">{{ ux_icon('material-symbols:archive-outline-rounded') }} Archiver</button></form>
+                        {% else %}<form method="post" action="{{ path('app_dashboard_blog_article_restore', {id: article.id}) }}"><input type="hidden" name="_token" value="{{ csrf_token('restore_article_' ~ article.id) }}"><button type="submit">{{ ux_icon('material-symbols:history-rounded') }} Restaurer</button></form>{% endif %}
+                    </div></details></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table></div>
+        <div class="blog-dashboard__no-results" hidden data-blog-dashboard-target="empty">Aucun article ne correspond à ces filtres.</div>
+        <footer class="blog-dashboard__footer"><span data-blog-dashboard-target="resultCount">{{ articles|length }} articles</span></footer>
+        {% endif %}
+    </div>
+
+    <dialog class="blog-dashboard__drawer" data-blog-dashboard-target="drawer" data-action="click->blog-dashboard#closeOnBackdrop"><div class="blog-dashboard__drawer-content">
+        <header><div><h2>Catégories</h2><p>Organisez les sujets de votre blog.</p></div><button type="button" aria-label="Fermer" data-action="blog-dashboard#closeCategories">{{ ux_icon('material-symbols:close-rounded') }}</button></header>
+        <a class="button button--primary" href="{{ path('app_dashboard_blog_category_new') }}">{{ ux_icon('material-symbols:add-rounded') }} Nouvelle catégorie</a>
+        <div class="blog-dashboard__category-list">{% for category in categories %}<article data-category-id="{{ category.id }}"><div><strong>{{ category.name }}</strong><span>{{ category.articles|length }} article{{ category.articles|length > 1 ? 's' : '' }}</span></div><div class="blog-dashboard__category-actions"><a href="{{ path('app_dashboard_blog_category_edit', {id: category.id}) }}" aria-label="Modifier">{{ ux_icon('material-symbols:edit-outline-rounded') }}<span class="sr-only">Modifier</span></a><form method="post" action="{{ path('app_dashboard_blog_category_delete', {id: category.id}) }}" onsubmit="return confirm('Supprimer cette catégorie ? Les articles seront conservés.')"><input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}"><button type="submit" aria-label="Supprimer">{{ ux_icon('material-symbols:delete-outline-rounded') }}<span class="sr-only">Supprimer</span></button></form></div></article>{% else %}<p>Aucune catégorie.</p>{% endfor %}</div>
+    </div></dialog>
+</section>
+{% endblock %}

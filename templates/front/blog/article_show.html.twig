@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+{% block metadescription %}{{ article.summary }}{% endblock %}
+{% block canonical %}{{ url('app_front_article_show', {slug: article.slug}) }}{% endblock %}
+{% block main_attributes %} data-page="article"{% endblock %}
+
+{% block openGraph %}
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ article.title }}">
+    <meta property="og:description" content="{{ article.summary }}">
+    <meta property="og:url" content="{{ url('app_front_article_show', {slug: article.slug}) }}">
+    <meta property="og:image" content="{{ absolute_url(asset(article.coverImage)) }}">
+    <meta property="article:published_time" content="{{ article.publishedAt|date('c') }}">
+    <meta property="article:modified_time" content="{{ article.updatedAt|date('c') }}">
+{% endblock %}
+
+{% block body %}
+    <article class="blog-article" aria-labelledby="article-title">
+        <header class="blog-article__header">
+            <figure class="blog-article__cover">
+                <img src="{{ asset(article.coverImage) }}" alt="Illustration de l’article « {{ article.title }} »">
+            </figure>
+
+            <div class="blog-article__heading">
+                {% if article.category %}
+                    <p class="blog-article__category">{{ article.category.name }}</p>
+                {% endif %}
+                <h1 id="article-title">{{ article.title }}</h1>
+                <p class="blog-article__summary">{{ article.summary }}</p>
+
+                <dl class="blog-article__dates">
+                    <div>
+                        <dt>Publié le</dt>
+                        <dd><time datetime="{{ article.publishedAt|date('c') }}">{{ article.publishedAt|format_datetime(pattern='d MMMM yyyy', locale='fr') }}</time></dd>
+                    </div>
+                    <div>
+                        <dt>Modifié le</dt>
+                        <dd><time datetime="{{ article.updatedAt|date('c') }}">{{ article.updatedAt|format_datetime(pattern='d MMMM yyyy', locale='fr') }}</time></dd>
+                    </div>
+                </dl>
+            </div>
+        </header>
+
+        <div class="blog-article__content">
+            {{ article.content|raw }}
+        </div>
+
+        <aside class="blog-article__cta" aria-labelledby="article-cta-title">
+            <h2 id="article-cta-title">Parlons de votre projet</h2>
+            <p>Vous souhaitez échanger sur votre besoin et identifier la solution la plus adaptée&nbsp;?</p>
+            <a class="button button--primary" href="{{ path('app_front_page', {path: 'contact'}) }}">Prendre rendez-vous</a>
+        </aside>
+    </article>
+{% endblock %}

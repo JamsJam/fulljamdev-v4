@@ -9,6 +9,7 @@
 @use 'components/admin/button-group/button-group' as *;
 @use 'components/admin/dropdown/dropdown' as *;
 @use 'components/admin/dialog' as *;
+@use 'components/admin/dropzone' as *;
 @use 'components/admin/slider/slider' as *;
 @use 'components/admin/stepper/stepper' as *;
 @use 'components/form/field' as *;
@@ -17,6 +18,8 @@
 @use 'pages/back/planning' as *;
 @use 'pages/back/page-builder' as *;
 @use 'pages/back/content-manager' as *;
+@use 'pages/back/blog-dashboard' as *;
+@use 'pages/back/project-dashboard' as *;
 @use 'animations/turbo' as *;
 @use 'components/shared/flash' as *;
 // @forward 'components/table';

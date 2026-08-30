@@ -4,12 +4,18 @@
 @use "../../page-block/cta" as *;
 @use "../../page-block/faq" as *;
 @use "../../page-block/planning" as *;
+@use "../../page-block/blog" as *;
 
 // .front--accueil main > section:first-child {
 //     background: var(--gradient-vertical);
 // }
 
 main[data-page="accueil"] {
+    .blog-showcase__item-content h3,
+    .latest-articles__item-content h3 {
+        font-size: var(--text-l);
+    }
+
     .hero-classic-square {
         &::before {
             background: color-mix(in oklch, var(--background-accent) 28%, transparent);
@@ -49,8 +55,8 @@ main[data-page="accueil"] {
         background: linear-gradient(
             180deg,
             var(--background-dark) 0%,
-            #E9E2FF 18%,
-            #E9E2FF 82%,
+            hsl(254 84% 85% / 1) 18%,
+            hsl(254 84% 85% / 1) 82%,
             var(--background-dark) 100%
         );
     }

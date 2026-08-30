@@ -3,7 +3,7 @@
 namespace App\Application\Blog\Article\Service;
 
 use App\Application\Blog\Article\Provider\ArticleProvider;
-use App\Entity\Content\Article;
+use App\Entity\Blog\Article;
 
 final readonly class GetArticlesService
 {

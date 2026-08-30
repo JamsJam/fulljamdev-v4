@@ -2,7 +2,7 @@
 
 namespace App\Application\Experience\Persister;
 
-use App\Entity\Content\Experience;
+use App\Entity\Experience\Experience;
 use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class ExperiencePersister

@@ -1,5 +1,37 @@
 framework:
     workflows:
+        article:
+            type: state_machine
+            supports:
+                - App\Entity\Blog\Article
+            marking_store:
+                type: method
+                property: status
+            initial_marking: draft
+            places:
+                - draft
+                - review
+                - scheduled
+                - published
+            transitions:
+                submit:
+                    from: draft
+                    to: review
+                reject:
+                    from: review
+                    to: draft
+                schedule:
+                    from: review
+                    to: scheduled
+                publish:
+                    from: [review, scheduled]
+                    to: published
+                unschedule:
+                    from: scheduled
+                    to: draft
+                take_offline:
+                    from: published
+                    to: review
         appointment:
             type: state_machine
             supports:

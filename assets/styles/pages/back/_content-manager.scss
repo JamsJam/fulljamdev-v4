@@ -61,12 +61,19 @@ body.admin .content-manager {
 
     &__form-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        justify-content: stretch;
         gap: var(--padding-lg);
 
-        > :has(textarea),
-        > :has(.sun-editor) {
-            grid-column: 1 / -1;
+        > * {
+            width: 100%;
+            min-width: 0;
+            align-self: stretch;
+        }
+
+        .sun-editor {
+            width: auto !important;
+            min-width: 0;
         }
     }
 
@@ -83,8 +90,5 @@ body.admin .content-manager {
             flex-direction: column;
         }
 
-        &__form-grid {
-            grid-template-columns: 1fr;
-        }
     }
 }

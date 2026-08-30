@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Application\Blog\Workflow\Message\ProcessScheduledArticles;
 use App\Application\Page\Block\Asset\Message\CleanupOrphanedPageImages;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\RecurringMessage;
@@ -22,6 +23,7 @@ class Schedule implements ScheduleProviderInterface
         return (new SymfonySchedule())
             ->stateful($this->cache) // ensure missed tasks are executed
             ->processOnlyLastMissedRun(true) // ensure only last missed task is run
+            ->add(RecurringMessage::every('1 minute', new ProcessScheduledArticles()))
             ->add(RecurringMessage::every(
                 '1 day',
                 new CleanupOrphanedPageImages(),

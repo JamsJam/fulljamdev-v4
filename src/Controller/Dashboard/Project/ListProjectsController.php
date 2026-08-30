@@ -12,6 +12,6 @@ final class ListProjectsController extends AbstractController
     #[Route('/dashboard/projet', name: 'app_dashboard_project', methods: ['GET'])]
     public function __invoke(GetProjectsService $service): Response
     {
-        return $this->render('dashboard/content/project/index.html.twig', ['projects' => $service->get()]);
+        return $this->render('dashboard/project/index.html.twig', ['projects' => $service->get()]);
     }
 }

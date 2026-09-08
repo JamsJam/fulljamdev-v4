@@ -80,7 +80,7 @@ jobs:
 
             echo "==========[3/9] Recuperation de develop=========="
             git fetch --prune origin develop
-            git checkout -B develop origin/develop
+            git checkout -f -B develop origin/develop
             git reset --hard origin/develop
 
             echo "==========[4/9] Creation de la configuration Symfony=========="

@@ -20,6 +20,7 @@ final class Aside
      *         route?: string,
      *         icon?: string,
      *         badge?: string|int,
+     *         logout?: bool,
      *         activePrefixes?: list<string>,
      *         children?: list<array{label: string, route: string, badge?: string|int, activePrefixes?: list<string>}>
      *     }>
@@ -89,6 +90,12 @@ final class Aside
                     'label' => 'Paramètres',
                     'route' => 'app_dashboard_settings',
                     'icon' => 'ic:round-settings',
+                ],
+                [
+                    'label' => 'Déconnexion',
+                    'route' => 'app_logout',
+                    'icon' => 'material-symbols:logout-rounded',
+                    'logout' => true,
                 ],
             ],
         ],

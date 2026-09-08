@@ -3,132 +3,106 @@
 namespace App\Application\Reservation\Appointment\Meeting;
 
 use App\Entity\Reservation\Appointment;
-use App\Service\Http\HttpClientService;
-use App\Service\UuidGeneratorService;
-use Psr\Log\LoggerInterface;
+use App\Service\Google\GoogleOAuthService;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final readonly class GoogleCalendarMeetingCreator
+final readonly class GoogleCalendarMeetingCreator implements MeetingLinkCreatorInterface
 {
-    private const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
-    private const CALENDAR_ENDPOINT = 'https://www.googleapis.com/calendar/v3/calendars/%s/events';
+    private const EVENTS_ENDPOINT = 'https://www.googleapis.com/calendar/v3/calendars/primary/events';
 
     public function __construct(
-        private HttpClientService $httpClient,
-        private UuidGeneratorService $uuidGenerator,
-        private LoggerInterface $logger,
-        private string $clientId,
-        private string $clientSecret,
-        private string $refreshToken,
-        private string $calendarId,
+        private HttpClientInterface $httpClient,
+        private GoogleOAuthService $googleOAuth,
     ) {
     }
 
-    public function create(Appointment $appointment): ?string
+    public function create(Appointment $appointment): string
     {
-        if (null !== $appointment->getLink()) {
-            return $appointment->getLink();
-        }
-
-        if (!$this->isConfigured()) {
-            $this->logger->warning("L'api google n'est pas configuré");
-
-            return null;
-        }
-
         $startAt = $appointment->getStartAt();
         $endAt = $appointment->getEndAt();
-        $contact = $appointment->getContact();
+        $title = trim((string) $appointment->getTitle());
 
-        if (null === $startAt || null === $endAt || null === $contact || null === $contact->getEmail()) {
-            throw new \DomainException('Le rendez-vous ne contient pas toutes les informations nécessaires à Google Calendar.');
+        if (null === $startAt || null === $endAt || $startAt >= $endAt || '' === $title) {
+            throw new \DomainException('Le rendez-vous ne contient pas les informations nécessaires à la création du Google Meet.');
         }
 
-        try {
-            $token = $this->httpClient->request('POST', self::TOKEN_ENDPOINT, [
-                'body' => [
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'refresh_token' => $this->refreshToken,
-                    'grant_type' => 'refresh_token',
+        $accessToken = $this->googleOAuth->getAccessTokenFromRefreshToken();
+        $event = $this->request('POST', self::EVENTS_ENDPOINT.'?conferenceDataVersion=1&sendUpdates=none', $accessToken, [
+            'summary' => $title,
+            'description' => $appointment->getDescription(),
+            'start' => [
+                'dateTime' => $startAt->format(\DateTimeInterface::RFC3339),
+                'timeZone' => $appointment->getTimezone(),
+            ],
+            'end' => [
+                'dateTime' => $endAt->format(\DateTimeInterface::RFC3339),
+                'timeZone' => $appointment->getTimezone(),
+            ],
+            'conferenceData' => [
+                'createRequest' => [
+                    'requestId' => bin2hex(random_bytes(16)),
+                    'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
                 ],
-            ])->toArray();
-
-            if (!isset($token['access_token']) || !is_string($token['access_token'])) {
-                throw new \DomainException('Google OAuth n’a retourné aucun jeton d’accès.');
-            }
-
-            $event = $this->httpClient->request(
-                'POST',
-                sprintf(self::CALENDAR_ENDPOINT, rawurlencode($this->calendarId)),
-                [
-                    'auth_bearer' => $token['access_token'],
-                    'query' => ['conferenceDataVersion' => 1, 'sendUpdates' => 'all'],
-                    'json' => [
-                        'summary' => $appointment->getTitle(),
-                        'description' => $appointment->getDescription(),
-                        'start' => [
-                            'dateTime' => $startAt->format(\DateTimeInterface::RFC3339),
-                            'timeZone' => $startAt->getTimezone()->getName(),
-                        ],
-                        'end' => [
-                            'dateTime' => $endAt->format(\DateTimeInterface::RFC3339),
-                            'timeZone' => $endAt->getTimezone()->getName(),
-                        ],
-                        'attendees' => [[
-                            'email' => $contact->getEmail(),
-                            'displayName' => trim(sprintf('%s %s', $contact->getFirstName(), $contact->getLastName())),
-                        ]],
-                        'conferenceData' => [
-                            'createRequest' => [
-                                'requestId' => $this->uuidGenerator->v4(),
-                                'conferenceSolutionKey' => ['type' => 'hangoutsMeet'],
-                            ],
-                        ],
-                    ],
-                ],
-            )->toArray();
-        } catch (ExceptionInterface $exception) {
-            throw new \DomainException('Impossible de créer le rendez-vous Google Calendar.', previous: $exception);
-        }
+            ],
+        ]);
 
         $meetingLink = $this->extractMeetingLink($event);
+        $eventId = $event['id'] ?? null;
+
+        for ($attempt = 0; null === $meetingLink && is_string($eventId) && '' !== $eventId && $attempt < 4; ++$attempt) {
+            usleep(250_000);
+            $event = $this->request('GET', self::EVENTS_ENDPOINT.'/'.rawurlencode($eventId), $accessToken);
+            $meetingLink = $this->extractMeetingLink($event);
+        }
+
         if (null === $meetingLink) {
-            throw new \DomainException('Google Calendar a créé l’événement sans retourner de lien Google Meet.');
+            throw new \DomainException('Google Calendar a créé l’événement sans retourner de lien Meet.');
         }
 
         return $meetingLink;
     }
 
-    private function isConfigured(): bool
+    /**
+     * @param array<string, mixed>|null $json
+     *
+     * @return array<string, mixed>
+     */
+    private function request(string $method, string $url, string $accessToken, ?array $json = null): array
     {
-        return '' !== $this->clientId
-            && '' !== $this->clientSecret
-            && '' !== $this->refreshToken
-            && '' !== $this->calendarId;
+        $options = [
+            'auth_bearer' => $accessToken,
+            'headers' => ['Accept' => 'application/json'],
+        ];
+        if (null !== $json) {
+            $options['json'] = $json;
+        }
+
+        try {
+            $response = $this->httpClient->request($method, $url, $options);
+            $statusCode = $response->getStatusCode();
+            $data = $response->toArray(false);
+        } catch (ExceptionInterface $exception) {
+            throw new \DomainException('Impossible de contacter Google Calendar.', previous: $exception);
+        }
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            $message = $data['error']['message'] ?? null;
+
+            throw new \DomainException(is_string($message) && '' !== $message ? $message : 'Google Calendar a refusé la création du rendez-vous.');
+        }
+
+        return $data;
     }
 
     /** @param array<string, mixed> $event */
     private function extractMeetingLink(array $event): ?string
     {
-        if (isset($event['hangoutLink']) && is_string($event['hangoutLink'])) {
-            return $event['hangoutLink'];
-        }
-
-        $entryPoints = $event['conferenceData']['entryPoints'] ?? [];
-        if (!is_array($entryPoints)) {
+        $link = $event['hangoutLink'] ?? null;
+        if (!is_string($link) || 'https' !== parse_url($link, PHP_URL_SCHEME) || 'meet.google.com' !== parse_url($link, PHP_URL_HOST)) {
             return null;
         }
 
-        foreach ($entryPoints as $entryPoint) {
-            if (is_array($entryPoint)
-                && 'video' === ($entryPoint['entryPointType'] ?? null)
-                && isset($entryPoint['uri'])
-                && is_string($entryPoint['uri'])) {
-                return $entryPoint['uri'];
-            }
-        }
-
-        return null;
+        return $link;
     }
 }

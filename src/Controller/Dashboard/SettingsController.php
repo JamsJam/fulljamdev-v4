@@ -3,20 +3,23 @@
 namespace App\Controller\Dashboard;
 
 use App\Application\Page\Page\Service\GetPagesService;
-use App\Application\Settings\Service\GetAccountSettingsService;
+use App\Application\Settings\Account\Dto\UserAccountDto;
+use App\Application\Settings\Account\Service\UpdateUserAccountService;
 use App\Application\Settings\Service\GetGeneralSettingsService;
-use App\Application\Settings\Service\UpdateAccountSettingsService;
 use App\Application\Settings\Service\UpdateGeneralSettingsService;
 use App\Entity\Page\Page;
-use App\Form\AccountSettingsType;
+use App\Entity\User;
 use App\Form\GeneralSettingsType;
+use App\Form\UserAccountType;
 use App\Service\Breadcrumb\BreadcrumbService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 final class SettingsController extends AbstractController
 {
     private const SECTION_TEMPLATES = [
@@ -40,8 +43,7 @@ final class SettingsController extends AbstractController
         GetPagesService $getPagesService,
         GetGeneralSettingsService $getGeneralSettingsService,
         UpdateGeneralSettingsService $updateGeneralSettingsService,
-        GetAccountSettingsService $getAccountSettingsService,
-        UpdateAccountSettingsService $updateAccountSettingsService,
+        UpdateUserAccountService $updateUserAccountService,
     ): Response {
         $pages = $getPagesService->get();
         $settings = $getGeneralSettingsService->get();
@@ -52,8 +54,12 @@ final class SettingsController extends AbstractController
                 array_map(static fn (Page $page): int => (int) $page->getId(), $pages),
             ),
         ]);
-        $account = $getAccountSettingsService->get();
-        $accountForm = $this->createForm(AccountSettingsType::class, $account, [
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
+        }
+        $userAccount = UserAccountDto::fromUser($user);
+        $userAccountForm = $this->createForm(UserAccountType::class, $userAccount, [
             'action' => $this->generateUrl('app_dashboard_settings', ['section' => 'account']),
         ]);
 
@@ -70,15 +76,15 @@ final class SettingsController extends AbstractController
                 }
             }
         } elseif ('account' === $section) {
-            $accountForm->handleRequest($request);
-            if ($accountForm->isSubmitted() && $accountForm->isValid()) {
+            $userAccountForm->handleRequest($request);
+            if ($userAccountForm->isSubmitted() && $userAccountForm->isValid()) {
                 try {
-                    $updateAccountSettingsService->update($account);
-                    $this->addFlash('success', 'Les informations du compte ont été enregistrées.');
+                    $updateUserAccountService->update($user, $userAccount);
+                    $this->addFlash('success', 'Le compte de connexion a été mis à jour.');
 
                     return $this->redirectToRoute('app_dashboard_settings', ['section' => 'account']);
-                } catch (\RuntimeException $exception) {
-                    $accountForm->addError(new FormError($exception->getMessage()));
+                } catch (\DomainException $exception) {
+                    $userAccountForm->addError(new FormError($exception->getMessage()));
                 }
             }
         }
@@ -88,7 +94,7 @@ final class SettingsController extends AbstractController
             'active_section' => $section,
             'section_template' => self::SECTION_TEMPLATES[$section],
             'general_form' => $form,
-            'account_form' => $accountForm,
+            'user_account_form' => $userAccountForm,
             'pages' => 'pages' === $section ? $pages : [],
         ]);
     }

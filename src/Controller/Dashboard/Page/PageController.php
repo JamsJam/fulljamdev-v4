@@ -16,8 +16,10 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/dashboard/settings/pages')]
+#[IsGranted('ROLE_ADMIN')]
 final class PageController extends AbstractController
 {
     #[Route('/new', name: 'app_dashboard_page_new', methods: ['GET', 'POST'])]

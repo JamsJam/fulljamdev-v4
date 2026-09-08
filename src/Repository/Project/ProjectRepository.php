@@ -16,7 +16,7 @@ final class ProjectRepository extends ServiceEntityRepository
     }
 
     /** @return list<Project> */
-    public function findPublishedFeatured(): array
+    public function findPublishedFeatured(int $limit = 3): array
     {
         return $this->createQueryBuilder('project')
             ->andWhere('project.isFeatured = :featured')
@@ -27,6 +27,7 @@ final class ProjectRepository extends ServiceEntityRepository
             ->setParameter('now', new \DateTimeImmutable())
             ->orderBy('project.publishedAt', 'DESC')
             ->addOrderBy('project.id', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

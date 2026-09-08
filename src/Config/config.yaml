@@ -7,12 +7,5 @@ branding:
     favicon_svg: null
     favicon_ico: null
     apple_touch_icon: null
-account:
-    first_name: Jeremy
-    last_name: Antoine
-    email: contact@fulljamdev.fr
-    phone_number: '0786646817'
-    company: 'Fulljam dDev'
-    job_title: 'Développeur Fullstack Php Symfony'
 pages:
     homepage_id: 1

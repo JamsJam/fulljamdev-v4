@@ -1,0 +1,104 @@
+main[data-page="login"] {
+    display: grid;
+    min-height: 70vh;
+    place-items: center;
+    padding: clamp(2rem, 8vw, 6rem) 1rem;
+}
+
+.login {
+    padding: 0;
+    background: none !important;
+
+    &__form {
+        display: grid;
+        gap: 1.25rem;
+        padding: clamp(1.5rem, 5vw, 3rem);
+        background: var(--background-purple);
+        border: 1px solid var(--border);
+        border-radius: 1.25rem;
+        box-shadow: var(--shadow);
+    }
+
+    header p {
+        color: var(--text-mute);
+    }
+
+    h1 {
+        margin-block: 0.25rem 0.75rem;
+        color: var(--text);
+    }
+
+    &__eyebrow {
+        color: var(--button-primary-border) !important;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+    &__field {
+        display: grid;
+        gap: 0.5rem;
+
+        label {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            min-height: 3rem;
+            padding-inline: 0.9rem;
+            color: var(--text);
+            font: inherit;
+            background: var(--background-dark);
+            border: 1px solid var(--border);
+            border-radius: 0.6rem;
+        }
+    }
+
+    &__password {
+        position: relative;
+
+        button {
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            color: var(--text-mute);
+            background: none;
+            border: 0;
+            cursor: pointer;
+            transform: translateY(-50%);
+
+            svg {
+                display: block;
+                width: 1.25rem;
+                height: 1.25rem;
+                stroke: currentColor;
+                stroke-width: 1.8;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            &[aria-pressed="false"] .login__visibility-off,
+            &[aria-pressed="true"] .login__visibility-on {
+                display: none;
+            }
+        }
+    }
+
+    &__remember {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: var(--text);
+    }
+
+    &__error {
+        padding: 0.8rem;
+        color: var(--text);
+        background: color-mix(in srgb, #c62828 25%, transparent);
+        border: 1px solid #c62828;
+        border-radius: 0.5rem;
+    }
+}

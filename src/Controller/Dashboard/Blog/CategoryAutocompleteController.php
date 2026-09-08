@@ -7,7 +7,9 @@ use App\Entity\Blog\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 final class CategoryAutocompleteController extends AbstractController
 {
     #[Route('/dashboard/blog/category/autocomplete', name: 'app_dashboard_blog_category_autocomplete', methods: ['GET'])]

@@ -17,12 +17,25 @@
             </p>
         </div>
 
-        <nav class="footer__navigation" aria-label="Navigation du pied de page">
+        <nav class="footer__navigation" aria-label="Navigation principale du pied de page">
             <p class="footer__title">Navigation</p>
             <ul class="footer__links">
                 <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                <li><a href="{{ path('app_home') }}#about">À propos</a></li>
-                <li><a href="{{ path('app_home') }}#contact">Contact</a></li>
+                <li><a href="{{ path('app_front_page', {path: 'about'}) }}">À propos</a></li>
+                <li><a href="{{ path('app_front_projects') }}">Projets</a></li>
+                <li><a href="{{ path('app_front_blog') }}">Blog</a></li>
+                <li><a href="{{ path('app_front_page', {path: 'contact'}) }}">Contact</a></li>
+            </ul>
+        </nav>
+
+        <nav class="footer__navigation" aria-label="Accès à l’espace d’administration">
+            <p class="footer__title">Espace</p>
+            <ul class="footer__links">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
+                {% else %}
+                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
+                {% endif %}
             </ul>
         </nav>
 

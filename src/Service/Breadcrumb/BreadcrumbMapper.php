@@ -33,6 +33,12 @@ final class BreadcrumbMapper
         'blog' => [
             'label' => 'Blog',
         ],
+        'project' => [
+            'label' => 'Projets',
+        ],
+        'cv' => [
+            'label' => 'CV',
+        ],
         'article' => [
             'label' => 'Articles',
             'route' => 'app_dashboard_blog',

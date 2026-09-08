@@ -8,7 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 final class DeleteProjectController extends AbstractController
 {
     #[Route('/dashboard/projet/{id}/delete', name: 'app_dashboard_project_delete', requirements: ['id' => '\d+'], methods: ['POST'])]

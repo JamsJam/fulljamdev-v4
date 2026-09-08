@@ -16,6 +16,9 @@ final class CardWithImage
         if (null !== $image?->mediaId && 1 === preg_match('/^[a-zA-Z0-9._-]+$/', $image->mediaId)) {
             return '/uploads/pages/'.$image->mediaId;
         }
+        if (null !== $image?->mediaId && 1 === preg_match('#^/uploads/projects/[a-zA-Z0-9._-]+$#', $image->mediaId)) {
+            return $image->mediaId;
+        }
 
         return null !== $image?->url && in_array(parse_url($image->url, PHP_URL_SCHEME), ['http', 'https'], true) ? $image->url : null;
     }

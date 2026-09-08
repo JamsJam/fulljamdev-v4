@@ -9,6 +9,27 @@ use PHPUnit\Framework\TestCase;
 
 final class BreadcrumbServiceTest extends TestCase
 {
+    /**
+     * @param list<string> $expectedLabels
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('childRouteProvider')]
+    public function testItBuildsBreadcrumbsForDashboardChildRoutes(string $route, array $expectedLabels): void
+    {
+        $breadcrumb = $this->createService()->getBreadcrumb($route);
+
+        self::assertSame($expectedLabels, array_column($breadcrumb, 'label'));
+    }
+
+    /**
+     * @return iterable<string, array{string, list<string>}>
+     */
+    public static function childRouteProvider(): iterable
+    {
+        yield 'blog' => ['app_dashboard_blog_article_new', ['Fulljamdev', 'Dashboard', 'Blog', 'Articles', 'Ajouter']];
+        yield 'project' => ['app_dashboard_project_new', ['Fulljamdev', 'Dashboard', 'Projets', 'Ajouter']];
+        yield 'cv' => ['app_dashboard_cv_edit', ['Fulljamdev', 'Dashboard', 'CV', 'Modifier']];
+    }
+
     public function testItBuildsTheBreadcrumbFromTheRouteElements(): void
     {
         $service = $this->createService();

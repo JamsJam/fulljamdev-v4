@@ -44,12 +44,15 @@ services:
         arguments:
             $targetDirectory: '%project_upload_directory%'
 
-    App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator:
+    App\Service\Google\GoogleOAuthService:
         arguments:
-            $clientId: '%env(GOOGLE_CALENDAR_CLIENT_ID)%'
-            $clientSecret: '%env(GOOGLE_CALENDAR_CLIENT_SECRET)%'
-            $refreshToken: '%env(GOOGLE_CALENDAR_REFRESH_TOKEN)%'
-            $calendarId: '%env(GOOGLE_CALENDAR_ID)%'
+            $clientId: '%env(GOOGLE_CLIENT_ID)%'
+            $clientSecret: '%env(GOOGLE_CLIENT_SECRET)%'
+            $redirectUri: '%env(GOOGLE_REDIRECT_URI)%'
+            $refreshToken: '%env(GOOGLE_REFRESH_TOKEN)%'
+
+    App\Application\Reservation\Appointment\Meeting\MeetingLinkCreatorInterface:
+        alias: App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

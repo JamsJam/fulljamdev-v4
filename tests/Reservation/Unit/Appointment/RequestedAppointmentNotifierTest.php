@@ -4,18 +4,13 @@ namespace App\Tests\Reservation\Unit\Appointment;
 
 use App\Application\Reservation\Appointment\Enum\AppointmentStatus;
 use App\Application\Reservation\Appointment\Notification\RequestedAppointmentNotifier;
-use App\Application\Settings\Account\Cache\AccountSettingsCache;
-use App\Application\Settings\Account\Provider\AccountSettingsProvider;
-use App\Application\Settings\Account\Proxy\AccountSettingsProxy;
-use App\Application\Settings\Service\GetAccountSettingsService;
-use App\Application\Settings\Storage\YamlSettingsStorage;
 use App\Entity\Contact;
 use App\Entity\Reservation\Appointment;
 use App\Entity\Reservation\Planning;
-use App\Service\Yaml\YamlParserService;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\RawMessage;
 
@@ -32,7 +27,7 @@ final class RequestedAppointmentNotifierTest extends TestCase
                 $messages[] = $message;
             });
 
-        (new RequestedAppointmentNotifier($mailer, $this->accountSettings()))->notify($this->appointment());
+        (new RequestedAppointmentNotifier($mailer, $this->userRepository()))->notify($this->appointment());
 
         self::assertContainsOnlyInstancesOf(TemplatedEmail::class, $messages);
         self::assertSame('contact@example.test', $messages[0]->getTo()[0]->getAddress());
@@ -48,7 +43,7 @@ final class RequestedAppointmentNotifierTest extends TestCase
         $mailer->expects(self::never())->method('send');
         $appointment = $this->appointment()->setStatus(AppointmentStatus::CONFIRMED);
 
-        (new RequestedAppointmentNotifier($mailer, $this->accountSettings()))->notify($appointment);
+        (new RequestedAppointmentNotifier($mailer, $this->userRepository()))->notify($appointment);
     }
 
     private function appointment(): Appointment
@@ -70,17 +65,20 @@ final class RequestedAppointmentNotifierTest extends TestCase
             ->setStatus(AppointmentStatus::REQUESTED);
     }
 
-    private function accountSettings(): GetAccountSettingsService
+    private function userRepository(): UserRepository
     {
-        $storage = new YamlSettingsStorage(
-            new YamlParserService(),
-            __DIR__.'/../../../Fixtures/config/account.yaml',
-        );
-        $provider = new AccountSettingsProvider($storage);
+        $user = (new User())
+            ->setEmail('admin@example.test')
+            ->setFirstName('Grace')
+            ->setLastName('Hopper')
+            ->setPhoneNumber('0102030405')
+            ->setCompany('Fulljam Dev')
+            ->setJobTitle('Administratrice')
+            ->setPassword('hash')
+            ->setRoles(['ROLE_ADMIN']);
+        $repository = $this->createStub(UserRepository::class);
+        $repository->method('findAdministrator')->willReturn($user);
 
-        return new GetAccountSettingsService(new AccountSettingsProxy(
-            new AccountSettingsCache(new ArrayAdapter()),
-            $provider,
-        ));
+        return $repository;
     }
 }

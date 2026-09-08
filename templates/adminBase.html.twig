@@ -36,7 +36,10 @@
                 {{ stimulus_action('sidebar', 'toggle') }}
             ></button>
 
-            <twig:Admin:Header :breadcrumb="breadcrumb|default([])" />
+            <twig:Admin:Header
+                :breadcrumb="breadcrumb|default([])"
+                :userName="app.user and app.user.firstName is defined ? app.user.firstName ~ ' ' ~ app.user.lastName : app.user.userIdentifier|default('Administrateur')"
+            />
 
 
             <main class="layout__content">

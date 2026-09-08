@@ -18,9 +18,9 @@ final readonly class ProjectProvider
     }
 
     /** @return list<Project> */
-    public function provideFeatured(): array
+    public function provideFeatured(int $limit = 3): array
     {
-        return $this->repository->findPublishedFeatured();
+        return $this->repository->findPublishedFeatured($limit);
     }
 
     public function provideOne(int $id): ?Project

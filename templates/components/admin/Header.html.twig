@@ -31,9 +31,14 @@
             </svg>
         </button>
 
-        <button class="admin-header__profile" type="button" aria-label="Ouvrir le menu du profil">
+        <a
+            class="admin-header__profile"
+            href="{{ path('app_dashboard_settings', {section: 'account'}) }}"
+            aria-label="Accéder aux paramètres du compte"
+            title="Paramètres du compte"
+        >
             <span class="admin-header__avatar" aria-hidden="true">{{ this.initials }}</span>
             <span class="admin-header__profile-name">{{ userName }}</span>
-        </button>
+        </a>
     </div>
 </header>

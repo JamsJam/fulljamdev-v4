@@ -1,0 +1,20 @@
+{% set projects = this.projects %}
+
+{% if projects is not empty %}
+    <section class="card-display card-display--projects" data-block-id="{{ blockId }}">
+        <header class="card-display__header">
+            <{{ data.title.level.value }} class="card-display__title">{{ data.title.content }}</{{ data.title.level.value }}>
+            <p class="card-display__lead">{{ data.text.content }}</p>
+        </header>
+
+        <div class="card-display__grid">
+            {% for project in projects %}
+                <twig:Front:CardWithImage :card="project" />
+            {% endfor %}
+        </div>
+
+        <div class="card-display__action">
+            <a class="button button--primary" href="{{ path('app_front_projects') }}">Voir tous les projets</a>
+        </div>
+    </section>
+{% endif %}

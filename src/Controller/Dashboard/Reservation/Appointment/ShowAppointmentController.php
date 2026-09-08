@@ -10,9 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Turbo\TurboBundle;
 use Symfony\UX\Turbo\TurboStreamResponse;
 
+#[IsGranted('ROLE_ADMIN')]
 final class ShowAppointmentController extends AbstractController
 {
     #[Route('/dashboard/reservations/appointments/{id}', name: 'app_dashboard_reservation_appointment_show', requirements: ['id' => '\d+'], methods: ['GET'])]

@@ -38,6 +38,7 @@
                                 <a
                                     class="sidebar__menu-link{{ active ? ' is-active' : '' }}"
                                     href="{{ path(item.route) }}"
+                                    {% if item.logout|default(false) %}data-turbo="false"{% endif %}
                                     {% if active %}aria-current="page"{% endif %}
                                 >
                             {% endif %}

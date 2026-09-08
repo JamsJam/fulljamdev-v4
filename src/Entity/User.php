@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: ['email'], message: 'Un compte utilise déjà cette adresse email.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -17,6 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     /**
@@ -31,11 +36,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $nom = null;
+    #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
+    private ?string $lastName = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $formname = null;
+    #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 30)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 30)]
+    private ?string $phoneNumber = null;
+
+    #[ORM\Column(length: 150)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 150)]
+    private ?string $company = null;
+
+    #[ORM\Column(length: 150)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 150)]
+    private ?string $jobTitle = null;
 
     public function getId(): ?int
     {
@@ -118,26 +142,62 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getNom(): ?string
+    public function getLastName(): ?string
     {
-        return $this->nom;
+        return $this->lastName;
     }
 
-    public function setNom(string $nom): static
+    public function setLastName(string $lastName): static
     {
-        $this->nom = $nom;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getFormname(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->formname;
+        return $this->firstName;
     }
 
-    public function setFormname(string $formname): static
+    public function setFirstName(string $firstName): static
     {
-        $this->formname = $formname;
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(string $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+
+    public function setCompany(string $company): static
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getJobTitle(): ?string
+    {
+        return $this->jobTitle;
+    }
+
+    public function setJobTitle(string $jobTitle): static
+    {
+        $this->jobTitle = $jobTitle;
 
         return $this;
     }

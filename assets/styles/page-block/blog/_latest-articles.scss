@@ -73,9 +73,11 @@
         align-items: center;
         gap: clamp(1rem, 3vw, 2rem);
         padding-block: 1.25rem;
+        padding-inline: 1rem;
         color: inherit;
         text-decoration: none;
 
+        &:hover { background: color-mix(in srgb, var(--background-purple) 55%, var(--background-dark)); }
         &:hover h3 { color: color-mix(in srgb, var(--text) 75%, var(--button-primary-border)); }
         &:focus-visible { outline: 2px solid var(--button-primary-border); outline-offset: 3px; }
     }

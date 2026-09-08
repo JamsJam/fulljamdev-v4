@@ -21,8 +21,9 @@ final readonly class FeaturedProjectsProvider implements FeaturedProjectsProvide
             $card->title = $project->getTitle();
             $card->text = $project->getExcerpt() ?? '';
             $card->cta->label = 'Voir le projet';
-            $card->cta->target = CtaTarget::URL;
-            $card->cta->href = '/projet/'.$project->getSlug();
+            $card->cta->target = CtaTarget::ROUTE;
+            $card->cta->routeName = 'app_front_project_show';
+            $card->cta->routeParameters = ['slug' => $project->getSlug()];
 
             $mainImage = $project->getImages()->first();
             if (false !== $mainImage) {

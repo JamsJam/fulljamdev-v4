@@ -168,8 +168,9 @@
             ul {
                 width: max-content;
                 min-width: 100%;
-                justify-content: space-around;
+                justify-content: center;
                 gap: 1.5rem;
+                padding-inline: 1rem;
             }
         }
     }

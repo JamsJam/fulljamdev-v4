@@ -12,7 +12,9 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 final class CreateCategoryController extends AbstractController
 {
     #[Route('/dashboard/blog/category/new', name: 'app_dashboard_blog_category_new', methods: ['GET', 'POST'])]

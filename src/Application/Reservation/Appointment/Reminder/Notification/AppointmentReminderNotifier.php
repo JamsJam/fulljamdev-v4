@@ -3,8 +3,8 @@
 namespace App\Application\Reservation\Appointment\Reminder\Notification;
 
 use App\Application\Reservation\Appointment\Reminder\Enum\AppointmentReminderType;
-use App\Application\Settings\Service\GetAccountSettingsService;
 use App\Entity\Reservation\Appointment;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -13,24 +13,24 @@ final readonly class AppointmentReminderNotifier
 {
     public function __construct(
         private MailerInterface $mailer,
-        private GetAccountSettingsService $getAccountSettingsService,
+        private UserRepository $userRepository,
     ) {
     }
 
     public function notify(Appointment $appointment, AppointmentReminderType $type): void
     {
         $contact = $appointment->getContact();
-        $account = $this->getAccountSettingsService->get();
-        $accountEmail = $account->email;
+        $account = $this->userRepository->findAdministrator();
+        $accountEmail = $account?->getEmail();
 
-        if (null === $contact || null === $contact->getEmail() || '' === $accountEmail) {
+        if (null === $contact || null === $contact->getEmail() || null === $accountEmail || '' === $accountEmail) {
             return;
         }
 
         $sender = new Address($accountEmail, trim(sprintf(
             '%s %s',
-            $account->firstName,
-            $account->lastName,
+            $account->getFirstName(),
+            $account->getLastName(),
         )));
         $template = match ($type) {
             AppointmentReminderType::DAY_BEFORE => 'day_before',

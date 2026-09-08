@@ -8,7 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 final class DeleteExperienceController extends AbstractController
 {
     #[Route('/dashboard/cv/{id}/delete', name: 'app_dashboard_cv_delete', requirements: ['id' => '\d+'], methods: ['POST'])]

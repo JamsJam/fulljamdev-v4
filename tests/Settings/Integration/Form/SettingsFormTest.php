@@ -2,10 +2,10 @@
 
 namespace App\Tests\Settings\Integration\Form;
 
-use App\Application\Settings\Account\Dto\AccountSettingsDto;
+use App\Application\Settings\Account\Dto\UserAccountDto;
 use App\Application\Settings\General\Dto\GeneralSettingsDto;
-use App\Form\AccountSettingsType;
 use App\Form\GeneralSettingsType;
+use App\Form\UserAccountType;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -19,10 +19,10 @@ final class SettingsFormTest extends KernelTestCase
         $this->formFactory = self::getContainer()->get(FormFactoryInterface::class);
     }
 
-    public function testAccountFormMapsAndValidatesCompleteSettings(): void
+    public function testUserAccountFormValidatesCredentialsUpdate(): void
     {
-        $settings = new AccountSettingsDto();
-        $form = $this->formFactory->create(AccountSettingsType::class, $settings, ['csrf_protection' => false]);
+        $account = new UserAccountDto();
+        $form = $this->formFactory->create(UserAccountType::class, $account, ['csrf_protection' => false]);
         $form->submit([
             'firstName' => 'Ada',
             'lastName' => 'Lovelace',
@@ -30,29 +30,32 @@ final class SettingsFormTest extends KernelTestCase
             'phoneNumber' => '+33 1 23 45 67 89',
             'company' => 'Analytical Engines',
             'jobTitle' => 'Développeuse',
+            'newPassword' => 'A-secure-password-123',
+            'currentPassword' => 'Current-password-123',
             'submit' => '',
         ]);
 
-        self::assertTrue($form->isSubmitted());
         self::assertTrue($form->isValid(), (string) $form->getErrors(true));
-        self::assertSame('ada@example.test', $settings->email);
+        self::assertSame('A-secure-password-123', $account->newPassword);
     }
 
-    public function testAccountFormRejectsMissingAndInvalidValues(): void
+    public function testUserAccountFormRequiresCurrentPassword(): void
     {
-        $form = $this->formFactory->create(AccountSettingsType::class, new AccountSettingsDto(), ['csrf_protection' => false]);
+        $form = $this->formFactory->create(UserAccountType::class, new UserAccountDto(), ['csrf_protection' => false]);
         $form->submit([
-            'firstName' => '',
-            'lastName' => '',
-            'email' => 'not-an-email',
-            'phoneNumber' => '',
-            'company' => '',
-            'jobTitle' => '',
+            'firstName' => 'Ada',
+            'lastName' => 'Lovelace',
+            'email' => 'ada@example.test',
+            'phoneNumber' => '+33 1 23 45 67 89',
+            'company' => 'Analytical Engines',
+            'jobTitle' => 'Développeuse',
+            'newPassword' => '',
+            'currentPassword' => '',
             'submit' => '',
         ]);
 
         self::assertFalse($form->isValid());
-        self::assertGreaterThanOrEqual(6, $form->getErrors(true)->count());
+        self::assertFalse($form->get('currentPassword')->isValid());
     }
 
     public function testGeneralFormMapsAValidTimezoneAndHomepageChoice(): void

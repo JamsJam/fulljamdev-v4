@@ -12,8 +12,10 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\UX\Turbo\TurboStreamResponse;
 
+#[IsGranted('ROLE_ADMIN')]
 final class CreatePlanningController extends AbstractController
 {
     #[Route('/dashboard/reservations/plannings/new', name: 'app_dashboard_reservation_planning_new', methods: ['GET', 'POST'])]

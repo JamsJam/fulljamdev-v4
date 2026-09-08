@@ -47,24 +47,30 @@ jobs:
       - name: Deployer sur le serveur de test
         uses: appleboy/ssh-action@v1.2.5
         env:
-          APP_DOMAIN: ${{ secrets.APP_DOMAIN }}
-          APP_SECRET_SOURCE: ${{ secrets.APP_TEST_SECRET }}
-          DATABASE_URL_SOURCE: ${{ secrets.DATABASE_TEST_URL }}
-          MAILER_DSN_SOURCE: ${{ secrets.MAILER_TEST_DSN }}
-          MESSENGER_TRANSPORT_DSN_SOURCE: ${{ secrets.MESSENGER_TEST_TRANSPORT_DSN }}
+          APP_USER: ${{ secrets.APP_USER }}
+          APP_DOMAIN: ${{ secrets.APP_DOMAIN_DEV }}
+          APP_SECRET: ${{ secrets.APP_SECRET_DEV }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
+          CORS_ALLOW_ORIGIN: ${{ secrets.CORS_ALLOW_ORIGIN_DEV }}
+          MAILER_DSN: ${{ secrets.MAILER_DSN }}
+          MESSENGER_TRANSPORT_DSN: ${{ secrets.MESSENGER_TRANSPORT_DSN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         with:
-          host: ${{ secrets.APP_SERVER }}
+          host: ${{ secrets.APP_HOST }}
           username: ${{ secrets.APP_USER }}
           password: ${{ secrets.APP_PASS }}
           port: ${{ secrets.APP_PORT }}
-          envs: APP_DOMAIN,APP_SECRET_SOURCE,DATABASE_URL_SOURCE,MAILER_DSN_SOURCE,MESSENGER_TRANSPORT_DSN_SOURCE
+          envs: APP_USER,APP_DOMAIN,APP_SECRET,DATABASE_URL,CORS_ALLOW_ORIGIN,MAILER_DSN,MESSENGER_TRANSPORT_DSN,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,GOOGLE_REFRESH_TOKEN
           script: |
             set -Eeuo pipefail
 
-            PROJECT_DIR="/var/www/${{ secrets.APP_USER }}/test.${APP_DOMAIN}"
+            PROJECT_DIR="/var/www/${APP_USER}/${APP_DOMAIN}"
 
             echo "==========[1/9] Verification de la configuration=========="
-            for VARIABLE_NAME in APP_DOMAIN APP_SECRET_SOURCE DATABASE_URL_SOURCE MAILER_DSN_SOURCE MESSENGER_TRANSPORT_DSN_SOURCE; do
+            for VARIABLE_NAME in APP_USER APP_DOMAIN APP_SECRET DATABASE_URL CORS_ALLOW_ORIGIN MAILER_DSN MESSENGER_TRANSPORT_DSN GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GOOGLE_REDIRECT_URI GOOGLE_REFRESH_TOKEN; do
               if [ -z "${!VARIABLE_NAME:-}" ]; then
                 echo "Erreur : ${VARIABLE_NAME} est absente ou vide." >&2
                 exit 1
@@ -91,10 +97,15 @@ jobs:
             cat > .env.local <<EOF
             APP_ENV=prod
             APP_DEBUG=0
-            DATABASE_URL=$(dotenv_quote "$DATABASE_URL_SOURCE")
-            APP_SECRET=$(dotenv_quote "$APP_SECRET_SOURCE")
-            MAILER_DSN=$(dotenv_quote "$MAILER_DSN_SOURCE")
-            MESSENGER_TRANSPORT_DSN=$(dotenv_quote "$MESSENGER_TRANSPORT_DSN_SOURCE")
+            APP_SECRET=$(dotenv_quote "$APP_SECRET")
+            DATABASE_URL=$(dotenv_quote "$DATABASE_URL")
+            CORS_ALLOW_ORIGIN=$(dotenv_quote "$CORS_ALLOW_ORIGIN")
+            MAILER_DSN=$(dotenv_quote "$MAILER_DSN")
+            MESSENGER_TRANSPORT_DSN=$(dotenv_quote "$MESSENGER_TRANSPORT_DSN")
+            GOOGLE_CLIENT_ID=$(dotenv_quote "$GOOGLE_CLIENT_ID")
+            GOOGLE_CLIENT_SECRET=$(dotenv_quote "$GOOGLE_CLIENT_SECRET")
+            GOOGLE_REDIRECT_URI=$(dotenv_quote "$GOOGLE_REDIRECT_URI")
+            GOOGLE_REFRESH_TOKEN=$(dotenv_quote "$GOOGLE_REFRESH_TOKEN")
             EOF
             chmod 600 .env.local
             rm -f .env.local.php
@@ -105,16 +116,16 @@ jobs:
             composer dump-env prod
 
             echo "==========[6/9] Nettoyage du cache=========="
-            APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --no-warmup
+              php bin/console cache:clear --no-warmup
 
             echo "==========[7/9] Execution des migrations=========="
-            APP_ENV=prod APP_DEBUG=0 php bin/console doctrine:migrations:migrate --no-interaction
+              php bin/console doctrine:migrations:migrate --no-interaction
 
             echo "==========[8/9] Compilation des assets=========="
-            APP_ENV=prod APP_DEBUG=0 php bin/console sass:build
-            APP_ENV=prod APP_DEBUG=0 php bin/console asset-map:compile
+              php bin/console sass:build
+              php bin/console asset-map:compile
 
             echo "==========[9/9] Rechauffement du cache=========="
-            APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup
+              php bin/console cache:warmup
 
             echo "Deploiement de develop termine avec succes."

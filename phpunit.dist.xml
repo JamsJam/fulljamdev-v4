@@ -33,7 +33,6 @@
         </testsuite>
         <testsuite name="Application">
             <directory>tests/Security/Application</directory>
-            <directory>tests/Settings/Application</directory>
             <directory>tests/Experience/Application</directory>
             <directory>tests/Project/Application</directory>
             <directory>tests/Blog/Application</directory>

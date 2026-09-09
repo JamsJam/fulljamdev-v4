@@ -1,17 +1,17 @@
 User-agent: Googlebot
-Disallow: /admin/
+Disallow: /dashboard/
 Allow: /
 
 User-agent: Bingbot
-Disallow: /admin/
+Disallow: /dashboard/
 Allow: /
 
 User-agent: AhrefsBot
-Disallow: /admin/
+Disallow: /dashboard/
 Allow: /
 
 User-agent: AhrefsSiteAudit
-Disallow: /admin/
+Disallow: /dashboard/
 Allow: /
 
 User-agent: *

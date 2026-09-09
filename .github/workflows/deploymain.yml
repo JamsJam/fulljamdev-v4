@@ -107,7 +107,7 @@ jobs:
             MESSENGER_TRANSPORT_DSN=$(dotenv_quote "$MESSENGER_TRANSPORT_DSN")
             GOOGLE_CLIENT_ID=$(dotenv_quote "$GOOGLE_CLIENT_ID")
             GOOGLE_CLIENT_SECRET=$(dotenv_quote "$GOOGLE_CLIENT_SECRET")
-            GOOGLE_REDIRECT_URI=$(dotenv_quote "$GOOGLE_REDIRECT_URI")
+            GOOGLE_REDIRECT_URI=$(dotenv_quote "https://${APP_DOMAIN%/}/${GOOGLE_REDIRECT_URI#/}")
             GOOGLE_REFRESH_TOKEN=$(dotenv_quote "$GOOGLE_REFRESH_TOKEN")
             EOF
             chmod 600 .env.local

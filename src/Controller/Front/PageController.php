@@ -13,7 +13,7 @@ final class PageController extends AbstractController
     #[Route(
         '/{path}',
         name: 'app_front_page',
-        requirements: ['path' => '[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*'],
+        requirements: ['path' => '(?!google(?:/|$))[a-z0-9]+(?:-[a-z0-9]+)*(?:/[a-z0-9]+(?:-[a-z0-9]+)*)*'],
         methods: ['GET'],
         priority: -1000,
     )]

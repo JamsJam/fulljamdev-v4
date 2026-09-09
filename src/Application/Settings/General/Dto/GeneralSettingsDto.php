@@ -8,6 +8,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class GeneralSettingsDto
 {
+    public bool $maintenanceEnabled = false;
+
+    #[Assert\Length(max: 2000)]
+    public string $maintenanceMessage = 'Désolé pour cette interruption. Le site est en cours de maintenance. Vous pouvez me retrouver via les liens ci-dessous. À très bientôt !';
+
+    /** @var list<array{name: string, value: string}> */
+    public array $maintenanceLinks = [];
+
     #[Assert\NotBlank(message: 'Le titre du site est obligatoire.')]
     #[Assert\Length(max: 120)]
     public string $siteTitle = 'FullJam Dev';
@@ -40,7 +48,7 @@ final class GeneralSettingsDto
     #[Assert\Timezone(message: 'Ce fuseau horaire n’est pas valide.')]
     public string $timezone = 'Europe/Paris';
 
-    #[Assert\NotNull(message: 'Sélectionnez une page d’accueil.')]
+    #[Assert\When(expression: '!this.maintenanceEnabled', constraints: [new Assert\NotNull(message: 'Sélectionnez une page d’accueil.')])]
     #[Assert\Positive(message: 'La page d’accueil sélectionnée n’est pas valide.')]
     public ?int $homepagePageId = null;
 }

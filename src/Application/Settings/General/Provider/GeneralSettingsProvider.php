@@ -19,6 +19,16 @@ final readonly class GeneralSettingsProvider
         $branding = is_array($configuration['branding'] ?? null) ? $configuration['branding'] : [];
 
         $dto = new GeneralSettingsDto();
+        $maintenance = is_array($configuration['maintenance'] ?? null) ? $configuration['maintenance'] : [];
+        $dto->maintenanceEnabled = true === ($maintenance['enabled'] ?? false);
+        $dto->maintenanceMessage = $this->stringValue($maintenance, 'message', $dto->maintenanceMessage);
+        foreach (is_array($maintenance['links'] ?? null) ? $maintenance['links'] : [] as $link) {
+            if (is_array($link) && is_string($link['name'] ?? null) && is_string($link['value'] ?? null)
+                && in_array(parse_url($link['value'], PHP_URL_SCHEME), ['https', 'http'], true)
+                && false !== filter_var($link['value'], FILTER_VALIDATE_URL)) {
+                $dto->maintenanceLinks[] = ['name' => $link['name'], 'value' => $link['value']];
+            }
+        }
         $dto->siteTitle = $this->stringValue($branding, 'site_title', 'FullJam Dev');
         $dto->logoPath = $this->nullableStringValue($branding, 'logo');
         $dto->faviconSvgPath = $this->nullableStringValue($branding, 'favicon_svg');

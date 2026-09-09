@@ -13,6 +13,31 @@ final class SettingsFormTest extends KernelTestCase
 {
     private FormFactoryInterface $formFactory;
 
+    public function testMaintenanceCanBeEnabledWithoutHomepageAndWithLinks(): void
+    {
+        $settings = new GeneralSettingsDto();
+        $form = $this->formFactory->create(GeneralSettingsType::class, $settings, ['csrf_protection' => false]);
+        $form->submit([
+            'siteTitle' => 'Portfolio', 'timezone' => 'Europe/Paris',
+            'maintenanceEnabled' => '1', 'maintenanceMessage' => 'À bientôt !',
+            'maintenanceLinks' => [['name' => 'Profil', 'value' => 'https://example.com/profil']],
+        ]);
+        self::assertTrue($form->isValid(), (string) $form->getErrors(true));
+        self::assertTrue($settings->maintenanceEnabled);
+        self::assertNull($settings->homepagePageId);
+        self::assertSame('https://example.com/profil', $settings->maintenanceLinks[0]['value']);
+    }
+
+    public function testMaintenanceLinksRejectUnsafeSchemes(): void
+    {
+        $form = $this->formFactory->create(GeneralSettingsType::class, new GeneralSettingsDto(), ['csrf_protection' => false]);
+        $form->submit([
+            'siteTitle' => 'Portfolio', 'timezone' => 'Europe/Paris', 'maintenanceEnabled' => '1',
+            'maintenanceLinks' => [['name' => 'Profil', 'value' => 'javascript:alert(1)']],
+        ]);
+        self::assertFalse($form->get('maintenanceLinks')->isValid());
+    }
+
     protected function setUp(): void
     {
         self::bootKernel();

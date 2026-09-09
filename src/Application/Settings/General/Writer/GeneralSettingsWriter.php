@@ -27,6 +27,11 @@ final readonly class GeneralSettingsWriter
         ];
         $configuration['parameters'] = $parameters;
         $configuration['pages'] = $pages;
+        $configuration['maintenance'] = [
+            'enabled' => $dto->maintenanceEnabled,
+            'message' => $dto->maintenanceMessage,
+            'links' => $dto->maintenanceLinks,
+        ];
 
         $this->storage->write($configuration);
     }

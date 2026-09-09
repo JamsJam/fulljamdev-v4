@@ -1,0 +1,31 @@
+{% set invalid = field.vars.errors|length > 0 %}
+{% set displayedImages = currentImages|default([]) %}
+{% if currentImage %}{% set displayedImages = [currentImage] %}{% endif %}
+{% set isMultiple = field.vars.full_name ends with '[]' %}
+<div class="field dropzone" data-controller="dropzone" data-dropzone-has-current-value="{{ displayedImages is not empty ? 'true' : 'false' }}" data-dropzone-current-count-value="{{ displayedImages|length }}"{% if invalid %} data-invalid="true"{% endif %}>
+    {{ form_label(field, null, {label_attr: {class: 'field__label'}}) }}
+    <div class="dropzone-container" data-dropzone-target="container" data-action="dragenter->dropzone#onDragEnter dragleave->dropzone#onDragLeave drop->dropzone#onDrop">
+        {{ form_widget(field, {attr: {
+            class: 'dropzone-input',
+            'data-dropzone-target': 'input',
+            'data-action': 'change->dropzone#onFileInputChange'
+        }}) }}
+        <p class="dropzone-placeholder{{ displayedImages is not empty ? ' hide' : '' }}" data-dropzone-target="placeholder">
+            Déposez {{ isMultiple ? 'des images' : 'une image' }} ici ou <span>parcourez vos fichiers</span>
+        </p>
+        <div class="dropzone-preview{{ displayedImages is not empty ? '' : ' hide' }}" data-dropzone-target="previewContainer">
+            {% for image in displayedImages %}
+                <div class="dropzone-preview__item">
+                    <div class="dropzone-preview__image" style="background-image:url('{{ asset(image) }}')"></div>
+                    <div class="dropzone-preview__filename">Image actuelle {{ loop.index }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="dropzone-helper">
+        <span data-dropzone-target="count">{{ displayedImages|length }} fichier{{ displayedImages|length > 1 ? 's' : '' }}</span>
+        <button type="button" data-dropzone-target="clear" data-action="dropzone#onClear">Effacer la sélection</button>
+    </div>
+    {% if field.vars.help %}<p class="field__description">{{ field.vars.help }}</p>{% endif %}
+    {% if invalid %}<div class="field__error">{{ form_errors(field) }}</div>{% endif %}
+</div>

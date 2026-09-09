@@ -1,0 +1,11 @@
+framework:
+    html_sanitizer:
+        sanitizers:
+            app.experience_sanitizer:
+                allow_elements:
+                    p: []
+                    ul: []
+                    ol: []
+                    li: []
+                    strong: []
+                    em: []

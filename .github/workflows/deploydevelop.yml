@@ -1,0 +1,131 @@
+name: deploydevelop
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-develop
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Tests et lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperer le depot
+        uses: actions/checkout@v6
+
+      - name: Configurer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: ctype, iconv, intl, mbstring
+          coverage: none
+          tools: composer:v2
+
+      - name: Installer les dependances Composer
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Executer les controles qualite et les tests
+        run: make test TEST_OPTIONS=--testdox
+
+  deploy:
+    needs: quality
+    name: Deployer l'environnement de developpement
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperer le depot
+        uses: actions/checkout@v6
+
+      - name: Deployer sur le serveur de test
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          APP_USER: ${{ secrets.APP_USER }}
+          APP_DOMAIN: ${{ secrets.APP_DOMAIN_DEV }}
+          APP_SECRET: ${{ secrets.APP_SECRET_DEV }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
+          CORS_ALLOW_ORIGIN: ${{ secrets.CORS_ALLOW_ORIGIN_DEV }}
+          MAILER_DSN: ${{ secrets.MAILER_DSN }}
+          MESSENGER_TRANSPORT_DSN: ${{ secrets.MESSENGER_TRANSPORT_DSN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        with:
+          host: ${{ secrets.APP_HOST }}
+          username: ${{ secrets.APP_USER }}
+          password: ${{ secrets.APP_PASS }}
+          port: ${{ secrets.APP_PORT }}
+          envs: APP_USER,APP_DOMAIN,APP_SECRET,DATABASE_URL,CORS_ALLOW_ORIGIN,MAILER_DSN,MESSENGER_TRANSPORT_DSN,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,GOOGLE_REFRESH_TOKEN
+          script: |
+            set -Eeuo pipefail
+
+            PROJECT_DIR="/var/www/${APP_USER}/${APP_DOMAIN}"
+
+            echo "==========[1/9] Verification de la configuration=========="
+            for VARIABLE_NAME in APP_USER APP_DOMAIN APP_SECRET DATABASE_URL CORS_ALLOW_ORIGIN MAILER_DSN MESSENGER_TRANSPORT_DSN GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GOOGLE_REDIRECT_URI GOOGLE_REFRESH_TOKEN; do
+              if [ -z "${!VARIABLE_NAME:-}" ]; then
+                echo "Erreur : ${VARIABLE_NAME} est absente ou vide." >&2
+                exit 1
+              fi
+            done
+
+            echo "==========[2/9] Acces au dossier du projet=========="
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              echo "Erreur : ${PROJECT_DIR} n'est pas un depot Git." >&2
+              exit 1
+            fi
+            cd "$PROJECT_DIR"
+
+            echo "==========[3/9] Recuperation de develop=========="
+            git fetch --prune origin develop
+            git checkout -f -B develop origin/develop
+            git reset --hard origin/develop
+
+            echo "==========[4/9] Creation de la configuration Symfony=========="
+            dotenv_quote() {
+              php -r 'echo json_encode($argv[1], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);' "$1"
+            }
+
+            cat > .env.local <<EOF
+            APP_ENV=prod
+            APP_DEBUG=0
+            APP_SECRET=$(dotenv_quote "$APP_SECRET")
+            DATABASE_URL=$(dotenv_quote "$DATABASE_URL")
+            CORS_ALLOW_ORIGIN=$(dotenv_quote "$CORS_ALLOW_ORIGIN")
+            MAILER_DSN=$(dotenv_quote "$MAILER_DSN")
+            MESSENGER_TRANSPORT_DSN=$(dotenv_quote "$MESSENGER_TRANSPORT_DSN")
+            GOOGLE_CLIENT_ID=$(dotenv_quote "$GOOGLE_CLIENT_ID")
+            GOOGLE_CLIENT_SECRET=$(dotenv_quote "$GOOGLE_CLIENT_SECRET")
+            GOOGLE_REDIRECT_URI=$(dotenv_quote "$GOOGLE_REDIRECT_URI")
+            GOOGLE_REFRESH_TOKEN=$(dotenv_quote "$GOOGLE_REFRESH_TOKEN")
+            EOF
+            chmod 600 .env.local
+            rm -f .env.local.php
+
+            echo "==========[5/9] Validation et installation Composer=========="
+            composer validate --no-check-publish
+            composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
+            composer dump-env prod
+
+            echo "==========[6/9] Nettoyage du cache=========="
+              php bin/console cache:clear --no-warmup
+
+            echo "==========[7/9] Execution des migrations=========="
+              php bin/console doctrine:migrations:migrate --no-interaction
+
+            echo "==========[8/9] Compilation des assets=========="
+              php bin/console sass:build
+              php bin/console asset-map:compile
+
+            echo "==========[9/9] Rechauffement du cache=========="
+              php bin/console cache:warmup
+
+            echo "Deploiement de develop termine avec succes."

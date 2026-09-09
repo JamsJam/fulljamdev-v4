@@ -1,0 +1,28 @@
+.cta-center {
+    display: grid;
+    place-items: center;
+    min-height: 32rem;
+    color: #fff;
+    background: #000;
+
+    &__content {
+        display: grid;
+        justify-items: center;
+        gap: var(--padding-xl);
+        width: min(100%, 64rem);
+        text-align: center;
+    }
+
+    &__title {
+        color: inherit;
+        font-size: var(--h2);
+        text-wrap: balance;
+    }
+
+    &__text {
+        color: inherit;
+        font-size: var(--text-l);
+        line-height: 1.55;
+        text-wrap: pretty;
+    }
+}

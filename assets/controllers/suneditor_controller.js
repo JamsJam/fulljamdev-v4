@@ -2,57 +2,31 @@ import { Controller } from '@hotwired/stimulus';
 import suneditor from 'suneditor';
 import plugins from 'suneditor/src/plugins';
 import lang from 'suneditor/src/lang';
-import fr from 'suneditor/src/lang/fr';
-
-
-
-/*
-* The following line makes this controller "lazy": it won't be downloaded until needed
-* See https://symfony.com/bundles/StimulusBundle/current/index.html#lazy-stimulus-controllers
-*/
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-
-    static targets = [
-        'sample'
-    ];
-
-    initialize() {
-        // Called once when the controller is first instantiated (per element)
-
-        // Here you can initialize variables, create scoped callables for event
-        // listeners, instantiate external libraries, etc.
-        // this._fooBar = this.fooBar.bind(this)
-    }
+    static values = {
+        profile: { type: String, default: 'full' },
+        maxCharacters: { type: Number, default: 1000 },
+    };
 
     connect() {
-        // Called every time the controller is connected to the DOM
-        // (on page load, when it's added to the DOM, moved in the DOM, etc.)
-
-        // Here you can add event listeners on the element or target elements,
-        // add or remove classes, attributes, dispatch custom events, etc.
-        // this.fooTarget.addEventListener('click', this._fooBar)
-    }
-
-    // Add custom controller actions here
-    // fooBar() { this.fooTarget.classList.toggle(this.bazClass) }
-
-    disconnect() {
-        // Called anytime its element is disconnected from the DOM
-        // (on page change, when it's removed from or moved in the DOM, etc.)
-
-        // Here you should remove all event listeners added in "connect()" 
-        // this.fooTarget.removeEventListener('click', this._fooBar)
-    }
-
-    sampleTargetConnected() {
         this.initEditor();
     }
 
-    initEditor() {
+    disconnect() {
+        this.editor?.destroy();
+        this.editor = null;
+    }
 
-        const editor = suneditor.create(this.sampleTarget.getAttribute('id'), {
+    initEditor() {
+        if (this.editor) {
+            return;
+        }
+
+        const isBasic = this.profileValue === 'basic';
+
+        this.editor = suneditor.create(this.element, {
             'mode': 'classic',
             'plugins': plugins,
             'rtl': false,
@@ -60,8 +34,8 @@ export default class extends Controller {
             'katex': 'window.katex',
             'charCounter': true,
             'charCounterType': 'char',
-            'charCounterLabel': 'characteres',
-            'maxCharCount': '1000',
+            'charCounterLabel': 'caractères',
+            'maxCharCount': this.maxCharactersValue,
             'className': 'wysiwygEditor',
             'font': [
                 'Montserra'
@@ -70,7 +44,7 @@ export default class extends Controller {
                 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72
             ],
             'fontSizeUnit': 'px',
-            'formats': [
+            'formats': isBasic ? ['p'] : [
                 'p', 
                 'h1', 
                 'h2', 
@@ -99,7 +73,9 @@ export default class extends Controller {
                     'tag': 'span'
                 }
             ],
-            'buttonList': [
+            'buttonList': isBasic ? [
+                ['undo', 'redo', 'bold', 'italic', 'list', 'removeFormat']
+            ] : [
                 [
                     'undo',
                     'redo',
@@ -143,6 +119,6 @@ export default class extends Controller {
             'lang': lang.fr,
             // "lang(In nodejs)": "fr"
         });
-        editor.onChange = function (contents, core) { editor.save(); };
+        this.editor.onChange = () => this.editor.save();
     }
 }

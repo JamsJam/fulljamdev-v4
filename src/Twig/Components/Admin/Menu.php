@@ -7,6 +7,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent]
 final class Menu
 {
+    /** @var array<int, array{name: string, route: string}> */
     public array $menu = [
         [
             'name' => 'Dashboard',

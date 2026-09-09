@@ -1,0 +1,92 @@
+@use "../../abstract/" as *;
+@use "../../abstract/admin" as admin;
+@use "../../animations/variables" as animation;
+
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+:root {
+    font-size: 16px;
+
+    @each $theme, $map in admin.$themes {
+        &[data-theme="#{$theme}"] {
+            @each $key, $value in $map {
+                --#{$key}: #{$value};
+            }
+        }
+    }
+
+    @each $key, $value in $fontfamily {
+        --font-#{$key}: #{$value};
+    }
+
+    @each $key, $value in map-get($fontsize, desktop) {
+        --#{$key}: #{$value};
+    }
+
+    @each $property, $scale in $spaces {
+        @each $key, $value in $scale {
+            --#{$property}-#{$key}: #{$value};
+        }
+    }
+
+    @each $key, $value in animation.$animations {
+        --animation-#{$key}: #{$value};
+    }
+
+    @media (max-width: $screen-l) {
+        @each $key, $value in map-get($fontsize, tablet) {
+            --#{$key}: #{$value};
+        }
+    }
+
+    @media (max-width: $screen-m) {
+        @each $key, $value in map-get($fontsize, mobile) {
+            --#{$key}: #{$value};
+        }
+    }
+}
+
+html,
+body {
+    min-width: 100dvw;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+body.admin {
+    color: var(--text);
+    background: var(--bg-light);
+    font-family: var(--font-text);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: var(--font-title);
+    }
+
+    h1 {
+        font-size: var(--h2);
+    }
+
+    h2 {
+        font-size: var(--h3);
+    }
+
+    h3 {
+        font-size: var(--text-l);
+    }
+
+    a {
+        text-decoration: none;
+    }
+}

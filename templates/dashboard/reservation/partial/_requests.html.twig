@@ -1,0 +1,118 @@
+<section
+    class="reservation-requests"
+    aria-labelledby="reservation-requests-title"
+    {{ stimulus_controller('reservation-requests-tabs') }}
+>
+    <div class="reservation-section-heading">
+        <div>
+            <h2 id="reservation-requests-title">Les demandes</h2>
+            <p>Traitez les nouvelles demandes et les créneaux proposés.</p>
+        </div>
+        <span class="reservation-section-heading__count">
+            {{ requestedAppointments|length + proposedAppointments|length }} demande{{ requestedAppointments|length + proposedAppointments|length > 1 ? 's' : '' }}
+        </span>
+    </div>
+
+    <div class="reservation-tabs" role="tablist" aria-label="Statut des demandes">
+        <button
+            id="requested-tab"
+            class="reservation-tabs__tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="requested-panel"
+            {{ stimulus_action('reservation-requests-tabs', 'select') }}
+            {{ stimulus_target('reservation-requests-tabs', 'tab') }}
+        >
+            Demandées <span>{{ requestedAppointments|length }}</span>
+        </button>
+        <button
+            id="proposed-tab"
+            class="reservation-tabs__tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="proposed-panel"
+            tabindex="-1"
+            {{ stimulus_action('reservation-requests-tabs', 'select') }}
+            {{ stimulus_target('reservation-requests-tabs', 'tab') }}
+        >
+            Proposées <span>{{ proposedAppointments|length }}</span>
+        </button>
+    </div>
+
+    {% for status, appointments in {requested: requestedAppointments, proposed: proposedAppointments} %}
+        <div
+            id="{{ status }}-panel"
+            class="reservation-requests__panel"
+            role="tabpanel"
+            aria-labelledby="{{ status }}-tab"
+            {% if status != 'requested' %}hidden{% endif %}
+            {{ stimulus_target('reservation-requests-tabs', 'panel') }}
+        >
+            {% if appointments is empty %}
+                <p class="reservation-requests__empty">
+                    {{ status == 'requested' ? 'Aucune nouvelle demande.' : 'Aucun créneau proposé en attente.' }}
+                </p>
+            {% else %}
+                <div class="reservation-requests__list">
+                    {% for appointment in appointments %}
+                        <article class="appointment-request-card" style="--planning-color: {{ appointment.planning.color }}">
+                            <header class="appointment-request-card__header">
+                                <span class="appointment-request-card__planning">
+                                    <span aria-hidden="true"></span>
+                                    {{ appointment.planning.title }}
+                                </span>
+                                <span class="appointment-request-card__status appointment-request-card__status--{{ appointment.status.value }}">
+                                    {{ appointment.status.value == 'requested' ? 'Demande reçue' : 'Créneau proposé' }}
+                                </span>
+                            </header>
+
+                            <div class="appointment-request-card__body">
+                                <div class="appointment-request-card__contact">
+                                    <span class="appointment-request-card__avatar" aria-hidden="true">
+                                        {{ appointment.contact.firstName|first|upper }}{{ appointment.contact.lastName|first|upper }}
+                                    </span>
+                                    <div>
+                                        <h3>{{ appointment.contact.firstName }} {{ appointment.contact.lastName }}</h3>
+                                        <a href="mailto:{{ appointment.contact.email }}">{{ appointment.contact.email }}</a>
+                                    </div>
+                                </div>
+
+                                <div class="appointment-request-card__subject">
+                                    <span>Objet du rendez-vous</span>
+                                    <strong>{{ appointment.title }}</strong>
+                                </div>
+
+                                <div class="appointment-request-card__schedule">
+                                    <span class="appointment-request-card__date-badge" aria-hidden="true">
+                                        <strong>{{ appointment.startAt|format_datetime(pattern: 'dd', timezone: appointment.timezone) }}</strong>
+                                        <small>{{ appointment.startAt|format_datetime(pattern: 'MMM', locale: 'fr', timezone: appointment.timezone)|upper }}</small>
+                                    </span>
+                                    <div>
+                                        <strong>{{ appointment.startAt|format_datetime(pattern: 'EEE d MMM', locale: 'fr', timezone: appointment.timezone)|capitalize }}</strong>
+                                        <span>
+                                            {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}–{{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <footer class="appointment-request-card__footer">
+                                <span>{{ appointment.timezone }}</span>
+                                <twig:Admin:Button
+                                    variant="ghost"
+                                    icon="material-symbols:arrow-outward-rounded"
+                                    iconPosition="end"
+                                    label="Examiner la demande"
+                                    href="{{ path('app_dashboard_reservation_appointment_show', {id: appointment.id}) }}"
+                                    data-turbo-frame="appointment-dialog-frame"
+                                />
+                            </footer>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</section>

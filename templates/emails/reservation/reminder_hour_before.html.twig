@@ -1,0 +1,9 @@
+<h1>Notre meeting va bientôt commencer</h1>
+
+<p>Bonjour {{ appointment.contact.firstName }},</p>
+<p>Notre meeting va bientôt commencer. Nous nous retrouvons dans une heure :</p>
+<p>
+    <strong>{{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}</strong>
+    ({{ appointment.timezone }})
+</p>
+<p><a href="{{ appointment.link }}">Rejoindre le meeting Google Meet</a></p>

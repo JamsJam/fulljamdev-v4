@@ -1,2 +1,11 @@
 parameters:
     theme: light
+    timezone: Europe/Paris
+branding:
+    site_title: 'FullJam Dev'
+    logo: null
+    favicon_svg: null
+    favicon_ico: null
+    apple_touch_icon: null
+pages:
+    homepage_id: 1

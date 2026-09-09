@@ -1,0 +1,30 @@
+<turbo-frame id="planning-dialog-frame">
+    <twig:Admin:Dialog title="Disponibilités de {{ planning.title }}" description="Consultez les créneaux ouverts à la réservation.">
+        <div class="planning-availability-summary">
+            {% set dayNames = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] %}
+            <ul class="planning-availability-summary__list">
+                {% for dayName in dayNames %}
+                    {% set availability = availabilitiesByDay[loop.index]|default(null) %}
+                    <li>
+                        <strong>{{ dayName }}</strong>
+                        {% if availability %}
+                            <span>{{ availability.startHour|date('H:i') }}–{{ availability.endHour|date('H:i') }}</span>
+                        {% else %}
+                            <span class="is-unavailable">Indisponible</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <div class="planning-form__actions">
+                <twig:Admin:Button variant="outline" label="Fermer" data-action="dialog#close" />
+                <twig:Admin:Button
+                    variant="primary"
+                    label="Modifier"
+                    href="{{ path('app_dashboard_reservation_planning_availabilities_edit', {id: planning.id}) }}"
+                    data-turbo-frame="planning-dialog-frame"
+                />
+            </div>
+        </div>
+    </twig:Admin:Dialog>
+</turbo-frame>

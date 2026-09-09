@@ -1,0 +1,11 @@
+<h1>Notre rendez-vous est demain</h1>
+
+<p>Bonjour {{ appointment.contact.firstName }},</p>
+<p>Notre rendez-vous de demain approche. Voici un rappel de votre créneau :</p>
+<p>
+    <strong>{{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}</strong><br>
+    De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+    à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+    ({{ appointment.timezone }})
+</p>
+<p><a href="{{ appointment.link }}">Rejoindre le meeting Google Meet</a></p>

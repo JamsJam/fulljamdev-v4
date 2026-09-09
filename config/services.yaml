@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    page_upload_directory: '%kernel.project_dir%/public/uploads/pages'
+    settings_upload_directory: '%kernel.project_dir%/public/uploads/settings'
+    blog_upload_directory: '%kernel.project_dir%/public/uploads/blog'
+    project_upload_directory: '%kernel.project_dir%/public/uploads/projects'
 
 services:
     # default configuration for services in *this* file
@@ -19,6 +23,36 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Application\Settings\Storage\YamlSettingsStorage:
+        arguments:
+            $settingsConfigurationFile: '%kernel.project_dir%/src/Config/config.yaml'
+
+    App\Service\FileUploaderService:
+        arguments:
+            $targetDirectory: '%page_upload_directory%'
+
+    App\Application\Settings\General\Asset\SiteAssetUploader:
+        arguments:
+            $targetDirectory: '%settings_upload_directory%'
+
+    App\Application\Blog\Article\Asset\ArticleCoverImageUploader:
+        arguments:
+            $targetDirectory: '%blog_upload_directory%'
+
+    App\Application\Project\Asset\ProjectImageUploader:
+        arguments:
+            $targetDirectory: '%project_upload_directory%'
+
+    App\Service\Google\GoogleOAuthService:
+        arguments:
+            $clientId: '%env(GOOGLE_CLIENT_ID)%'
+            $clientSecret: '%env(GOOGLE_CLIENT_SECRET)%'
+            $redirectUri: '%env(GOOGLE_REDIRECT_URI)%'
+            $refreshToken: '%env(GOOGLE_REFRESH_TOKEN)%'
+
+    App\Application\Reservation\Appointment\Meeting\MeetingLinkCreatorInterface:
+        alias: App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

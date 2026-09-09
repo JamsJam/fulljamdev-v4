@@ -1,0 +1,30 @@
+{% set icon_only = this.iconOnly %}
+{% set loading = this.loading %}
+
+{% set tag = href ? 'a' : 'button' %}
+
+<{{ tag }}
+    {{ attributes.defaults({class: 'button ' ~ this.variantClass ~ (icon_only ? ' button--icon-only' : '')}) }}
+    {% if href %}href="{{ href }}"{% else %}type="{{ type }}"{% endif %}
+    {% if not href and (disabled or loading) %}disabled{% endif %}
+    {% if href and (disabled or loading) %}aria-disabled="true"{% endif %}
+    {% if icon_only %}aria-label="{{ label|default('Action') }}"{% endif %}
+    {% if loading %}aria-busy="true"{% endif %}
+>
+    {% if loading %}
+        <span class="button__spinner" aria-hidden="true"></span>
+        <span>{{ label|default('Chargement…') }}</span>
+    {% else %}
+        {% if icon and iconPosition == 'start' %}
+            {{ ux_icon(icon, {class: 'button__icon', 'aria-hidden': 'true'}) }}
+        {% endif %}
+
+        {% if not icon_only %}
+            <span class="button__label">{{ label|default('Action') }}</span>
+        {% endif %}
+
+        {% if icon and iconPosition == 'end' %}
+            {{ ux_icon(icon, {class: 'button__icon', 'aria-hidden': 'true'}) }}
+        {% endif %}
+    {% endif %}
+</{{ tag }}>

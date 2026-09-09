@@ -1,0 +1,9 @@
+<section
+    class="hero-classic-square{% if data.reverse %} hero-classic-square--reverse{% endif %}"
+    data-block-id="{{ blockId }}"
+>
+    {% include 'components/page/block/hero/shared/_content.html.twig' with {hero_class: 'hero-classic-square'} %}
+    <div class="hero-classic-square__visual">
+        {% include 'components/page/block/hero/shared/_media.html.twig' with {hero_class: 'hero-classic-square', with_glow: true} %}
+    </div>
+</section>

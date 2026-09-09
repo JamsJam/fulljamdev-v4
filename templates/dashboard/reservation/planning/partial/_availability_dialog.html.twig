@@ -1,0 +1,6 @@
+<twig:Admin:Dialog
+    title="Ajouter un planning"
+    description="Définissez maintenant les disponibilités de ce planning."
+>
+    {% include 'dashboard/reservation/planning/partial/_availability_form.html.twig' with {form: form} only %}
+</twig:Admin:Dialog>

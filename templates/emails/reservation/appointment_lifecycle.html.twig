@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ notification.subject }}</title>
+    </head>
+    <body>
+        <h1>{{ notification.heading }}</h1>
+
+        <p>Bonjour {{ appointment.contactFirstName }},</p>
+        <p>{{ notification.message }}</p>
+
+        <p>
+            <strong>{{ appointment.title }}</strong><br>
+            {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}<br>
+            De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+            à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+        </p>
+
+        {% if notification.action == 'join' and appointment.link %}
+            <p><a href="{{ appointment.link }}">Rejoindre le rendez-vous Google Meet</a></p>
+        {% elseif notification.action == 'book' and appointment.planningSlug %}
+            <p><a href="{{ url('app_front_planning_appointment', {slug: appointment.planningSlug}) }}">Choisir un nouveau créneau</a></p>
+        {% endif %}
+
+        {% if appointment.summary %}
+            <h2>Compte rendu</h2>
+            <p>{{ appointment.summary|nl2br }}</p>
+        {% endif %}
+    </body>
+</html>

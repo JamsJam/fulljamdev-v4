@@ -36,6 +36,18 @@
             "src/Repository/.gitignore"
         ]
     },
+    "doctrine/doctrine-fixtures-bundle": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "1f5514cfa15b947298df4d771e694e578d4c204d"
+        },
+        "files": [
+            "src/DataFixtures/AppFixtures.php"
+        ]
+    },
     "doctrine/doctrine-migrations-bundle": {
         "version": "3.4",
         "recipe": {
@@ -60,6 +72,9 @@
         "files": [
             ".php-cs-fixer.dist.php"
         ]
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.10.0"
     },
     "nelmio/cors-bundle": {
         "version": "2.5",
@@ -253,6 +268,15 @@
             "config/packages/notifier.yaml"
         ]
     },
+    "symfony/panther": {
+        "version": "2.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "eac1868f830a3e332764bb3919ab02311b3340c8"
+        }
+    },
     "symfony/property-info": {
         "version": "7.3",
         "recipe": {
@@ -276,6 +300,18 @@
         "files": [
             "config/packages/routing.yaml",
             "config/routes.yaml"
+        ]
+    },
+    "symfony/scheduler": {
+        "version": "7.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "7.2",
+            "ref": "caea3c928ee9e1b21288fd76aef36f16ea355515"
+        },
+        "files": [
+            "src/Schedule.php"
         ]
     },
     "symfony/security-bundle": {
@@ -353,6 +389,9 @@
             "assets/icons/symfony.svg"
         ]
     },
+    "symfony/ux-toolkit": {
+        "version": "v2.36.1"
+    },
     "symfony/ux-turbo": {
         "version": "2.25",
         "recipe": {
@@ -409,6 +448,18 @@
         },
         "files": [
             "config/packages/messenger.yaml"
+        ]
+    },
+    "symfony/workflow": {
+        "version": "7.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.3",
+            "ref": "3b2f8ca32a07fcb00f899649053943fa3d8bbfb6"
+        },
+        "files": [
+            "config/packages/workflow.yaml"
         ]
     },
     "symfonycasts/sass-bundle": {

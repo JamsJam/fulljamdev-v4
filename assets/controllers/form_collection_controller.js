@@ -22,29 +22,17 @@ export default class extends Controller {
 
     addCollectionElement(event)
     {
-        const item = document.createElement('li');
-        item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);
+        const template = document.createElement('template');
+        template.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue).trim();
+        const item = template.content.firstElementChild;
+        if (!item) return;
         this.collectionContainerTarget.appendChild(item);
         this.indexValue++;
-        this.addTagFormDeleteLink(item);
     }
 
-    addTagFormDeleteLink(item) {
-        const removeFormButton = document.createElement('button');
-        removeFormButton.innerText = 'Supprimer';
-        removeFormButton.classList.add('button__action', 'action--delete') ;
-
-        item.append(removeFormButton);
-
-        removeFormButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            // remove the li for the tag form
-            item.remove();
-        });
-
-
+    removeCollectionElement(event) {
+        event.currentTarget.closest('[data-form-collection-item]')?.remove();
     }
 
 
 }
-

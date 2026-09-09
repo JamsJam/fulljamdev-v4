@@ -1,0 +1,18 @@
+{% set sectionId = id|default('experience-timeline') %}
+{% set titleId = sectionId ~ '-title' %}
+
+<section id="{{ sectionId }}" class="experience-timeline" aria-labelledby="{{ titleId }}">
+    <div class="experience-timeline__container">
+        <header class="experience-timeline__header">
+            <{{ titleLevel }} id="{{ titleId }}" class="experience-timeline__title">{{ title }}</{{ titleLevel }}>
+        </header>
+
+        {% if experiences is not empty %}
+            <div class="experience-timeline__items">
+                {% for experience in experiences %}
+                    <twig:Front:ExperienceItem :experience="experience" />
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>

@@ -1,0 +1,14 @@
+{% set current = pagination.currentPageNumber %}
+{% set last = this.pageCount %}
+{% if last > 1 %}
+<nav class="pagination" aria-label="Pagination des articles">
+    <a class="pagination__control{{ current == 1 ? ' is-disabled' : '' }}" href="{{ current > 1 ? path(app.current_route, app.request.query.all|merge({page: current - 1})) : '#' }}"{% if current == 1 %} aria-disabled="true" tabindex="-1"{% endif %}>{{ ux_icon('material-symbols:chevron-left-rounded') }}<span>Précédent</span></a>
+    <ol class="pagination__pages">
+        {% for page in this.pages %}
+            {% if page is same as('start-ellipsis') or page is same as('end-ellipsis') %}<li class="pagination__ellipsis" aria-hidden="true">…</li>
+            {% else %}<li><a class="pagination__page{{ page == current ? ' is-active' : '' }}" href="{{ path(app.current_route, app.request.query.all|merge({page: page})) }}"{% if page == current %} aria-current="page"{% endif %}>{{ page }}</a></li>{% endif %}
+        {% endfor %}
+    </ol>
+    <a class="pagination__control{{ current == last ? ' is-disabled' : '' }}" href="{{ current < last ? path(app.current_route, app.request.query.all|merge({page: current + 1})) : '#' }}"{% if current == last %} aria-disabled="true" tabindex="-1"{% endif %}><span>Suivant</span>{{ ux_icon('material-symbols:chevron-right-rounded') }}</a>
+</nav>
+{% endif %}

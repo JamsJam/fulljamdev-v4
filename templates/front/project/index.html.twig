@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block title %}Projets{% endblock %}
+{% block metadescription %}Découvrez une sélection de projets web conçus avec Symfony, PHP et des technologies modernes.{% endblock %}
+{% block canonical %}{{ url('app_front_projects') }}{% endblock %}
+{% block main_attributes %} data-page="project-catalog"{% endblock %}
+{% block body %}
+<section class="project-catalog" aria-labelledby="project-catalog-title">
+    <header class="project-catalog__hero"><p class="project-catalog__eyebrow">Réalisations</p><h1 id="project-catalog-title">Les projets</h1><p>Une sélection de produits, plateformes et expériences web pensés pour être utiles, performants et durables.</p></header>
+    <form class="project-catalog__filters" method="get" action="{{ path('app_front_projects') }}" role="search">
+        <label class="project-catalog__search"><span class="sr-only">Rechercher dans les projets</span>{{ ux_icon('material-symbols:search-rounded') }}<input type="search" name="q" value="{{ query }}" placeholder="Rechercher un projet…" maxlength="100"></label>
+        <label class="project-catalog__select"><span class="sr-only">Filtrer par technologie</span><select name="technology"><option value="">Toutes les technologies</option>{% for technology in technologies %}<option value="{{ technology.id }}"{{ selected_technology == technology.id ? ' selected' : '' }}>{{ technology.name }}</option>{% endfor %}</select>{{ ux_icon('material-symbols:keyboard-arrow-down-rounded') }}</label>
+        <button class="button button--primary" type="submit">Filtrer</button>
+        {% if query or selected_technology %}<a class="project-catalog__reset" href="{{ path('app_front_projects') }}">Effacer les filtres</a>{% endif %}
+    </form>
+    <div class="project-catalog__result-header"><h2>{{ projects.totalItemCount }} projet{{ projects.totalItemCount > 1 ? 's' : '' }}</h2></div>
+    {% if projects is empty %}
+        <div class="project-catalog__empty">{{ ux_icon('material-symbols:search-off-rounded') }}<h2>Aucun projet trouvé</h2><p>Essayez une autre recherche ou choisissez une autre technologie.</p><a class="button button--primary" href="{{ path('app_front_projects') }}">Voir tous les projets</a></div>
+    {% else %}
+        <div class="project-catalog__grid">
+            {% for project in projects %}
+                <twig:Front:BlogArticleCard :article="project" />
+            {% endfor %}
+        </div>
+        <twig:Front:Pagination :pagination="projects" />
+    {% endif %}
+</section>
+{% endblock %}

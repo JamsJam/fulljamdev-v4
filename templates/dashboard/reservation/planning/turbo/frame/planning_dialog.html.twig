@@ -1,0 +1,8 @@
+<turbo-frame id="planning-dialog-frame">
+    <twig:Admin:Dialog
+        title="Ajouter un planning"
+        description="Créez le planning, puis définissez ses disponibilités."
+    >
+        {% include 'dashboard/reservation/planning/partial/_planning_form.html.twig' with {form: form} only %}
+    </twig:Admin:Dialog>
+</turbo-frame>

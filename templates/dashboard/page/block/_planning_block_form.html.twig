@@ -1,0 +1,22 @@
+<div class="page-builder__block-fields">
+    <div class="page-builder__grid page-builder__essentials">
+        <twig:Form:Field :field="data.title.content" label="Titre" />
+        <twig:Form:Field :field="data.text.content" label="Texte" />
+    </div>
+
+    <details class="page-builder__settings">
+        <summary>Réglages du titre et du texte</summary>
+        <div class="page-builder__settings-content">
+            <twig:Form:Field :field="data.title.level" />
+            <div class="page-builder__grid">
+                <twig:Form:KeyValueCollection :field="data.title.attributes" />
+                <twig:Form:KeyValueCollection :field="data.text.attributes" />
+            </div>
+        </div>
+    </details>
+
+    <twig:Form:Field :field="data.planningId" />
+    <p class="page-builder__feedback">
+        Le contenu reste synchronisé avec le planning sélectionné. Un planning inactif ne sera pas affiché sur le site.
+    </p>
+</div>

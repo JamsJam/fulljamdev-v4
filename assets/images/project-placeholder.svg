@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title description">
+    <title id="title">Aperçu du projet indisponible</title>
+    <desc id="description">Illustration abstraite représentant une interface web.</desc>
+    <defs>
+        <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#21143d" />
+            <stop offset="1" stop-color="#090511" />
+        </linearGradient>
+        <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#9d6cff" />
+            <stop offset="1" stop-color="#6842d8" />
+        </linearGradient>
+    </defs>
+    <rect width="1200" height="720" fill="url(#background)" />
+    <circle cx="180" cy="120" r="240" fill="#6f3cc3" opacity=".18" />
+    <circle cx="1080" cy="650" r="300" fill="#9d6cff" opacity=".12" />
+    <rect x="230" y="145" width="740" height="430" rx="28" fill="#160d29" stroke="#9d6cff" stroke-opacity=".5" stroke-width="4" />
+    <rect x="230" y="145" width="740" height="72" rx="28" fill="#2c1a4d" />
+    <circle cx="278" cy="181" r="10" fill="#9d6cff" />
+    <circle cx="312" cy="181" r="10" fill="#7652c5" />
+    <circle cx="346" cy="181" r="10" fill="#50378a" />
+    <rect x="290" y="275" width="270" height="30" rx="15" fill="url(#accent)" />
+    <rect x="290" y="335" width="520" height="16" rx="8" fill="#e9e2ff" opacity=".72" />
+    <rect x="290" y="375" width="430" height="16" rx="8" fill="#e9e2ff" opacity=".42" />
+    <rect x="290" y="445" width="150" height="48" rx="24" fill="url(#accent)" />
+</svg>

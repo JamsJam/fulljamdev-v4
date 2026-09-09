@@ -1,0 +1,15 @@
+<ol class="stepper" aria-label="{{ label }}">
+    {% for step in steps %}
+        <li
+            class="stepper__item{{ loop.index == activeStep ? ' is-active' : '' }}{{ loop.index < activeStep ? ' is-complete' : '' }}"
+            {% if loop.index == activeStep %}aria-current="step"{% endif %}
+        >
+            <span class="stepper__marker" aria-hidden="true">{{ loop.index < activeStep ? '✓' : loop.index }}</span>
+            <strong>{{ step }}</strong>
+        </li>
+
+        {% if not loop.last %}
+            <li class="stepper__separator" aria-hidden="true"></li>
+        {% endif %}
+    {% endfor %}
+</ol>

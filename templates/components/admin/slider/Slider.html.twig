@@ -1,0 +1,34 @@
+<div
+    class="slider"
+    {{ stimulus_controller('slider', {
+        min: min,
+        max: max,
+        suffix: suffix
+    }) }}
+>
+    <div class="slider__header">
+        {{ form_label(field) }}
+        <output class="slider__value" {{ stimulus_target('slider', 'output') }}>
+            {{ field.vars.value }}{{ suffix }}
+        </output>
+    </div>
+
+    {{ form_widget(field, {
+        attr: {
+            class: 'slider__input',
+            min: min,
+            max: max,
+            step: step,
+            'data-slider-target': 'input',
+            'data-action': 'input->slider#update change->slider#update'
+        }
+    }) }}
+
+    <div class="slider__bounds" aria-hidden="true">
+        <span>{{ min }}{{ suffix }}</span>
+        <span>{{ max }}{{ suffix }}</span>
+    </div>
+
+    {{ form_help(field) }}
+    {{ form_errors(field) }}
+</div>

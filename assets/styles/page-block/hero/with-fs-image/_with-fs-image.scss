@@ -1,0 +1,119 @@
+@use "../../../abstract/" as *;
+
+.hero-with-fs-image {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 1fr);
+    align-items: stretch;
+    gap: clamp(3rem, 7vw, 7rem);
+    min-height: min(52rem, calc(100dvh - 6rem));
+    color: #111827;
+    background: #fff;
+
+    &__content {
+        grid-column: 2;
+        display: grid;
+        align-content: center;
+        gap: var(--padding-xl);
+        padding-block: clamp(3rem, 7vw, 7rem);
+    }
+
+    &__title {
+        color: #111827;
+        font-size: var(--h1);
+        line-height: 1.08;
+        text-wrap: balance;
+    }
+
+    &__lead {
+        color: #6b7280;
+        font-size: var(--text-l);
+        line-height: 1.62;
+        text-wrap: pretty;
+    }
+
+    &__actions {
+        @extend %flex-row-start-center;
+        flex-wrap: wrap;
+        gap: var(--padding-lg);
+    }
+
+    &__media {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: stretch;
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: clamp(1rem, 2vw, 2rem);
+        box-shadow: 0 1.5rem 4rem rgb(17 24 39 / 18%);
+    }
+
+    &__media img,
+    &__placeholder {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+    }
+
+    &__media img {
+        object-fit: cover;
+    }
+
+    &__placeholder {
+        display: grid;
+        place-items: center;
+        color: #6b7280;
+    }
+
+    &--reverse &__content {
+        grid-column: 1;
+    }
+
+    &--reverse &__media {
+        grid-column: 2;
+    }
+}
+
+@media (max-width: $screen-xl) {
+    .hero-with-fs-image {
+        grid-template-columns: 1fr;
+        min-height: auto;
+
+        &__content,
+        &__media,
+        &--reverse &__content,
+        &--reverse &__media {
+            grid-column: auto;
+        }
+
+        &__content {
+            padding-block: 0;
+        }
+
+        &__media {
+            grid-row: 1;
+            min-height: clamp(22rem, 60vw, 40rem);
+        }
+
+        &--reverse &__media {
+            grid-row: auto;
+        }
+    }
+}
+
+@media (max-width: $screen-m) {
+    .hero-with-fs-image {
+        &__actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        &__media {
+            min-height: 22rem;
+        }
+    }
+}

@@ -1,0 +1,6 @@
+<twig:Front:ExperienceTimeline
+    id="resume-timeline-{{ blockId|default('new') }}"
+    title="{{ data.title.content }}"
+    titleLevel="{{ data.title.level.value }}"
+    :experiences="this.experiences"
+/>

@@ -1,0 +1,24 @@
+<section class="reservation-processing" aria-labelledby="appointments-to-process-title">
+    <div class="reservation-processing__content">
+        <span class="reservation-processing__icon" aria-hidden="true">
+            {{ ux_icon('material-symbols:calendar-month-outline-rounded') }}
+        </span>
+        <div>
+            <h2 id="appointments-to-process-title">À traiter</h2>
+            <p>
+                {% if appointmentsToProcess is empty %}
+                    Aucun rendez-vous passé n’attend de traitement.
+                {% else %}
+                    {{ appointmentsToProcess|length }} rendez-vous nécessite{{ appointmentsToProcess|length > 1 ? 'nt' : '' }} une action.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <twig:Admin:Button
+        variant="secondary"
+        label="Voir les rendez-vous à traiter"
+        icon="material-symbols:arrow-outward-rounded"
+        iconPosition="end"
+        href="{{ path('app_dashboard_reservation_processing') }}"
+    />
+</section>

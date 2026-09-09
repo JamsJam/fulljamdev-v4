@@ -1,0 +1,32 @@
+<section class="page-list" aria-labelledby="settings-pages-title">
+    <header class="page-list__header">
+        <div>
+            <h2 id="settings-pages-title">Pages</h2>
+            <p>Construisez vos pages à partir de blocs marketing prédéfinis.</p>
+        </div>
+        <twig:Admin:Button
+            href="{{ path('app_dashboard_page_new') }}"
+            label="Créer une page"
+            data-turbo-frame="_top"
+        />
+    </header>
+
+    <div class="page-list__items">
+        {% for page in pages %}
+            <article>
+                <div>
+                    <strong>{{ page.title }}</strong>
+                    <a href="{{ path('app_front_page', {path: page.path}) }}" target="_blank" rel="noopener noreferrer">/{{ page.path }}</a>
+                </div>
+                <twig:Admin:Button
+                    variant="outline"
+                    href="{{ path('app_dashboard_page_edit', {id: page.id}) }}"
+                    label="Modifier"
+                    data-turbo-frame="_top"
+                />
+            </article>
+        {% else %}
+            <p>Aucune page n’a encore été créée.</p>
+        {% endfor %}
+    </div>
+</section>

@@ -1,0 +1,23 @@
+{% set isProject = article.technologies is defined %}
+{% set href = isProject ? path('app_front_project_show', {slug: article.slug}) : path('app_front_article_show', {slug: article.slug}) %}
+{% set projectImage = isProject ? article.images.first : null %}
+{% set image = isProject ? (projectImage ? projectImage.path : null) : article.coverImage %}
+<article class="blog-card">
+    <a class="blog-card__link" href="{{ href }}" aria-label="{{ isProject ? 'Découvrir le projet' : 'Lire l’article' }} « {{ article.title }} »">
+        <figure class="blog-card__media">
+            {% if image %}<img src="{{ asset(image) }}" alt="" loading="lazy">{% else %}{{ ux_icon(isProject ? 'material-symbols:devices-rounded' : 'material-symbols:image-outline-rounded', {'aria-hidden': 'true'}) }}{% endif %}
+        </figure>
+        <div class="blog-card__content">
+            <header class="blog-card__header">
+                <div class="blog-card__meta">
+                    {% if isProject %}{% set firstTechnology = article.technologies.first %}{% if firstTechnology %}<span class="blog-card__badge">{{ firstTechnology.name }}</span>{% endif %}
+                    {% elseif article.category %}<span class="blog-card__badge">{{ article.category.name }}</span>{% endif %}
+                    {% if article.publishedAt %}<time datetime="{{ article.publishedAt|date('c') }}">{{ article.publishedAt|format_datetime(pattern='d MMM yyyy', locale='fr') }}</time>{% endif %}
+                </div>
+                <h2 class="blog-card__title">{{ article.title }}</h2>
+            </header>
+            <p class="blog-card__summary">{{ isProject ? article.excerpt : article.summary }}</p>
+            <footer class="blog-card__footer"><span>{{ isProject ? 'Découvrir le projet' : 'Lire l’article' }}</span> {{ ux_icon('material-symbols:arrow-forward-rounded', {'aria-hidden': 'true'}) }}</footer>
+        </div>
+    </a>
+</article>

@@ -1,9 +1,8 @@
 symfonycasts_sass:
 
     root_sass:
-        - "%kernel.project_dir%/assets/styles/app.scss"
         - "%kernel.project_dir%/assets/styles/admin.scss"
-        - "%kernel.project_dir%/assets/styles/home.scss"
+        - "%kernel.project_dir%/assets/styles/front.scss"
 
     # The Sass binary to use
     binary:               null

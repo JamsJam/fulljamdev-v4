@@ -6,19 +6,21 @@ export default class extends Controller {
 
     static targets = [
         'input',
+        'container',
         'previewContainer',
         'placeholder',
         'count',
         'clear',
     ];
 
+    static values = {
+        hasCurrent: Boolean,
+        currentCount: Number,
+    };
+
 
     connect() {
-
-        // const previewContainer = document.createElement('div');
-        // previewContainer.classList.add("dropzone-preview__container");
-        // previewContainer.style.backgroundColor = "tan";
-        // container.append(previewContainer);
+        this.initialPreview = this.previewContainerTarget.innerHTML;
     }
 
     disconnect() {
@@ -59,9 +61,9 @@ export default class extends Controller {
 
     onClear(){
         this.inputTarget.value = '';
-        this.previewContainerTarget.innerHTML = '';
-        this.updateCount(0);
-        this.desactivatePreview();
+        this.previewContainerTarget.innerHTML = this.initialPreview;
+        this.updateCount(this.currentCountValue);
+        this.hasCurrentValue ? this.activatePreview() : this.desactivatePreview();
 
     }
 
@@ -71,7 +73,6 @@ export default class extends Controller {
      * @returns {void}
      */
     updateCount(count) {
-        console.log(typeof 'hello');
         this.countTarget.innerText = `${count.toString()} fichier${count > 1 ? 's' : ''}`;
     }
 
@@ -85,19 +86,19 @@ export default class extends Controller {
     createPreviewItem(name, image = null, icon = null) {
         const item = document.createElement('div');
         item.classList.add('dropzone-preview__item');
+        const preview = document.createElement('div');
+        preview.classList.add('dropzone-preview__image');
+        const filename = document.createElement('div');
+        filename.classList.add('dropzone-preview__filename');
+        filename.textContent = name;
+
         if (image) {
-
-            item.innerHTML = `
-                    <div class="dropzone-preview__image" style='background-image:url(${image})'></div>
-                    <div class="dropzone-preview__filename">${name}</div>
-                `;
+            preview.style.backgroundImage = `url(${image})`;
         } else {
-            item.innerHTML = `
-                    <div class="dropzone-preview__image" >${icon}</div>
-                    <div class="dropzone-preview__filename">${name}</div>
-                `;
-
+            preview.textContent = icon;
         }
+
+        item.append(preview, filename);
         this.previewContainerTarget.append(item);
     }
 
@@ -109,6 +110,18 @@ export default class extends Controller {
     desactivatePreview(){
         this.placeholderTarget.classList.remove('hide');
         this.previewContainerTarget.classList.add('hide');
+    }
+
+    onDragEnter() {
+        this.containerTarget.classList.add('draghover');
+    }
+
+    onDragLeave() {
+        this.containerTarget.classList.remove('draghover');
+    }
+
+    onDrop() {
+        this.containerTarget.classList.remove('draghover');
     }
 
 

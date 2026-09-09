@@ -1,0 +1,12 @@
+<turbo-stream action="replace" target="booking-calendar">
+    <template>
+        <twig:Form:DatePicker
+            :field="form.date.value"
+            :calendar="calendar"
+            :previousUrl="path('app_front_planning_calendar', {slug: planning.slug, month: calendar.previous})"
+            :nextUrl="path('app_front_planning_calendar', {slug: planning.slug, month: calendar.next})"
+            id="booking-calendar"
+            label="Choisir une date de rendez-vous"
+        />
+    </template>
+</turbo-stream>

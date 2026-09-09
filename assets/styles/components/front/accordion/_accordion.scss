@@ -1,0 +1,81 @@
+.accordion {
+    width: 100%;
+    border-block-start: 1px solid var(--border-mute);
+
+    &__item {
+        border-block-end: 1px solid var(--border-mute);
+        transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    &__item:hover,
+    &__item:focus-within,
+    &__item.is-open {
+        background-color: var(--background-purple);
+        border-color: var(--border);
+    }
+
+    &__trigger {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--padding-lg);
+        padding-inline: var(--padding-lg);
+        padding-block: var(--padding-xl);
+        color: var(--text);
+        background: transparent;
+        border: 0;
+        font-size: var(--text-m);
+        font-weight: 600;
+        text-align: start;
+        cursor: pointer;
+        transition: color 0.15s ease;
+    }
+
+    &__icon {
+        flex: 0 0 0.65rem;
+        width: 0.65rem;
+        height: 0.65rem;
+        border-inline-end: 2px solid currentcolor;
+        border-block-end: 2px solid currentcolor;
+        transform: rotate(45deg) translate(-0.15rem, -0.15rem);
+        transition: transform 0.15s ease;
+    }
+
+    &__item.is-open &__icon {
+        transform: rotate(225deg) translate(-0.15rem, -0.15rem);
+    }
+
+    &__content {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        color: var(--text-mute);
+        font-size: var(--text-m);
+        line-height: 1.6;
+        transition: grid-template-rows 0.15s ease;
+    }
+
+    &__item.is-open &__content {
+        grid-template-rows: 1fr;
+    }
+
+    &__content-inner {
+        min-height: 0;
+        overflow: hidden;
+        background-color: var(--background-dark);
+    }
+
+    &__content-inner p {
+        padding: var(--padding-xl) var(--padding-lg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .accordion__item,
+    .accordion__trigger,
+    .accordion__icon,
+    .accordion__content {
+        transition: none;
+    }
+}

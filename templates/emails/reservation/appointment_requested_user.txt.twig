@@ -1,0 +1,8 @@
+Nouvelle demande de rendez-vous
+
+{{ appointment.contact.firstName }} {{ appointment.contact.lastName }} vient de demander un rendez-vous pour « {{ appointment.planning.title }} ».
+
+Objet : {{ appointment.title }}
+Email : {{ appointment.contact.email }}
+Téléphone : {{ appointment.contact.phoneNumber }}
+Créneau : {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}, de {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} ({{ appointment.timezone }})

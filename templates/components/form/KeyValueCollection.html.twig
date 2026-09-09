@@ -1,0 +1,17 @@
+{% set row_prototype %}{% include 'components/form/_key_value_row.html.twig' with {row: field.vars.prototype, key_label: keyLabel, value_label: valueLabel} only %}{% endset %}
+
+<fieldset
+    class="key-value-collection"
+    data-controller="form-collection"
+    data-form-collection-index-value="{{ field|length }}"
+    data-form-collection-prototype-value="{{ row_prototype|e('html_attr') }}"
+>
+    <legend>{{ legend ?? field.vars.label }}</legend>
+    {{ form_errors(field) }}
+    <ul data-form-collection-target="collectionContainer">
+        {% for row in field %}
+            {% include 'components/form/_key_value_row.html.twig' with {row: row, key_label: keyLabel, value_label: valueLabel} only %}
+        {% endfor %}
+    </ul>
+    <twig:Admin:Button variant="outline" :label="addLabel" data-action="form-collection#addCollectionElement" />
+</fieldset>

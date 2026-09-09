@@ -1,0 +1,39 @@
+@use "../../abstract/" as *;
+
+.card-display {
+    display: grid;
+    gap: clamp(3rem, 7vw, 5rem);
+
+    &__header {
+        display: grid;
+        gap: var(--padding-xl);
+        max-width: 76rem;
+    }
+
+    &__title {
+        color: var(--text);
+        font-size: var(--h1);
+        line-height: 1.08;
+        text-wrap: balance;
+    }
+
+    &__lead {
+        max-width: 68rem;
+        color: var(--text-mute);
+        font-size: var(--text-l);
+        line-height: 1.55;
+        text-wrap: pretty;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+        gap: clamp(1.25rem, 3vw, 2.5rem);
+    }
+
+    &__action {
+        display: flex;
+        justify-content: center;
+    }
+
+}

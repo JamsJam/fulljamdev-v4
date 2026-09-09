@@ -1,82 +1,137 @@
 name: deploymain
 
 on:
-  workflow_run:
-    workflows: ["cimain"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
 
 jobs:
-  build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    name: Build
+  quality:
+    name: Tests et lint
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.0.3
+    steps:
+      - name: Recuperer le depot
+        uses: actions/checkout@v6
+
+      - name: Configurer PHP
+        uses: shivammathur/setup-php@v2
         with:
-          host: ${{ secrets.APP_SERVER }}
+          php-version: "8.3"
+          extensions: ctype, iconv, intl, mbstring
+          coverage: none
+          tools: composer:v2
+
+      - name: Installer les dependances Composer
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Executer les linters Symfony et PHP
+        run: make quality
+
+      - name: Executer PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Executer les tests
+        run: php bin/phpunit --testdox
+
+  deploy:
+    needs: quality
+    name: Deployer en production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperer le depot
+        uses: actions/checkout@v6
+
+      - name: Deployer sur le serveur de production
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          APP_USER: ${{ secrets.APP_USER }}
+          APP_DOMAIN: ${{ secrets.APP_DOMAIN_MAIN }}
+          APP_SECRET: ${{ secrets.APP_SECRET_MAIN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_MAIN }}
+          CORS_ALLOW_ORIGIN: ${{ secrets.CORS_ALLOW_ORIGIN_MAIN }}
+          MAILER_DSN: ${{ secrets.MAILER_DSN }}
+          MESSENGER_TRANSPORT_DSN: ${{ secrets.MESSENGER_TRANSPORT_DSN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        with:
+          host: ${{ secrets.APP_HOST }}
           username: ${{ secrets.APP_USER }}
           password: ${{ secrets.APP_PASS }}
           port: ${{ secrets.APP_PORT }}
+          envs: APP_USER,APP_DOMAIN,APP_SECRET,DATABASE_URL,CORS_ALLOW_ORIGIN,MAILER_DSN,MESSENGER_TRANSPORT_DSN,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_REDIRECT_URI,GOOGLE_REFRESH_TOKEN
           script: |
-            echo
-            echo "============================"
-            echo "[ Ouverture du dossier ]"
-            echo "============================"
-            echo
-            cd /var/www/${{ secrets.APP_USER }}/${{ secrets.APP_DOMAIN }}
-            echo
-            echo "============================"
-            echo "[ mise a jour du dossier ]"
-            echo "============================"
-            echo
-            git stash
-            git pull
-            echo
-            echo "============================"
-            echo "[ creation du .env ]"
-            echo "============================"
-            echo
-            cat <<EOF > .env.local
+            set -Eeuo pipefail
+
+            PROJECT_DIR="/var/www/${APP_USER}/${APP_DOMAIN}"
+
+            echo "==========[1/9] Verification de la configuration=========="
+            for VARIABLE_NAME in APP_USER APP_DOMAIN APP_SECRET DATABASE_URL CORS_ALLOW_ORIGIN MAILER_DSN MESSENGER_TRANSPORT_DSN GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GOOGLE_REDIRECT_URI GOOGLE_REFRESH_TOKEN; do
+              if [ -z "${!VARIABLE_NAME:-}" ]; then
+                echo "Erreur : ${VARIABLE_NAME} est absente ou vide." >&2
+                exit 1
+              fi
+            done
+
+            echo "==========[2/9] Acces au dossier du projet=========="
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              echo "Erreur : ${PROJECT_DIR} n'est pas un depot Git." >&2
+              exit 1
+            fi
+            cd "$PROJECT_DIR"
+
+            echo "==========[3/9] Recuperation de main=========="
+            git fetch --prune origin main
+            git checkout -B main origin/main
+            git reset --hard origin/main
+
+            echo "==========[4/9] Creation de la configuration Symfony=========="
+            dotenv_quote() {
+              php -r 'echo json_encode($argv[1], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);' "$1"
+            }
+
+            cat > .env.local <<EOF
             APP_ENV=prod
             APP_DEBUG=0
-            DATABASE_URL=${{ secrets.DATABASE_MAIN_URL }}
-            APP_SECRET=${{ secrets.APP_MAIN_SECRET }}
-            MAILER_DSN=${{ secrets.MAILER_MAIN_DSN }}
-            MESSENGER_TRANSPORT_DSN=${{ secrets.MESSENGER_MAIN_TRANSPORT_DSN }}
+            APP_SECRET=$(dotenv_quote "$APP_SECRET")
+            DATABASE_URL=$(dotenv_quote "$DATABASE_URL")
+            CORS_ALLOW_ORIGIN=$(dotenv_quote "$CORS_ALLOW_ORIGIN")
+            MAILER_DSN=$(dotenv_quote "$MAILER_DSN")
+            MESSENGER_TRANSPORT_DSN=$(dotenv_quote "$MESSENGER_TRANSPORT_DSN")
+            GOOGLE_CLIENT_ID=$(dotenv_quote "$GOOGLE_CLIENT_ID")
+            GOOGLE_CLIENT_SECRET=$(dotenv_quote "$GOOGLE_CLIENT_SECRET")
+            GOOGLE_REDIRECT_URI=$(dotenv_quote "$GOOGLE_REDIRECT_URI")
+            GOOGLE_REFRESH_TOKEN=$(dotenv_quote "$GOOGLE_REFRESH_TOKEN")
             EOF
-            echo
-            echo "============================"
-            echo "[ Generation du .env.local.php ]"
-            echo "============================"
-            echo
+            chmod 600 .env.local
+            rm -f .env.local.php
+
+            echo "==========[5/9] Validation et installation Composer=========="
+            composer validate --no-check-publish
+            composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
             composer dump-env prod
-            php bin/console cache:clear
-            echo
-            echo "============================"
-            echo "[ mise a jour des packages ]"
-            echo "============================"
-            echo
-            composer install --no-dev --optimize-autoloader -n
-            php bin/console cache:clear
-            echo
-            echo "============================"
-            echo "[ mise a jour de la BBD ]"
-            echo "============================"
-            echo
-            php bin/console d:m:m -n
-            echo
-            echo "============================"
-            echo "[ Build du style ]"
-            echo "============================"
-            echo
-            php bin/console sass:build
-            php bin/console asset-map:compile
 
+            echo "==========[6/9] Nettoyage du cache=========="
+            APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --no-warmup
 
+            echo "==========[7/9] Execution des migrations=========="
+            APP_ENV=prod APP_DEBUG=0 php bin/console doctrine:migrations:migrate --no-interaction
 
+            echo "==========[8/9] Compilation des assets=========="
+            APP_ENV=prod APP_DEBUG=0 php bin/console sass:build
+            APP_ENV=prod APP_DEBUG=0 php bin/console asset-map:compile
 
+            echo "==========[9/9] Rechauffement du cache=========="
+            APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup
+
+            echo "Deploiement de production termine avec succes."

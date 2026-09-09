@@ -1,0 +1,12 @@
+Votre demande de rendez-vous a bien été reçue
+
+Bonjour {{ appointment.contact.firstName }},
+
+Votre demande pour « {{ appointment.planning.title }} » a bien été enregistrée.
+Vous recevrez un nouvel email lorsqu’elle aura été traitée.
+
+Créneau demandé :
+{{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}
+De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} ({{ appointment.timezone }})
+
+Objet : {{ appointment.title }}

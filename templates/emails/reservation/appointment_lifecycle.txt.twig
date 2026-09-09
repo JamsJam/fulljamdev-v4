@@ -1,0 +1,20 @@
+{{ notification.heading }}
+
+Bonjour {{ appointment.contactFirstName }},
+
+{{ notification.message }}
+
+{{ appointment.title }}
+{{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}
+De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
+
+{% if notification.action == 'join' and appointment.link %}
+Rejoindre le rendez-vous : {{ appointment.link }}
+{% elseif notification.action == 'book' and appointment.planningSlug %}
+Choisir un nouveau créneau : {{ url('app_front_planning_appointment', {slug: appointment.planningSlug}) }}
+{% endif %}
+
+{% if appointment.summary %}
+Compte rendu
+{{ appointment.summary }}
+{% endif %}

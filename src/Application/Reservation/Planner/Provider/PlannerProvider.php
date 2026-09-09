@@ -10,17 +10,17 @@ final class PlannerProvider extends AbstractPlannerProvider implements PlannerPr
 {
     public function provide(): array
     {
-        return $this->planningRepository->findBy([], ['title' => 'ASC']);
+        return $this->planningRepository->findBy(['archivedAt' => null], ['title' => 'ASC']);
     }
 
     public function provideOne(int $id): ?Planning
     {
-        return $this->planningRepository->find($id);
+        return $this->planningRepository->findOneBy(['id' => $id, 'archivedAt' => null]);
     }
 
     public function provideOneBySlug(string $slug): ?Planning
     {
-        return $this->planningRepository->findOneBy(['slug' => $slug]);
+        return $this->planningRepository->findOneBy(['slug' => $slug, 'archivedAt' => null]);
     }
 
     public function colorExists(string $color): bool

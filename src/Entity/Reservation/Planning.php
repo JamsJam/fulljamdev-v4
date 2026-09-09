@@ -78,6 +78,12 @@ class Planning
     #[ORM\Column(options: ['default' => false])]
     private bool $isActive = false;
 
+    #[ORM\Column(options: ['default' => true])]
+    private bool $isOnline = true;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $archivedAt = null;
+
     /**
      * @var Collection<int, Availability>
      */
@@ -199,7 +205,30 @@ class Planning
 
     public function isActive(): bool
     {
-        return $this->isActive;
+        return null === $this->archivedAt && $this->isActive;
+    }
+
+    public function isOnline(): bool
+    {
+        return $this->isOnline;
+    }
+
+    public function setIsOnline(bool $isOnline): static
+    {
+        $this->isOnline = $isOnline;
+
+        return $this;
+    }
+
+    public function getArchivedAt(): ?\DateTimeImmutable
+    {
+        return $this->archivedAt;
+    }
+
+    public function archive(): void
+    {
+        $this->archivedAt = new \DateTimeImmutable();
+        $this->isActive = false;
     }
 
     public function setIsActive(bool $isActive): static

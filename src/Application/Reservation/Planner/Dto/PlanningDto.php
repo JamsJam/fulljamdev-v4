@@ -24,6 +24,10 @@ final class PlanningDto
         #[Assert\NotBlank(message: 'La couleur du planning est obligatoire.')]
         #[Assert\CssColor(formats: Assert\CssColor::HEX_LONG, message: 'La couleur doit être au format hexadécimal #RRGGBB.')]
         public string $color = '#6750A4',
+
+        public bool $isActive = false,
+
+        public bool $isOnline = true,
     ) {
     }
 }

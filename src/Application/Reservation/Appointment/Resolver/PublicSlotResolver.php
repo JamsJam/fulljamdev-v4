@@ -32,7 +32,8 @@ final readonly class PublicSlotResolver
     {
         $timezone = new \DateTimeZone($this->getGeneralSettingsService->get()->timezone);
         $now = new \DateTimeImmutable('now', $timezone);
-        $start = $month->setTimezone($timezone)->modify('first day of this month')->setTime(0, 0);
+        // The requested month is a calendar value, not an instant to convert.
+        $start = new \DateTimeImmutable($month->format('Y-m-01').' 00:00:00', $timezone);
         $end = $start->modify('last day of this month')->setTime(23, 59, 59);
 
         return $this->resolveRange($planning, $start, $end, $now);

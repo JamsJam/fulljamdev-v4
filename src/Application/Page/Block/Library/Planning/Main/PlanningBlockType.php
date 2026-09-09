@@ -9,6 +9,8 @@ use App\Entity\Reservation\Planning;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PlanningBlockType extends AbstractType
@@ -24,10 +26,24 @@ final class PlanningBlockType extends AbstractType
             ->add('text', TextType::class)
             ->add('planningId', ChoiceType::class, [
                 'label' => 'Planning à afficher',
+                'required' => false,
                 'placeholder' => 'Sélectionnez un planning',
                 'choices' => $this->planningChoices(),
                 'choice_translation_domain' => false,
             ]);
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
+            $data = $event->getData();
+            $choices = $this->planningChoices();
+            if ($data instanceof PlanningBlockDTO && null !== $data->planningId && !in_array($data->planningId, $choices, true)) {
+                $choices['Planning indisponible (vous pouvez en sélectionner un autre)'] = $data->planningId;
+                $event->getForm()->add('planningId', ChoiceType::class, [
+                    'label' => 'Planning à afficher', 'required' => false,
+                    'placeholder' => 'Sélectionnez un planning', 'choices' => $choices,
+                    'choice_translation_domain' => false,
+                ]);
+            }
+        });
     }
 
     /** @return array<string, int> */

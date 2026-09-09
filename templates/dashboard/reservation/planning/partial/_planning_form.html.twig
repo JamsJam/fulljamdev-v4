@@ -1,14 +1,16 @@
 <div id="planning-dialog-content">
+    {% if not editing|default(false) %}
     <twig:Admin:Stepper
         :steps="['Créer le planning', 'Modifier les disponibilités']"
         :activeStep="1"
         label="Étapes de création du planning"
     />
+    {% endif %}
 
     {{ form_start(form, {
         attr: {
             class: 'planning-form',
-            'data-turbo-stream': 'true'
+            'data-turbo-stream': editing|default(false) ? 'false' : 'true'
         }
     }) }}
         {{ form_errors(form) }}
@@ -16,6 +18,8 @@
         <div class="planning-form__fields">
             <twig:Form:Field :field="form.title" />
             <twig:Form:Field :field="form.description" />
+            <twig:Form:Field :field="form.isActive" />
+            <twig:Form:Field :field="form.isOnline" />
 
             <div class="planning-form__row">
                 <twig:Admin:Slider :field="form.duration" :min="5" :max="60" :step="5" suffix=" min" />
@@ -25,7 +29,7 @@
             <div
                 class="planning-form__row planning-form__row--compact planning-color-check"
                 data-controller="planning-color-availability"
-                data-planning-color-availability-url-value="{{ path('app_dashboard_reservation_planning_check_color') }}"
+                data-planning-color-availability-url-value="{{ path('app_dashboard_reservation_planning_check_color', editing|default(false) ? {id: planning.id} : {}) }}"
                 data-planning-color-availability-loading-value="false"
             >
                 <twig:Form:Field :field="form.color" />
@@ -47,8 +51,12 @@
         </div>
 
         <div class="planning-form__actions">
-            <twig:Admin:Button variant="outline" label="Annuler" data-action="dialog#close" />
-            <twig:Admin:Button variant="primary" type="submit" label="Continuer" />
+            {% if editing|default(false) %}
+                <twig:Admin:Button variant="outline" label="Annuler" href="{{ path('app_dashboard_reservation_plannings') }}" />
+            {% else %}
+                <twig:Admin:Button variant="outline" label="Annuler" data-action="dialog#close" />
+            {% endif %}
+            <twig:Admin:Button variant="primary" type="submit" label="{{ editing|default(false) ? 'Enregistrer les modifications' : 'Continuer' }}" />
         </div>
     {{ form_end(form) }}
 </div>

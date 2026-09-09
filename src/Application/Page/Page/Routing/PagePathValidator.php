@@ -30,6 +30,7 @@ final readonly class PagePathValidator
             return true;
         }
 
-        return 'app_front_page' === ($parameters['_route'] ?? null);
+        // Neither public fallback reserves a path for an application feature.
+        return in_array($parameters['_route'] ?? null, ['app_front_page', 'app_front_missing_page'], true);
     }
 }

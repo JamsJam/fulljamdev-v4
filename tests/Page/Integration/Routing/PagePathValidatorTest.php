@@ -5,6 +5,8 @@ namespace App\Tests\Page\Integration\Routing;
 use App\Application\Page\Page\Routing\PagePathValidator;
 use App\Application\Page\Page\Service\CheckPagePathAvailabilityService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RouterInterface;
 
 final class PagePathValidatorTest extends KernelTestCase
 {
@@ -38,5 +40,17 @@ final class PagePathValidatorTest extends KernelTestCase
 
         self::assertTrue($service->conflictsWithApplicationRoute('dashboard/reservations'));
         self::assertFalse($service->conflictsWithApplicationRoute('services/formation'));
+    }
+
+    public function testMissingPageFallbackDoesNotReserveTrailingSlashPaths(): void
+    {
+        $router = self::getContainer()->get(RouterInterface::class);
+        $context = clone $router->getContext();
+        $context->setMethod('GET');
+        $matcher = new UrlMatcher($router->getRouteCollection(), $context);
+
+        self::assertSame('app_front_missing_page', $matcher->match('/services/formation/')['_route']);
+        self::assertTrue($this->validator->isAvailable('services/formation'));
+        self::assertFalse($this->validator->isAvailable('login'));
     }
 }

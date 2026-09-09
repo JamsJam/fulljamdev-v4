@@ -20,7 +20,8 @@ final readonly class UpdateGeneralSettingsService
 
     public function update(GeneralSettingsDto $dto): void
     {
-        if (null === $dto->homepagePageId || null === $this->pageProvider->provideOne($dto->homepagePageId)) {
+        if ((null === $dto->homepagePageId && !$dto->maintenanceEnabled)
+            || (null !== $dto->homepagePageId && null === $this->pageProvider->provideOne($dto->homepagePageId))) {
             throw new \DomainException('La page sélectionnée comme page d’accueil n’existe pas.');
         }
 

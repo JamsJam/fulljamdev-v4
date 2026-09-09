@@ -6,6 +6,14 @@
         {{ form_errors(general_form) }}
 
         <fieldset class="settings__fieldset">
+            <legend>Maintenance du site</legend>
+            <p>Les visiteurs verront la page de maintenance. Les utilisateurs connectés pourront continuer à consulter le site.</p>
+            <twig:Form:Field :field="general_form.maintenanceEnabled" class="settings__field" />
+            <twig:Form:Field :field="general_form.maintenanceMessage" class="settings__field" />
+            <twig:Form:KeyValueCollection :field="general_form.maintenanceLinks" legend="Où me retrouver" keyLabel="Libellé" valueLabel="Lien" addLabel="Ajouter un lien" />
+        </fieldset>
+
+        <fieldset class="settings__fieldset">
             <legend>Identité du site</legend>
 
             <twig:Form:Field

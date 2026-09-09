@@ -13,6 +13,21 @@ final class GeneralSettingsInfrastructureTest extends KernelTestCase
 {
     private string $yamlFile;
 
+    public function testMaintenanceSettingsArePersistedAndReloaded(): void
+    {
+        $settings = self::getContainer()->get(GetGeneralSettingsService::class)->get();
+        self::assertFalse($settings->maintenanceEnabled);
+        $settings->maintenanceEnabled = true;
+        $settings->maintenanceMessage = 'De retour bientôt';
+        $settings->maintenanceLinks = [['name' => 'Profil', 'value' => 'https://example.com/profil']];
+        self::getContainer()->get(GeneralSettingsWriter::class)->write($settings);
+        self::getContainer()->get(GeneralSettingsCache::class)->invalidate();
+        $loaded = self::getContainer()->get(GetGeneralSettingsService::class)->get();
+        self::assertTrue($loaded->maintenanceEnabled);
+        self::assertSame($settings->maintenanceMessage, $loaded->maintenanceMessage);
+        self::assertSame($settings->maintenanceLinks, $loaded->maintenanceLinks);
+    }
+
     protected function setUp(): void
     {
         self::bootKernel();

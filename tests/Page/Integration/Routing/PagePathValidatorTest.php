@@ -12,6 +12,30 @@ final class PagePathValidatorTest extends KernelTestCase
 {
     private PagePathValidator $validator;
 
+    public function testGooglePathsAreReservedAndOAuthRoutesStillMatch(): void
+    {
+        $router = self::getContainer()->get(RouterInterface::class);
+        $context = clone $router->getContext();
+        $context->setMethod('GET');
+        $matcher = new UrlMatcher($router->getRouteCollection(), $context);
+
+        self::assertSame('app_google_connect', $matcher->match('/google/connect')['_route']);
+        self::assertSame('app_google_callback', $matcher->match('/google/callback')['_route']);
+        foreach (['google', 'google/', 'google/connect', 'google/callback', 'google/unknown'] as $path) {
+            self::assertFalse($this->validator->isAvailable($path));
+        }
+        self::assertTrue($this->validator->isAvailable('google-services'));
+
+        foreach (['/google', '/google/unknown'] as $path) {
+            try {
+                $matcher->match($path);
+                self::fail('Google paths must not match a page fallback.');
+            } catch (\Symfony\Component\Routing\Exception\ResourceNotFoundException) {
+                self::assertTrue(true);
+            }
+        }
+    }
+
     protected function setUp(): void
     {
         self::bootKernel();

@@ -14,6 +14,10 @@ final readonly class PagePathValidator
 
     public function isAvailable(string $path): bool
     {
+        if ('google' === $path || str_starts_with($path, 'google/')) {
+            return false;
+        }
+
         $context = clone $this->router->getContext();
         $context->setMethod('GET');
         $matcher = new UrlMatcher($this->router->getRouteCollection(), $context);

@@ -5,12 +5,36 @@ namespace App\Tests\Reservation\Unit\Appointment;
 use App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator;
 use App\Entity\Reservation\Appointment;
 use App\Service\Google\GoogleOAuthService;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class GoogleCalendarMeetingCreatorTest extends TestCase
 {
+    public function testCalendarRejectionIsLoggedWithoutPayloadOrToken(): void
+    {
+        $handler = new TestHandler();
+        $client = new MockHttpClient([
+            self::jsonResponse(['access_token' => 'private-access-token']),
+            self::jsonResponse(['error' => ['message' => 'private-response-content', 'errors' => [['reason' => 'insufficientPermissions']]]], 403),
+        ]);
+        $creator = new GoogleCalendarMeetingCreator($client, $this->oauth($client), new Logger('google', [$handler]));
+        try {
+            $creator->create($this->appointment());
+            self::fail('Expected a Calendar rejection');
+        } catch (\DomainException) {
+            self::assertTrue($handler->hasErrorThatContains('google.calendar.request_rejected'));
+        }
+        $records = $handler->getRecords();
+        $last = $records[array_key_last($records)];
+        self::assertSame(403, $last->context['status_code']);
+        self::assertSame('insufficientPermissions', $last->context['error_code']);
+        self::assertArrayHasKey('duration_ms', $last->context);
+        self::assertStringNotContainsString('private-', json_encode($records, JSON_THROW_ON_ERROR));
+    }
+
     public function testItCreatesAnEventWithoutGuestAndReturnsTheMeetLink(): void
     {
         $requests = [];

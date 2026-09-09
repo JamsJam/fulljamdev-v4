@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Application\Settings\Account\Notification\AdminAccountCreatedNotifier;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +22,7 @@ final class CreateAdminUserCommand extends Command
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly ValidatorInterface $validator,
         private readonly EntityManagerInterface $entityManager,
+        private readonly AdminAccountCreatedNotifier $notifier,
     ) {
         parent::__construct();
     }
@@ -78,6 +80,16 @@ final class CreateAdminUserCommand extends Command
         $this->entityManager->persist($user);
         $this->entityManager->flush();
         $io->success(sprintf('Le compte administrateur %s a été créé.', $email));
+
+        try {
+            $this->notifier->notify($user);
+        } catch (\Exception $exception) {
+            $io->error(sprintf('Le compte est créé, mais la notification par email a échoué : %s', $exception->getMessage()));
+
+            return Command::FAILURE;
+        }
+
+        $io->info('L’email de confirmation a été transmis au service d’envoi.');
 
         return Command::SUCCESS;
     }

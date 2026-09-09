@@ -3,12 +3,35 @@
 namespace App\Tests\Shared\Unit\Google;
 
 use App\Service\Google\GoogleOAuthService;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class GoogleOAuthServiceTest extends TestCase
 {
+    public function testRejectedTokenRequestIsLoggedWithoutSecrets(): void
+    {
+        $handler = new TestHandler();
+        $client = new MockHttpClient(new MockResponse(json_encode([
+            'error' => 'invalid_grant', 'error_description' => 'private-response-content',
+        ], JSON_THROW_ON_ERROR), ['http_code' => 400]));
+        $service = new GoogleOAuthService($client, 'private-client-id', 'private-secret', 'https://example.com/callback', 'private-refresh-token', new Logger('google', [$handler]));
+        try {
+            $service->getAccessTokenFromRefreshToken();
+            self::fail('Expected an OAuth rejection');
+        } catch (\DomainException) {
+            self::assertTrue($handler->hasErrorThatContains('google.oauth.request_rejected'));
+        }
+        $records = $handler->getRecords();
+        self::assertSame(400, $records[1]->context['status_code']);
+        self::assertSame('invalid_grant', $records[1]->context['error_code']);
+        self::assertSame($records[0]->context['request_id'], $records[1]->context['request_id']);
+        self::assertArrayHasKey('duration_ms', $records[1]->context);
+        self::assertStringNotContainsString('private-', json_encode($records, JSON_THROW_ON_ERROR));
+    }
+
     public function testItBuildsTheOfflineConsentAuthorizationUrl(): void
     {
         $service = $this->service(new MockHttpClient());

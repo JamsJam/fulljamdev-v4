@@ -1,6 +1,14 @@
 monolog:
     channels:
+        - google
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+    handlers:
+        google:
+            type: stream
+            path: "%kernel.logs_dir%/google.log"
+            level: info
+            channels: [google]
+            formatter: monolog.formatter.json
 
 when@dev:
     monolog:

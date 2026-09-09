@@ -32,6 +32,7 @@
             <directory>tests/Project/Integration</directory>
         </testsuite>
         <testsuite name="Application">
+            <directory>tests/Reservation/Application</directory>
             <directory>tests/Page/Application</directory>
             <directory>tests/Security/Application</directory>
             <directory>tests/Experience/Application</directory>

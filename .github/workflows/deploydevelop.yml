@@ -97,6 +97,7 @@ jobs:
             cat > .env.local <<EOF
             APP_ENV=prod
             APP_DEBUG=0
+            APP_DOMAIN=$(dotenv_quote "${APP_DOMAIN%/}")
             APP_SECRET=$(dotenv_quote "$APP_SECRET")
             DATABASE_URL=$(dotenv_quote "$DATABASE_URL")
             CORS_ALLOW_ORIGIN=$(dotenv_quote "$CORS_ALLOW_ORIGIN")

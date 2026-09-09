@@ -6,3 +6,10 @@ Objet : {{ appointment.title }}
 Email : {{ appointment.contact.email }}
 Téléphone : {{ appointment.contact.phoneNumber }}
 Créneau : {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}, de {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }} ({{ appointment.timezone }})
+
+{% if appointment.id %}
+Confirmer le rendez-vous : {{ url('app_dashboard_reservation_appointment_review', {id: appointment.id, transition: 'confirm'}) }}
+Refuser la demande : {{ url('app_dashboard_reservation_appointment_review', {id: appointment.id, transition: 'reject'}) }}
+
+Ces liens ouvrent votre espace administrateur. Connectez-vous puis validez votre choix.
+{% endif %}

@@ -17,6 +17,7 @@
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor/
+/public/uploads/
 ###< symfony/asset-mapper ###
 
 ###> friendsofphp/php-cs-fixer ###
@@ -27,3 +28,4 @@
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+

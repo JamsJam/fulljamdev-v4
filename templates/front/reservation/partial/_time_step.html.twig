@@ -11,7 +11,7 @@
             :showErrors="show_errors|default(false)"
             :widgetAttr="{
                 'data-action': 'change->public-booking#selectTimezone',
-                'data-times-url': path('app_front_planning_times', {slug: planning.slug, date: selected_date})
+                'data-times-url': path('app_front_planning_times', {slug: planning.slug, access: app.request.query.get('access'), date: selected_date})
             }"
         />
         <p>Les horaires sont affichés dans le fuseau sélectionné.</p>

@@ -132,7 +132,7 @@
                                     <td>{{ planning.gap }} min</td>
                                     <td>
                                         <span class="planning-status planning-status--{{ planning.active ? 'active' : 'inactive' }}">
-                                            {{ planning.active ? 'Actif' : 'Inactif' }}
+                                            {{ planning.active ? 'Actif' : 'Inactif' }} · {{ planning.online ? 'En ligne' : 'Hors ligne' }}
                                         </span>
                                     </td>
                                     <td class="planning-datatable__actions-column">
@@ -147,12 +147,16 @@
                                                     href: path('app_dashboard_reservation_planning_availabilities_show', {id: planning.id}),
                                                     turboFrame: 'planning-dialog-frame'
                                                 },
-                                                {
+                                                planning.online ? {
                                                     label: 'Copier le lien public',
                                                     copyText: absolute_url(path('app_front_planning_appointment', {slug: planning.slug}))
+                                                } : {
+                                                    label: 'Créer un lien signé',
+                                                    href: path('app_dashboard_reservation_planning_invitation', {id: planning.id})
                                                 },
                                                 {label: 'Voir les rendez-vous', href: path('app_dashboard_reservation') ~ '#reservation-calendar-title'},
-                                                {label: 'Gérer le planning'}
+                                                {label: 'Gérer le planning', href: path('app_dashboard_reservation_planning_edit', {id: planning.id})},
+                                                {label: 'Supprimer le planning', href: path('app_dashboard_reservation_planning_delete', {id: planning.id})}
                                             ]"
                                         />
                                     </td>

@@ -1,0 +1,17 @@
+{% extends 'adminBase.html.twig' %}
+{% block title %}Gérer le planning — {{ planning.title }}{% endblock %}
+{% block body %}
+    <section class="planning-dashboard">
+        <header class="planning-dashboard__header">
+            <div><h1>Gérer le planning</h1><p>{{ planning.title }}</p></div>
+            <twig:Admin:Button variant="destructive" label="Supprimer le planning" href="{{ path('app_dashboard_reservation_planning_delete', {id: planning.id}) }}" />
+        </header>
+        <p>Les modifications s’appliquent aux nouvelles réservations. Les rendez-vous déjà créés conservent leurs horaires et leur statut.</p>
+        {% include 'dashboard/reservation/planning/partial/_planning_form.html.twig' with {form: form, planning: planning, editing: true} only %}
+        <p><a href="{{ path('app_dashboard_reservation_planning_availabilities_edit', {id: planning.id}) }}" data-turbo-frame="planning-dialog-frame">Modifier les disponibilités</a></p>
+        {% if planning.active and not planning.online %}
+            <p><a href="{{ path('app_dashboard_reservation_planning_invitation', {id: planning.id}) }}">Créer un lien signé (1 à 72 heures)</a></p>
+        {% endif %}
+        <turbo-frame id="planning-dialog-frame"></turbo-frame>
+    </section>
+{% endblock %}

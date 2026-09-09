@@ -12,6 +12,7 @@
     }
 
     &__title {
+        color: var(--text);
         font-size: var(--h2);
         text-wrap: balance;
     }

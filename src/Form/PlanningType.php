@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Application\Reservation\Planner\Dto\PlanningDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -15,6 +16,16 @@ final class PlanningType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('isActive', CheckboxType::class, [
+                'label' => 'Ouvrir ce planning aux réservations',
+                'required' => false,
+                'help' => 'Autorise les réservations, y compris par lien signé. Désactiver le planning ne modifie pas les rendez-vous existants.',
+            ])
+            ->add('isOnline', CheckboxType::class, [
+                'label' => 'En ligne',
+                'required' => false,
+                'help' => 'Visible sur le site et accessible par son lien public. Hors ligne, un planning actif reste accessible uniquement avec un lien signé temporaire.',
+            ])
             ->add('title', null, [
                 'label' => 'Nom du planning',
                 'attr' => ['placeholder' => 'Ex. Appels découverte'],

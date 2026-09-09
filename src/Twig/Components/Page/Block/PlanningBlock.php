@@ -28,7 +28,7 @@ final class PlanningBlock
 
         $planning = $this->findPlanning->find($this->data->planningId);
 
-        return null !== $planning && $planning->isActive() ? $planning : null;
+        return null !== $planning && $planning->isActive() && $planning->isOnline() ? $planning : null;
     }
 
     /** @param array<string, mixed> $attributes */

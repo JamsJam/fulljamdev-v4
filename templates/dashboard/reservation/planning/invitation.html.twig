@@ -1,0 +1,27 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Lien signé — {{ planning.title }}{% endblock %}
+
+{% block body %}
+    <section class="planning-dashboard">
+        <h1>Inviter quelqu’un sur {{ planning.title }}</h1>
+        <p>Ce lien permet de réserver sur ce planning même hors ligne. Il est réutilisable jusqu’à son expiration et cesse de fonctionner si vous désactivez ou supprimez le planning.</p>
+        {% if planning.active %}
+            {{ form_start(form, {attr: {'data-turbo': 'false', class: 'planning-form'}}) }}
+                {{ form_errors(form) }}
+                <twig:Form:Field :field="form.hours" />
+                <twig:Admin:Button type="submit" variant="primary" label="Créer le lien signé" />
+            {{ form_end(form) }}
+            {% if invitation_url %}
+                <div data-controller="clipboard" data-clipboard-text-value="{{ invitation_url }}" class="planning-form">
+                    <label for="planning-invitation-url">Lien à partager</label>
+                    <input id="planning-invitation-url" type="text" readonly value="{{ invitation_url }}" style="width: 100%">
+                    <twig:Admin:Button label="Copier le lien" data-action="clipboard#copy" data-clipboard-target="label" />
+                </div>
+            {% endif %}
+        {% else %}
+            <p role="status">Activez ce planning pour créer un lien signé.</p>
+        {% endif %}
+        <twig:Admin:Button variant="outline" label="Gérer le planning" href="{{ path('app_dashboard_reservation_planning_edit', {id: planning.id}) }}" />
+    </section>
+{% endblock %}

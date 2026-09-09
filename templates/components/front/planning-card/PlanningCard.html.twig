@@ -1,4 +1,5 @@
 <article{{ attributes.defaults({class: 'planning-card'}) }}>
+    {% if planning and planning.active and planning.online %}
     <header class="planning-card__header">
         <p class="planning-card__eyebrow">Prendre rendez-vous</p>
         <h2 class="planning-card__title">{{ planning.title }}</h2>
@@ -17,4 +18,8 @@
         label="Choisir un créneau"
         variant="cta"
     />
+    {% else %}
+        <h2 class="planning-card__title">Prendre rendez-vous</h2>
+        <p>La prise de rendez-vous est momentanément indisponible.</p>
+    {% endif %}
 </article>

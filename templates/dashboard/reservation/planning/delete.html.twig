@@ -1,0 +1,14 @@
+{% extends 'adminBase.html.twig' %}
+{% block title %}Supprimer le planning{% endblock %}
+{% block body %}
+    <section class="planning-dashboard">
+        <h1>Supprimer « {{ planning.title }} » ?</h1>
+        <p>Ce planning disparaîtra de la liste et ne permettra plus de nouvelles réservations.</p>
+        <p>Les rendez-vous existants, y compris les demandes en attente, seront conservés et pourront toujours être traités.</p>
+        <form method="post" data-turbo="false">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_planning_' ~ planning.id) }}">
+            <twig:Admin:Button variant="destructive" type="submit" label="Supprimer le planning" />
+            <twig:Admin:Button variant="outline" label="Annuler" href="{{ path('app_dashboard_reservation_planning_edit', {id: planning.id}) }}" />
+        </form>
+    </section>
+{% endblock %}

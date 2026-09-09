@@ -15,7 +15,6 @@ final class PlanningBlockDTO
     #[Assert\Valid]
     public TextDTO $text;
 
-    #[Assert\NotNull(message: 'Sélectionnez un planning.')]
     #[Assert\Positive(message: 'Le planning sélectionné est invalide.')]
     public ?int $planningId = null;
 

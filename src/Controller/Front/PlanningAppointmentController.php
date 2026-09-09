@@ -7,6 +7,7 @@ use App\Application\Reservation\Appointment\Resolver\PublicSlotResolver;
 use App\Application\Reservation\Appointment\Service\CreateRequestedAppointmentService;
 use App\Application\Reservation\Appointment\Service\SlotTimezoneConverter;
 use App\Application\Reservation\Planner\Service\FindPlanningService;
+use App\Application\Reservation\Planner\Service\PlanningInvitationService;
 use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Form\PublicAppointmentType;
 use App\UI\DatePicker\Service\DatePickerService;
@@ -25,6 +26,7 @@ final class PlanningAppointmentController extends AbstractController
         string $slug,
         Request $request,
         FindPlanningService $findPlanningService,
+        PlanningInvitationService $invitations,
         PublicSlotResolver $slotResolver,
         DatePickerService $datePicker,
         CreateRequestedAppointmentService $createAppointmentService,
@@ -32,8 +34,14 @@ final class PlanningAppointmentController extends AbstractController
         SlotTimezoneConverter $timezoneConverter,
     ): Response {
         $planning = $findPlanningService->findBySlug($slug);
-        if (null === $planning || !$planning->isActive()) {
-            throw $this->createNotFoundException('Ce planning n’est pas disponible.');
+        if (null === $planning || !$invitations->canAccess($planning, $request->query->getString('access'))) {
+            $frame = $this->resolveBookingFrame($request);
+            $context = ['booking_frame' => $frame];
+            if (str_contains((string) $request->headers->get('Accept'), TurboBundle::STREAM_MEDIA_TYPE)) {
+                return new TurboStreamResponse($this->renderView('front/reservation/turbo/stream/unavailable.stream.html.twig', $context), status: Response::HTTP_NOT_FOUND);
+            }
+
+            return $this->render('front/reservation/unavailable.html.twig', $context, new Response(status: Response::HTTP_NOT_FOUND));
         }
 
         $bookingFrame = $this->resolveBookingFrame($request);
@@ -89,6 +97,7 @@ final class PlanningAppointmentController extends AbstractController
                 return $this->redirectToRoute('app_front_planning_appointment_confirmation', [
                     'slug' => $planning->getSlug(),
                     '_frame' => $bookingFrame,
+                    'access' => $request->query->getString('access') ?: null,
                 ]);
             } catch (\DomainException $exception) {
                 $form->get('time')->get('value')->addError(new FormError($exception->getMessage()));

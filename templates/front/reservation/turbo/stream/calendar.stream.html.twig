@@ -3,8 +3,8 @@
         <twig:Form:DatePicker
             :field="form.date.value"
             :calendar="calendar"
-            :previousUrl="path('app_front_planning_calendar', {slug: planning.slug, month: calendar.previous})"
-            :nextUrl="path('app_front_planning_calendar', {slug: planning.slug, month: calendar.next})"
+            :previousUrl="path('app_front_planning_calendar', {slug: planning.slug, access: app.request.query.get('access'), month: calendar.previous})"
+            :nextUrl="path('app_front_planning_calendar', {slug: planning.slug, access: app.request.query.get('access'), month: calendar.next})"
             id="booking-calendar"
             label="Choisir une date de rendez-vous"
         />

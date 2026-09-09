@@ -5,9 +5,11 @@ namespace App\Controller\Front;
 use App\Application\Reservation\Appointment\Dto\PublicAppointmentDto;
 use App\Application\Reservation\Appointment\Resolver\PublicSlotResolver;
 use App\Application\Reservation\Planner\Service\FindPlanningService;
+use App\Application\Reservation\Planner\Service\PlanningInvitationService;
 use App\Form\PublicAppointmentType;
 use App\UI\DatePicker\Service\DatePickerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\UX\Turbo\TurboStreamResponse;
@@ -23,12 +25,14 @@ final class PlanningCalendarController extends AbstractController
     public function __invoke(
         string $slug,
         string $month,
+        Request $request,
         FindPlanningService $findPlanningService,
+        PlanningInvitationService $invitations,
         PublicSlotResolver $slotResolver,
         DatePickerService $datePicker,
     ): Response {
         $planning = $findPlanningService->findBySlug($slug);
-        if (null === $planning || !$planning->isActive()) {
+        if (null === $planning || !$invitations->canAccess($planning, $request->query->getString('access'))) {
             throw $this->createNotFoundException('Ce planning n’est pas disponible.');
         }
 

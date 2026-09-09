@@ -24,7 +24,8 @@ final readonly class PlanningFactory
             ->setDuration((int) $dto->duration)
             ->setGap((int) $dto->gap)
             ->setColor($dto->color)
-            ->setIsActive(false);
+            ->setIsActive($dto->isActive)
+            ->setIsOnline($dto->isOnline);
     }
 
     private function sanitizeDescription(?string $description): ?string

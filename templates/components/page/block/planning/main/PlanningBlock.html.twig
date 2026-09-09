@@ -20,4 +20,12 @@
             <p class="planning-block__loading">Chargement du planning…</p>
         </turbo-frame>
     </section>
+{% else %}
+    <section class="planning-block" data-block-id="{{ blockId }}">
+        <header class="planning-block__header">
+            <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+            <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+        </header>
+        <p class="planning-block__loading">La prise de rendez-vous est momentanément indisponible. Vous pouvez utiliser les autres moyens de contact proposés sur cette page.</p>
+    </section>
 {% endif %}

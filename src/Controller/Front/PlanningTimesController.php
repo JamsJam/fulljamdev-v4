@@ -5,6 +5,7 @@ namespace App\Controller\Front;
 use App\Application\Reservation\Appointment\Dto\PublicAppointmentDto;
 use App\Application\Reservation\Appointment\Resolver\PublicSlotResolver;
 use App\Application\Reservation\Planner\Service\FindPlanningService;
+use App\Application\Reservation\Planner\Service\PlanningInvitationService;
 use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Form\PublicAppointmentType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,11 +27,12 @@ final class PlanningTimesController extends AbstractController
         string $date,
         Request $request,
         FindPlanningService $findPlanningService,
+        PlanningInvitationService $invitations,
         PublicSlotResolver $slotResolver,
         GetGeneralSettingsService $getGeneralSettingsService,
     ): Response {
         $planning = $findPlanningService->findBySlug($slug);
-        if (null === $planning || !$planning->isActive()) {
+        if (null === $planning || !$invitations->canAccess($planning, $request->query->getString('access'))) {
             throw $this->createNotFoundException('Ce planning n’est pas disponible.');
         }
 

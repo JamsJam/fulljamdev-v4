@@ -1,31 +1,19 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>{{ notification.subject }}</title>
-    </head>
-    <body>
-        <h1>{{ notification.heading }}</h1>
-
-        <p>Bonjour {{ appointment.contactFirstName }},</p>
-        <p>{{ notification.message }}</p>
-
-        <p>
-            <strong>{{ appointment.title }}</strong><br>
-            {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}<br>
-            De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
-            à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
-        </p>
-
-        {% if notification.action == 'join' and appointment.link %}
-            <p><a href="{{ appointment.link }}">Rejoindre le rendez-vous Google Meet</a></p>
-        {% elseif notification.action == 'book' and appointment.planningSlug %}
-            <p><a href="{{ url('app_front_planning_appointment', {slug: appointment.planningSlug}) }}">Choisir un nouveau créneau</a></p>
-        {% endif %}
-
-        {% if appointment.summary %}
-            <h2>Compte rendu</h2>
-            <p>{{ appointment.summary|nl2br }}</p>
-        {% endif %}
-    </body>
-</html>
+{% extends 'emails/base.html.twig' %}
+{% block subject %}{{ notification.subject }}{% endblock %}
+{% block preheader %}{{ notification.message }}{% endblock %}
+{% block heading %}{{ notification.heading }}{% endblock %}
+{% block content %}
+    <p>Bonjour {{ appointment.contactFirstName }},</p>
+    <p>{{ notification.message }}</p>
+    {% include 'emails/reservation/_slot.html.twig' with {appointment: appointment} only %}
+    {% if notification.action == 'join' and appointment.link %}
+        {% include 'emails/_button.html.twig' with {href: appointment.link, label: 'Rejoindre sur Google Meet'} only %}
+        <p style="font-size: 12px; color: #6c6478;">Conservez cet email pour retrouver votre lien le jour du rendez-vous.</p>
+    {% elseif notification.action == 'book' and appointment.planningSlug %}
+        {% include 'emails/_button.html.twig' with {href: url('app_front_planning_appointment', {slug: appointment.planningSlug}), label: 'Choisir un nouveau créneau'} only %}
+    {% endif %}
+    {% if appointment.summary %}
+        <h2 style="font-size: 20px; margin-top: 28px;">Le compte rendu de notre échange</h2>
+        <div style="padding: 20px; border: 1px solid #e8e1ef; border-radius: 8px;">{{ appointment.summary|sanitize_html }}</div>
+    {% endif %}
+{% endblock %}

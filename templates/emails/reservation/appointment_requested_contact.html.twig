@@ -1,18 +1,11 @@
-<h1>Votre demande de rendez-vous a bien été reçue</h1>
-
-<p>Bonjour {{ appointment.contact.firstName }},</p>
-
-<p>
-    Votre demande pour « {{ appointment.planning.title }} » a bien été enregistrée.
-    Vous recevrez un nouvel email lorsqu’elle aura été traitée.
-</p>
-
-<h2>Créneau demandé</h2>
-<p>
-    <strong>{{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }}</strong><br>
-    De {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
-    à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
-    ({{ appointment.timezone }})
-</p>
-
-<p><strong>Objet :</strong> {{ appointment.title }}</p>
+{% extends 'emails/base.html.twig' %}
+{% block subject %}Votre demande de rendez-vous a bien été reçue{% endblock %}
+{% block preheader %}Votre créneau est demandé. Un email vous informera dès sa confirmation.{% endblock %}
+{% block eyebrow %}Demande reçue{% endblock %}
+{% block heading %}Merci, votre demande est bien arrivée.{% endblock %}
+{% block content %}
+    <p>Bonjour {{ appointment.contact.firstName }},</p>
+    <p>Votre demande pour « {{ appointment.planning.title }} » a bien été enregistrée. Je reviens vers vous dès qu’elle a été traitée.</p>
+    {% include 'emails/reservation/_slot.html.twig' with {appointment: appointment} only %}
+    <p style="padding: 16px; background-color: #fff8e6; color: #715318; border-radius: 8px; font-size: 14px;">Ce rendez-vous est en attente de validation. Vous recevrez un nouvel email avec les informations de connexion une fois confirmé.</p>
+{% endblock %}

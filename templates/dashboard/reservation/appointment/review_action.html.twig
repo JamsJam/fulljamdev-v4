@@ -1,0 +1,21 @@
+{% extends 'adminBase.html.twig' %}
+{% set action_label = transition == 'confirm' ? 'Confirmer le rendez-vous' : 'Refuser la demande' %}
+{% block title %}{{ action_label }}{% endblock %}
+{% block body %}
+    <section aria-labelledby="appointment-action-title">
+        <h1 id="appointment-action-title">{{ action_label }}</h1>
+        <h2>{{ appointment.title }}</h2>
+        <p>{{ appointment.contact.firstName }} {{ appointment.contact.lastName }} · {{ appointment.contact.email }}</p>
+        {% include 'emails/reservation/_slot.html.twig' with {appointment: appointment} only %}
+        {% if can_apply %}
+            <p>{{ transition == 'confirm' ? 'Le rendez-vous sera confirmé et un email sera envoyé au contact avec son lien de connexion.' : 'La demande sera refusée et le contact sera prévenu par email.' }}</p>
+            <form method="post" action="{{ path('app_dashboard_reservation_appointment_transition', {id: appointment.id, transition: transition}) }}" data-turbo="false">
+                <input type="hidden" name="_token" value="{{ csrf_token('appointment_transition_' ~ appointment.id) }}">
+                <button type="submit" style="padding: 14px 22px; border: 0; border-radius: 8px; background: {{ transition == 'confirm' ? '#6750a4' : '#b3261e' }}; color: white; font: inherit; cursor: pointer;">{{ action_label }}</button>
+            </form>
+        {% else %}
+            <p role="status">Cette demande a déjà été traitée ou cette action n’est plus disponible. Aucune modification n’a été effectuée.</p>
+        {% endif %}
+        <p><a href="{{ path('app_dashboard_reservation_processing') }}">Retour aux rendez-vous</a></p>
+    </section>
+{% endblock %}

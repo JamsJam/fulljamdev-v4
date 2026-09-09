@@ -41,6 +41,7 @@ final readonly class RequestedAppointmentNotifier
         );
         $context = [
             'appointment' => [
+                'id' => $appointment->getId(),
                 'title' => $appointment->getTitle(),
                 'timezone' => $appointment->getTimezone(),
                 'startAt' => $appointment->getStartAt(),

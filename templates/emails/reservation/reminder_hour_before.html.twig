@@ -1,9 +1,14 @@
-<h1>Notre meeting va bientôt commencer</h1>
-
-<p>Bonjour {{ appointment.contact.firstName }},</p>
-<p>Notre meeting va bientôt commencer. Nous nous retrouvons dans une heure :</p>
-<p>
-    <strong>{{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}</strong>
-    ({{ appointment.timezone }})
-</p>
-<p><a href="{{ appointment.link }}">Rejoindre le meeting Google Meet</a></p>
+{% extends 'emails/base.html.twig' %}
+{% block subject %}On se retrouve dans une heure.{% endblock %}
+{% block preheader %}Notre rendez-vous commence bientôt. Votre lien de connexion est prêt.{% endblock %}
+{% block eyebrow %}Un petit rappel{% endblock %}
+{% block heading %}On se retrouve dans une heure.{% endblock %}
+{% block content %}
+    <p>Bonjour {{ appointment.contact.firstName }},</p>
+    <p>Notre rendez-vous commence bientôt. Votre lien de connexion est prêt.</p>
+    {% include 'emails/reservation/_slot.html.twig' with {appointment: appointment} only %}
+    {% if appointment.link %}
+        {% include 'emails/_button.html.twig' with {href: appointment.link, label: 'Rejoindre sur Google Meet'} only %}
+    {% endif %}
+    <p style="font-size: 14px; color: #6c6478;">Un imprévu ? Répondez à cet email pour me prévenir.</p>
+{% endblock %}

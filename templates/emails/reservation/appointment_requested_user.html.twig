@@ -1,20 +1,15 @@
-<h1>Nouvelle demande de rendez-vous</h1>
-
-<p>
-    {{ appointment.contact.firstName }} {{ appointment.contact.lastName }} vient de demander un rendez-vous
-    pour « {{ appointment.planning.title }} ».
-</p>
-
-<h2>Informations</h2>
-<ul>
-    <li><strong>Objet :</strong> {{ appointment.title }}</li>
-    <li><strong>Email :</strong> <a href="mailto:{{ appointment.contact.email }}">{{ appointment.contact.email }}</a></li>
-    <li><strong>Téléphone :</strong> {{ appointment.contact.phoneNumber }}</li>
-    <li>
-        <strong>Créneau :</strong>
-        {{ appointment.startAt|format_datetime(pattern: 'EEEE d MMMM y', locale: 'fr', timezone: appointment.timezone)|capitalize }},
-        de {{ appointment.startAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
-        à {{ appointment.endAt|format_datetime(pattern: 'HH:mm', timezone: appointment.timezone) }}
-        ({{ appointment.timezone }})
-    </li>
-</ul>
+{% extends 'emails/base.html.twig' %}
+{% block subject %}Nouvelle demande de rendez-vous{% endblock %}
+{% block preheader %}{{ appointment.contact.firstName }} {{ appointment.contact.lastName }} attend votre réponse pour {{ appointment.planning.title }}.{% endblock %}
+{% block eyebrow %}Une demande à traiter{% endblock %}
+{% block heading %}Un nouvel échange se prépare.{% endblock %}
+{% block content %}
+    <p><strong>{{ appointment.contact.firstName }} {{ appointment.contact.lastName }}</strong> souhaite vous rencontrer pour « {{ appointment.planning.title }} ».</p>
+    {% include 'emails/reservation/_slot.html.twig' with {appointment: appointment} only %}
+    <p style="font-size: 14px;">Email : <a href="mailto:{{ appointment.contact.email }}" style="color: #6750a4;">{{ appointment.contact.email }}</a><br>Téléphone : {{ appointment.contact.phoneNumber ?: 'Non renseigné' }}</p>
+    {% if appointment.id %}
+        {% include 'emails/_button.html.twig' with {href: url('app_dashboard_reservation_appointment_review', {id: appointment.id, transition: 'confirm'}), label: 'Confirmer le rendez-vous'} only %}
+        {% include 'emails/_button.html.twig' with {href: url('app_dashboard_reservation_appointment_review', {id: appointment.id, transition: 'reject'}), label: 'Refuser la demande', secondary: true} only %}
+        <p style="font-size: 12px; color: #6c6478;">Connectez-vous à votre espace administrateur pour valider votre choix. Le contact sera ensuite prévenu par email.</p>
+    {% endif %}
+{% endblock %}

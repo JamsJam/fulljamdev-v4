@@ -16,5 +16,5 @@ Choisir un nouveau créneau : {{ url('app_front_planning_appointment', {slug: ap
 
 {% if appointment.summary %}
 Compte rendu
-{{ appointment.summary }}
+{{ appointment.summary|striptags }}
 {% endif %}

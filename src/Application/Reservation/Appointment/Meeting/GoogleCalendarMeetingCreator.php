@@ -27,17 +27,28 @@ final readonly class GoogleCalendarMeetingCreator implements MeetingLinkCreatorI
         $startAt = $appointment->getStartAt();
         $endAt = $appointment->getEndAt();
         $title = trim((string) $appointment->getTitle());
+        $contact = $appointment->getContact();
+        $email = trim((string) $contact?->getEmail());
 
         if (null === $startAt || null === $endAt || $startAt >= $endAt || '' === $title) {
             $this->logger->error('google.calendar.invalid_appointment', ['appointment_id' => $appointment->getId()]);
             throw new \DomainException('Le rendez-vous ne contient pas les informations nécessaires à la création du Google Meet.');
         }
 
+        if (false === filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->logger->error('google.calendar.invalid_attendee', ['appointment_id' => $appointment->getId()]);
+            throw new \DomainException('Une adresse e-mail valide est nécessaire pour inviter le contact au rendez-vous.');
+        }
+
         $this->logger->info('google.calendar.meeting_creation_started', ['appointment_id' => $appointment->getId()]);
         $accessToken = $this->googleOAuth->getAccessTokenFromRefreshToken();
-        $event = $this->request('POST', self::EVENTS_ENDPOINT.'?conferenceDataVersion=1&sendUpdates=none', $accessToken, [
+        $event = $this->request('POST', self::EVENTS_ENDPOINT.'?conferenceDataVersion=1&sendUpdates=all', $accessToken, [
             'summary' => $title,
             'description' => $appointment->getDescription(),
+            'attendees' => [[
+                'email' => $email,
+                'displayName' => trim($contact?->getFirstName().' '.$contact?->getLastName()),
+            ]],
             'start' => [
                 'dateTime' => $startAt->format(\DateTimeInterface::RFC3339),
                 'timeZone' => $appointment->getTimezone(),

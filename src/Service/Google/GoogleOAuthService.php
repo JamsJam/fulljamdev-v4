@@ -34,7 +34,7 @@ final readonly class GoogleOAuthService
             'redirect_uri' => $this->redirectUri,
             'response_type' => 'code',
             'access_type' => 'offline',
-            'prompt' => 'consent',
+            'prompt' => 'select_account consent',
             'scope' => self::CALENDAR_EVENTS_SCOPE,
             'state' => $state,
         ], '', '&', PHP_QUERY_RFC3986);

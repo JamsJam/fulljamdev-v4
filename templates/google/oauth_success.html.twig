@@ -10,9 +10,11 @@
     <main>
     <section aria-labelledby="google-oauth-title">
         <h1 id="google-oauth-title">Connexion Google réussie</h1>
+        <p>Le compte choisi a autorisé l’application. Le compte utilisé par le serveur ne changera qu’après le remplacement du token dans sa configuration.</p>
         <p>Copiez immédiatement ce refresh token dans <code>GOOGLE_REFRESH_TOKEN</code>, puis fermez cette page.</p>
         <pre><code>{{ refresh_token }}</code></pre>
         <p>Ce secret n’est ni enregistré en base de données ni écrit dans les logs.</p>
+        <p>Mettez également à jour le secret <code>GOOGLE_REFRESH_TOKEN</code> utilisé par le déploiement. Les nouveaux rendez-vous seront créés dans le calendrier principal du compte choisi ; les événements existants resteront dans leur calendrier actuel.</p>
     </section>
     </main>
 </body>

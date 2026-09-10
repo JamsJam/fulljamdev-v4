@@ -44,7 +44,7 @@ final class GoogleOAuthServiceTest extends TestCase
         self::assertSame('http://localhost:8000/google/callback', $parameters['redirect_uri']);
         self::assertSame('code', $parameters['response_type']);
         self::assertSame('offline', $parameters['access_type']);
-        self::assertSame('consent', $parameters['prompt']);
+        self::assertSame('select_account consent', $parameters['prompt']);
         self::assertSame('https://www.googleapis.com/auth/calendar.events', $parameters['scope']);
         self::assertSame('secure-state', $parameters['state']);
     }

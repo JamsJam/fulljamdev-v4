@@ -32,6 +32,7 @@
             data-form-collection-prototype-value="{{ card_prototype|e('html_attr') }}"
         >
             <legend>Cartes saisies manuellement</legend>
+            <twig:Form:Field :field="data.contentType" />
             <ul data-form-collection-target="collectionContainer">
                 {% for card in data.cards %}{% include 'dashboard/page/block/_card_display_item_form.html.twig' with {card: card, mediaField: mediaField, mediaLabel: mediaLabel} only %}{% endfor %}
             </ul>

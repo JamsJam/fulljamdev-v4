@@ -8,6 +8,7 @@ use App\Application\SEO\JsonLd\Dto\PageContext;
 use App\Application\SEO\JsonLd\Dto\WebsiteData;
 use App\Application\SEO\JsonLd\Enum\PageType;
 use App\Application\SEO\JsonLd\Interface\PageContextProviderInterface;
+use App\Application\SEO\JsonLd\Registry\BlockJsonLdCollector;
 use App\Application\Settings\Service\GetGeneralSettingsService;
 
 final readonly class BuiltPageContextProvider implements PageContextProviderInterface
@@ -16,6 +17,7 @@ final readonly class BuiltPageContextProvider implements PageContextProviderInte
         private PublicUrlGenerator $urls,
         private GetGeneralSettingsService $settings,
         private StructuredIdentityProvider $identity,
+        private BlockJsonLdCollector $blocks,
     ) {
     }
 
@@ -52,6 +54,7 @@ final readonly class BuiltPageContextProvider implements PageContextProviderInte
             breadcrumbParents: $breadcrumbs,
             profilePage: $page->seo->profilePage,
             breadcrumbName: $page->title,
+            contributions: $page->seo->noIndex || '' === trim($page->seo->title ?: $page->title) ? [] : $this->blocks->collect($page->blocks, $url),
         );
     }
 }

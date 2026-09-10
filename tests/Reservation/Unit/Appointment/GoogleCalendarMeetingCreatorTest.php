@@ -3,10 +3,12 @@
 namespace App\Tests\Reservation\Unit\Appointment;
 
 use App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator;
+use App\Entity\Contact;
 use App\Entity\Reservation\Appointment;
 use App\Service\Google\GoogleOAuthService;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -35,7 +37,7 @@ final class GoogleCalendarMeetingCreatorTest extends TestCase
         self::assertStringNotContainsString('private-', json_encode($records, JSON_THROW_ON_ERROR));
     }
 
-    public function testItCreatesAnEventWithoutGuestAndReturnsTheMeetLink(): void
+    public function testItInvitesTheContactAndReturnsTheMeetLink(): void
     {
         $requests = [];
         $client = new MockHttpClient(static function (string $method, string $url, array $options) use (&$requests): MockResponse {
@@ -58,13 +60,15 @@ final class GoogleCalendarMeetingCreatorTest extends TestCase
         self::assertCount(2, $requests);
         self::assertSame('POST', $requests[1]['method']);
         self::assertSame(
-            'https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1&sendUpdates=none',
+            'https://www.googleapis.com/calendar/v3/calendars/primary/events?conferenceDataVersion=1&sendUpdates=all',
             $requests[1]['url'],
         );
         $event = json_decode($requests[1]['options']['body'], true, flags: JSON_THROW_ON_ERROR);
 
         self::assertSame('hangoutsMeet', $event['conferenceData']['createRequest']['conferenceSolutionKey']['type']);
-        self::assertArrayNotHasKey('attendees', $event);
+        self::assertSame([['email' => 'private-contact@example.com', 'displayName' => 'private-first private-last']], $event['attendees']);
+        self::assertArrayNotHasKey('organizer', $event);
+        self::assertArrayNotHasKey('responseStatus', $event['attendees'][0]);
         self::assertSame('Europe/Paris', $event['start']['timeZone']);
     }
 
@@ -79,6 +83,27 @@ final class GoogleCalendarMeetingCreatorTest extends TestCase
         $this->expectExceptionMessage('Calendar API disabled');
 
         (new GoogleCalendarMeetingCreator($client, $this->oauth($client)))->create($this->appointment());
+    }
+
+    #[DataProvider('invalidContacts')]
+    public function testItRejectsInvalidGuestsBeforeCallingGoogle(?Contact $contact): void
+    {
+        $client = new MockHttpClient(static function (): MockResponse {
+            self::fail('Google must not be called without a valid guest email.');
+        });
+        $appointment = $this->appointment()->setContact($contact);
+
+        $this->expectException(\DomainException::class);
+        $this->expectExceptionMessage('Une adresse e-mail valide est nécessaire');
+        (new GoogleCalendarMeetingCreator($client, $this->oauth($client)))->create($appointment);
+    }
+
+    public static function invalidContacts(): iterable
+    {
+        yield 'missing contact' => [null];
+        yield 'missing email' => [new Contact()];
+        yield 'empty email' => [(new Contact())->setEmail('   ')];
+        yield 'invalid email' => [(new Contact())->setEmail('invalid-email')];
     }
 
     public function testItFetchesTheEventUntilGoogleReturnsTheMeetLink(): void
@@ -122,6 +147,7 @@ final class GoogleCalendarMeetingCreatorTest extends TestCase
     private function appointment(): Appointment
     {
         return (new Appointment())
+            ->setContact((new Contact())->setFirstName('private-first')->setLastName('private-last')->setEmail('private-contact@example.com'))
             ->setTitle('Audit du projet')
             ->setDescription('Présentation du besoin et prochaines étapes.')
             ->setStartAt(new \DateTimeImmutable('2026-09-10 14:00:00 Europe/Paris'))

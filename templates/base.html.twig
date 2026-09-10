@@ -4,38 +4,56 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        {# ? === title === #}
-        <title>{% block title %}Accueil{% endblock %} | {{ site.siteTitle }}</title>
-        {# ? === metdescription === #}
-        <meta name="description" content="{% block metadescription %}{% endblock %}">
-        {# ? === jsonLD === #}
-        {# ? === metakeyword === #}
-        <meta name="keywords" content="{% block keyword %}{% endblock %}">
-        {# ? === opengraph === #}
-        {% block openGraph %}{% endblock %}
-        
-        {# ? === twitter === #}
-        {# <meta property="og:title" content="Titre de la page">
-        <meta property="og:description" content="Description pour les réseaux sociaux">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://www.exemple.com/page">
-        <meta property="og:image" content="https://www.exemple.com/images/og-image.jpg"> #}
-        {# ? === robot === #}
+
+        {% set document_title %}{% block title %}Accueil{% endblock %}{% endset %}
+        {% set document_description %}{% block metadescription %}{% endblock %}{% endset %}
+        {% set request_url = app.request ? app.request.uri : null %}
+        {% set canonical_url %}{% block canonical %}{{ request_url }}{% endblock %}{% endset %}
+        {% set canonical_url = canonical_url|trim ?: request_url %}
+        {% set page_seo = page is defined and page.seo is defined ? page.seo : null %}
+        {% set social_title = page_seo and page_seo.socialTitle ? page_seo.socialTitle : document_title|trim %}
+        {% set social_description = page_seo and page_seo.socialDescription ? page_seo.socialDescription : document_description|trim %}
+        {% set social_image_path = page_seo and page_seo.socialImagePath ? page_seo.socialImagePath : null %}
+        {% if social_image_path is null and article is defined and article.coverImage %}
+            {% set social_image_path = article.coverImage %}
+        {% elseif social_image_path is null and project is defined and project.images.first %}
+            {% set social_image_path = project.images.first.path %}
+        {% elseif social_image_path is null and site.logoPath %}
+            {% set social_image_path = site.logoPath %}
+        {% endif %}
+
+        <title>{{ document_title|trim }} | {{ site.siteTitle }}</title>
+        {% if document_description|trim is not empty %}
+            <meta name="description" content="{{ document_description|trim }}">
+        {% endif %}
+
+        {% block openGraph %}
+            <meta property="og:type" content="{{ article is defined ? 'article' : 'website' }}">
+            <meta property="og:title" content="{{ social_title }}">
+            {% if social_description is not empty %}<meta property="og:description" content="{{ social_description }}">{% endif %}
+            {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}">{% endif %}
+            <meta property="og:site_name" content="{{ site.siteTitle }}">
+            <meta property="og:locale" content="fr_FR">
+            {% if social_image_path %}<meta property="og:image" content="{{ absolute_url(asset(social_image_path)) }}">{% endif %}
+            {% if article is defined and article.publishedAt %}<meta property="article:published_time" content="{{ article.publishedAt|date('c') }}">{% endif %}
+            {% if article is defined and article.updatedAt %}<meta property="article:modified_time" content="{{ article.updatedAt|date('c') }}">{% endif %}
+            <meta name="twitter:card" content="{{ social_image_path ? 'summary_large_image' : 'summary' }}">
+            <meta name="twitter:title" content="{{ social_title }}">
+            {% if social_description is not empty %}<meta name="twitter:description" content="{{ social_description }}">{% endif %}
+            {% if social_image_path %}<meta name="twitter:image" content="{{ absolute_url(asset(social_image_path)) }}">{% endif %}
+        {% endblock %}
+
         <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
-        {# ? === json/ld === #}
 
-        <script type="application/ld+json">{% block jsonLD %}{% endblock %}</script>
-        
-        {# ? === languages === #}
-        <link rel="alternate" hreflang="fr" href="https://fulljamdev.fr/">
-        <link rel="alternate" hreflang="x-default" href="https://fulljamdev.fr/">
-        {# ? === canonical === #}
-        <link rel="canonical" href="{% block canonical %}{% endblock %}" />
+        {% block jsonLD %}
+            {% set json_ld = page_json_ld() %}
+            {% if json_ld is not null %}
+                <script type="application/ld+json">{{ json_ld|raw }}</script>
+            {% endif %}
+        {% endblock %}
 
+        {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
 
-
-        {# ? === favicon === #}
         {% if site.faviconSvgPath %}
             <link rel="icon" type="image/svg+xml" href="{{ asset(site.faviconSvgPath) }}">
         {% endif %}

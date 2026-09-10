@@ -27,6 +27,34 @@ final class GeneralSettingsType extends AbstractType
                 'label' => 'Titre du site',
                 'empty_data' => '',
             ])
+            ->add('structuredIdentityType', ChoiceType::class, [
+                'label' => 'Nature de l’identité publique',
+                'choices' => [
+                    'Aucune identité structurée' => '',
+                    'Personne' => 'Person',
+                    'Organisation' => 'Organization',
+                ],
+            ])
+            ->add('structuredIdentityName', TextType::class, [
+                'label' => 'Nom public',
+                'required' => false,
+            ])
+            ->add('structuredIdentityUrl', TextType::class, [
+                'label' => 'Page de référence sur ce site',
+                'help' => 'Facultative. Utilisez par exemple /about. La page d’accueil est utilisée par défaut.',
+                'required' => false,
+            ])
+            ->add('structuredIdentitySameAs', CollectionType::class, [
+                'entry_type' => MaintenanceLinkType::class,
+                'label' => 'Profils externes',
+                'allow_add' => true,
+                'allow_delete' => true,
+                'required' => false,
+            ])
+            ->add('structuredIdentityIsArticleAuthor', CheckboxType::class, [
+                'label' => 'Utiliser cette identité comme auteur des articles',
+                'required' => false,
+            ])
             ->add('logoFile', FileType::class, [
                 'label' => 'Logo',
                 'required' => false,

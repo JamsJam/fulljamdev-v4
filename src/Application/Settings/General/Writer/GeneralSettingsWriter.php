@@ -25,6 +25,13 @@ final readonly class GeneralSettingsWriter
             'favicon_ico' => $dto->faviconIcoPath,
             'apple_touch_icon' => $dto->appleTouchIconPath,
         ];
+        $configuration['structured_identity'] = [
+            'type' => $dto->structuredIdentityType,
+            'name' => $dto->structuredIdentityName,
+            'url' => $dto->structuredIdentityUrl,
+            'same_as' => $dto->structuredIdentitySameAs,
+            'article_author' => $dto->structuredIdentityIsArticleAuthor,
+        ];
         $configuration['parameters'] = $parameters;
         $configuration['pages'] = $pages;
         $configuration['maintenance'] = [

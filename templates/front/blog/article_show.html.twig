@@ -5,16 +5,6 @@
 {% block canonical %}{{ url('app_front_article_show', {slug: article.slug}) }}{% endblock %}
 {% block main_attributes %} data-page="article"{% endblock %}
 
-{% block openGraph %}
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="{{ article.title }}">
-    <meta property="og:description" content="{{ article.summary }}">
-    <meta property="og:url" content="{{ url('app_front_article_show', {slug: article.slug}) }}">
-    <meta property="og:image" content="{{ absolute_url(asset(article.coverImage)) }}">
-    <meta property="article:published_time" content="{{ article.publishedAt|date('c') }}">
-    <meta property="article:modified_time" content="{{ article.updatedAt|date('c') }}">
-{% endblock %}
-
 {% block body %}
     <article class="blog-article" aria-labelledby="article-title">
         <header class="blog-article__header">

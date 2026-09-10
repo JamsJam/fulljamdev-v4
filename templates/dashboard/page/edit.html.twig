@@ -28,6 +28,22 @@
                     <twig:Form:Field :field="form.seo.description" />
                     <twig:Form:Field :field="form.seo.canonicalUrl" />
                     <twig:Form:Field :field="form.seo.noIndex" />
+                    <twig:Form:Field :field="form.seo.profilePage" />
+                </div>
+                <div class="page-builder__grid">
+                    <twig:Form:Field :field="form.seo.socialTitle" />
+                    <twig:Form:Field :field="form.seo.socialDescription" />
+                    <div>
+                        <twig:Form:Field :field="form.seo.socialImageFile" />
+                        {% if form.seo.vars.data.socialImagePath %}
+                            <img src="{{ asset(form.seo.vars.data.socialImagePath) }}" alt="Image sociale actuelle" width="240">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="page-builder__seo-breadcrumbs">
+                    <h3>Fil d’Ariane</h3>
+                    <p>Ajoutez les pages parentes dans leur ordre d’affichage. La page courante est ajoutée automatiquement.</p>
+                    <twig:Form:BreadcrumbCollection :field="form.seo.breadcrumbParents" />
                 </div>
             </details>
 

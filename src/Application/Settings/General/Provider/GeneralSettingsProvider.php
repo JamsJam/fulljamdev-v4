@@ -30,6 +30,19 @@ final readonly class GeneralSettingsProvider
             }
         }
         $dto->siteTitle = $this->stringValue($branding, 'site_title', 'FullJam Dev');
+        $structuredIdentity = is_array($configuration['structured_identity'] ?? null) ? $configuration['structured_identity'] : [];
+        $identityType = $this->stringValue($structuredIdentity, 'type', '');
+        $dto->structuredIdentityType = in_array($identityType, ['Person', 'Organization'], true) ? $identityType : '';
+        $dto->structuredIdentityName = $this->nullableStringValue($structuredIdentity, 'name');
+        $dto->structuredIdentityUrl = $this->nullableStringValue($structuredIdentity, 'url');
+        foreach (is_array($structuredIdentity['same_as'] ?? null) ? $structuredIdentity['same_as'] : [] as $profile) {
+            if (is_array($profile) && is_string($profile['name'] ?? null) && is_string($profile['value'] ?? null)
+                && in_array(parse_url($profile['value'], PHP_URL_SCHEME), ['https', 'http'], true)
+                && false !== filter_var($profile['value'], FILTER_VALIDATE_URL)) {
+                $dto->structuredIdentitySameAs[] = ['name' => $profile['name'], 'value' => $profile['value']];
+            }
+        }
+        $dto->structuredIdentityIsArticleAuthor = true === ($structuredIdentity['article_author'] ?? false);
         $dto->logoPath = $this->nullableStringValue($branding, 'logo');
         $dto->faviconSvgPath = $this->nullableStringValue($branding, 'favicon_svg');
         $dto->faviconIcoPath = $this->nullableStringValue($branding, 'favicon_ico');

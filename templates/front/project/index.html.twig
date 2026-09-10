@@ -2,6 +2,7 @@
 {% block title %}Projets{% endblock %}
 {% block metadescription %}Découvrez une sélection de projets web conçus avec Symfony, PHP et des technologies modernes.{% endblock %}
 {% block canonical %}{{ url('app_front_projects') }}{% endblock %}
+{% block robots %}{{ query or selected_technology ? 'noindex, follow' : parent() }}{% endblock %}
 {% block main_attributes %} data-page="project-catalog"{% endblock %}
 {% block body %}
 <section class="project-catalog" aria-labelledby="project-catalog-title">

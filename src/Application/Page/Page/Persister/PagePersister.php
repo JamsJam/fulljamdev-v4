@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Application\Page\Page\Writer;
+namespace App\Application\Page\Page\Persister;
 
 use App\Application\Page\Block\Asset\BlockAssetProcessor;
 use App\Application\Page\Block\Mapper\BlockDataMapper;
 use App\Application\Page\Block\Registry\BlockRegistry;
 use App\Application\Page\Page\Dto\PageDTO;
+use App\Application\Page\SEO\Asset\SeoImageUploader;
 use App\Entity\Page\Page;
 use App\Entity\Page\PageBlock;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final readonly class PageWriter
+final readonly class PagePersister
 {
     public function __construct(
         private BlockRegistry $registry,
@@ -19,6 +20,7 @@ final readonly class PageWriter
         private SerializerInterface $serializer,
         private EntityManagerInterface $entityManager,
         private BlockAssetProcessor $assetProcessor,
+        private ?SeoImageUploader $seoImageUploader = null,
     ) {
     }
 
@@ -26,6 +28,13 @@ final readonly class PageWriter
     {
         $page ??= new Page();
         $page->setTitle($dto->title)->setPath($dto->path);
+        if (null !== $dto->seo->socialImageFile) {
+            if (null === $this->seoImageUploader) {
+                throw new \LogicException('The SEO image uploader is required to process a social image.');
+            }
+            $dto->seo->socialImagePath = $this->seoImageUploader->upload($dto->seo->socialImageFile);
+            $dto->seo->socialImageFile = null;
+        }
         $seo = json_decode($this->serializer->serialize($dto->seo, 'json'), true, flags: JSON_THROW_ON_ERROR);
         $page->setSeo(is_array($seo) ? $seo : []);
 

@@ -2,17 +2,7 @@
 
 {% block title %}{{ metaTitle }}{% endblock %}
 {% block metadescription %}{{ metaDescription}}{% endblock %}
-{% block openGraph %}
-
-    <meta property="og:title" content="Fulljamdev - {{metaTitle}}">
-    <meta property="og:type" content="website">
-    <meta property="og:description" content="{{metaDescription}}">
-    <meta property="og:url" content="{{url(app.current_route)}}">
-    <meta property="og:site_name" content="fulljamdev.fr">
-    <meta property="og:image" content="{{absolute_url(asset("/images/about-me2.jpeg")) }}">
-    {# <meta property="og:image" content="{{asset("/images/logos/logo-112.png")}}"> #}
-{% endblock %}
-{% block jsonLD %}{{ jsonLD|raw}}{% endblock %}
+{% block jsonLD %}{{ parent() }}{% endblock %}
 {% block canonical %}{{url('app_home')}}{% endblock %}
 
 

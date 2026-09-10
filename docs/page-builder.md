@@ -79,3 +79,58 @@ Un CTA peut cibler :
 - une route Symfony existante avec ses paramètres.
 
 Les routes proposées dans l’interface sont classées entre routes publiques et routes du dashboard.
+
+
+## Contributions JSON-LD des blocs
+
+`BuiltPageContextProvider` collecte les contributions des blocs de la page affichée
+avec `BlockJsonLdCollector`. Chaque service implémentant
+`BlockJsonLdContributorInterface` est automatiquement enregistré avec le tag
+`app.json_ld.block_contributor`. `PageContext` reçoit uniquement des
+`JsonLdContribution` contenant des données publiques, sans entités ni DTO de blocs.
+`JsonLdBuilder` fait assembler ces contributions avec la définition de page et le
+fil d’Ariane par `ContributionGraphAssembler`.
+
+Blocs pris en charge :
+
+- `faq.main` : questions et réponses complètes, dédupliquées à l’échelle de la page.
+  La page reçoit aussi le type `FAQPage` et les questions comme `mainEntity`.
+  Si elle possède déjà une entité principale (profil), celle-ci est conservée et
+  les questions sont reliées par `mentions`, sans ajouter `FAQPage`.
+- `blog.latest` : `ItemList` des articles effectivement affichés, avec références
+  `BlogPosting` utilisant les mêmes identifiants que les pages articles.
+- `project.featured` et cartes dynamiques `featured_projects` : `ItemList` des
+  projets publiés sélectionnés, représentés par des `CreativeWork`.
+- `card_display.with_image` et `services.main` : liste des cartes manuelles.
+  Le champ **Contenu des cartes** permet de déclarer explicitement des services
+  (`Service`). Les anciennes cartes restent en mode **Contenu général**.
+  Les cartes générales liées par une route article ou projet sont typées en
+  conséquence ; les autres restent des `Thing`. Le nom historique `services.main`
+  désigne une présentation avec logo et ne suffit pas à qualifier un service.
+
+Les listes sont reliées à la page par `mentions` : afficher une liste d’articles
+ne transforme pas la page en article. Les identifiants des services sont propres
+aux cartes ; un bouton vers une page contact commune ne fusionne pas les services.
+Les sources dynamiques ignorent les cartes manuelles et leur choix de contenu.
+Les sélections d’articles et de projets sont partagées avec Twig et mémorisées
+sur la requête courante, pour garder les mêmes contenus et éviter une seconde
+requête SQL. Les pages `noindex` ne déclenchent pas la collecte.
+
+Pour ajouter un contributeur :
+
+1. Implémenter `supports(PageBlockDTO)` pour les types et DTO compatibles.
+2. Produire une `JsonLdContribution` dans `contribute()`, avec des nœuds identifiés
+   par `@id` et les identifiants à relier à la page dans `mentions`.
+3. Utiliser l’identifiant absolu du bloc fourni par le collecteur pour les objets
+   locaux, et l’identité canonique de l’objet pour les contenus partagés.
+4. Réutiliser la source de l’affichage ; ne publier que les données visibles.
+5. Tester le graphe, les blocs vides et les interactions avec les autres blocs.
+
+Aucun bloc pricing n’existe actuellement. Aucune `Offer` n’est déduite d’un texte
+ou d’un montant isolé. Un futur bloc tarifaire devra porter explicitement le
+service ou produit, le prix, la devise et les conditions nécessaires.
+Les blocs de mise en page, CTA, planning et chronologie n’ajoutent pas de schéma
+spécialisé sur la seule base de leur présentation.
+
+Références : [ItemList](https://schema.org/ItemList),
+[FAQPage](https://schema.org/FAQPage), [mentions](https://schema.org/mentions).

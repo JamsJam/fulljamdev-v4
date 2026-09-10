@@ -85,4 +85,47 @@ final class PageBlockTypeTest extends KernelTestCase
         self::assertSame('Premier Hero', $page->blocks[4]->data->title->content);
         self::assertSame('Second Hero', $page->blocks[9]->data->title->content);
     }
+
+    public function testLegacyCardBlockCanBeSubmittedWithoutContentType(): void
+    {
+        self::bootKernel();
+        $mapper = self::getContainer()->get(\App\Application\Page\Block\Mapper\BlockDataMapper::class);
+        $page = new PageDTO();
+        $page->title = 'Accueil';
+        $page->path = 'accueil';
+        $page->blocks = [new PageBlockDTO(3, 'services.main', $mapper->denormalize('services.main', [
+            'title' => ['content' => 'Services', 'level' => 'h2', 'attributes' => []],
+            'text' => ['content' => 'Description', 'attributes' => []],
+            'source' => 'static',
+            'sourceKey' => 'featured_projects',
+            'cards' => [],
+            'cta' => [],
+        ]))];
+
+        $form = self::getContainer()->get(FormFactoryInterface::class)->create(PageType::class, $page, ['csrf_protection' => false]);
+        $form->submit([
+            'title' => 'Accueil',
+            'path' => 'accueil',
+            'seo' => ['title' => '', 'description' => '', 'canonicalUrl' => '', 'noIndex' => '0'],
+            'blocks' => [[
+                'id' => '3',
+                'type' => 'services.main',
+                'position' => '0',
+                'data' => [
+                    'title' => ['content' => 'Services', 'level' => 'h2', 'attributes' => []],
+                    'text' => ['content' => 'Description', 'attributes' => []],
+                    'source' => 'static',
+                    'sourceKey' => 'featured_projects',
+                    'cards' => [],
+                    'cta' => [],
+                ],
+            ]],
+        ]);
+
+        self::assertTrue($form->isSynchronized(), (string) $form->getErrors(true));
+        self::assertSame(
+            \App\Application\Page\Block\Library\CardDisplay\Data\CardContentType::GENERIC,
+            $page->blocks[0]->data->contentType,
+        );
+    }
 }

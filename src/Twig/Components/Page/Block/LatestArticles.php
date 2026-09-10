@@ -3,8 +3,8 @@
 namespace App\Twig\Components\Page\Block;
 
 use App\Application\Page\Block\Library\Blog\Latest\LatestArticlesDTO;
+use App\Application\Page\Block\Library\Blog\Latest\LatestArticlesProvider;
 use App\Entity\Blog\Article;
-use App\Repository\Blog\ArticleRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent(
@@ -16,13 +16,13 @@ final class LatestArticles
     public LatestArticlesDTO $data;
     public ?int $blockId = null;
 
-    public function __construct(private readonly ArticleRepository $articles)
+    public function __construct(private readonly LatestArticlesProvider $articles)
     {
     }
 
     /** @return list<Article> */
     public function getArticles(): array
     {
-        return $this->articles->findLatestPublished(new \DateTimeImmutable(), 4);
+        return $this->articles->provide();
     }
 }

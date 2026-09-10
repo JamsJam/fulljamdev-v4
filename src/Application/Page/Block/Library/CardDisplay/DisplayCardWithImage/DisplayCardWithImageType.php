@@ -2,6 +2,7 @@
 
 namespace App\Application\Page\Block\Library\CardDisplay\DisplayCardWithImage;
 
+use App\Application\Page\Block\Library\CardDisplay\Data\CardContentType;
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardWithImageType;
 use App\Application\Page\Data\Enum\ValueSource;
@@ -22,6 +23,12 @@ final class DisplayCardWithImageType extends AbstractType
         $builder->add('title', HeadingType::class)->add('text', TextType::class)
             ->add('source', EnumType::class, ['class' => ValueSource::class, 'expanded' => true, 'choice_label' => static fn (ValueSource $source): string => ValueSource::STATIC === $source ? 'Saisie manuelle' : 'Données dynamiques'])
             ->add('sourceKey', ChoiceType::class, ['label' => 'Source dynamique', 'choices' => ['Projets mis en avant' => 'featured_projects'], 'required' => false])
+            ->add('contentType', EnumType::class, [
+                'class' => CardContentType::class,
+                'label' => 'Contenu des cartes',
+                'choice_label' => static fn (CardContentType $type): string => CardContentType::SERVICE === $type ? 'Services proposés' : 'Contenu général',
+                'empty_data' => CardContentType::GENERIC->value,
+            ])
             ->add('cards', CollectionType::class, ['entry_type' => CardWithImageType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false, 'prototype' => true])
             ->add('cta', CtaType::class, ['label' => 'CTA sous les cartes', 'required' => false]);
     }

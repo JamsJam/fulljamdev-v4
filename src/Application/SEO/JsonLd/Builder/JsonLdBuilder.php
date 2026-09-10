@@ -10,6 +10,7 @@ final readonly class JsonLdBuilder
     public function __construct(
         private PageDefinitionRegistry $definitions,
         private BreadcrumbBuilder $breadcrumb,
+        private ContributionGraphAssembler $contributions = new ContributionGraphAssembler(),
     ) {
     }
 
@@ -25,6 +26,8 @@ final readonly class JsonLdBuilder
         if (null !== $breadcrumb) {
             $nodes[] = $breadcrumb;
         }
+
+        $nodes = $this->contributions->assemble($nodes, $context);
 
         return [] === $nodes ? null : ['@context' => 'https://schema.org', '@graph' => $nodes];
     }

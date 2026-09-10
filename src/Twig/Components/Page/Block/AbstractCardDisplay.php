@@ -2,28 +2,23 @@
 
 namespace App\Twig\Components\Page\Block;
 
+use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayCardsProvider;
 use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayItemDTO;
-use App\Application\Page\Block\Library\CardDisplay\Data\FeaturedProjectsProviderInterface;
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
-use App\Application\Page\Data\Enum\ValueSource;
 
 abstract class AbstractCardDisplay
 {
     public CardDisplayDTO $data;
     public ?int $blockId = null;
 
-    public function __construct(private readonly FeaturedProjectsProviderInterface $featuredProjects)
+    public function __construct(private readonly CardDisplayCardsProvider $cards)
     {
     }
 
     /** @return list<CardDisplayItemDTO> */
     public function getCards(): array
     {
-        if (ValueSource::STATIC === $this->data->source) {
-            return $this->data->cards;
-        }
-
-        return 'featured_projects' === $this->data->sourceKey ? $this->featuredProjects->provide() : [];
+        return $this->cards->provide($this->data);
     }
 
     /** @param array<string, mixed> $attributes */

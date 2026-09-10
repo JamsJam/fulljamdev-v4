@@ -22,6 +22,20 @@
                 description="Ce titre est utilisé pour identifier le site dans le navigateur et les interfaces."
             />
 
+            <div class="settings__grid">
+                <twig:Form:Field :field="general_form.structuredIdentityType" class="settings__field" />
+                <twig:Form:Field :field="general_form.structuredIdentityName" class="settings__field" />
+                <twig:Form:Field :field="general_form.structuredIdentityUrl" class="settings__field" />
+                <twig:Form:Field :field="general_form.structuredIdentityIsArticleAuthor" class="settings__field" />
+            </div>
+            <twig:Form:KeyValueCollection
+                :field="general_form.structuredIdentitySameAs"
+                legend="Profils externes (sameAs)"
+                keyLabel="Réseau"
+                valueLabel="URL du profil"
+                addLabel="Ajouter un profil"
+            />
+
             <div class="settings__assets">
                 <div>
                     <twig:Form:Field :field="general_form.logoFile" class="settings__field" />

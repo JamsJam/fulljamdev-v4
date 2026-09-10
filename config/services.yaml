@@ -32,6 +32,10 @@ services:
         arguments:
             $targetDirectory: '%page_upload_directory%'
 
+    App\Application\Page\SEO\Asset\SeoImageUploader:
+        arguments:
+            $targetDirectory: '%page_upload_directory%'
+
     App\Application\Settings\General\Asset\SiteAssetUploader:
         arguments:
             $targetDirectory: '%settings_upload_directory%'

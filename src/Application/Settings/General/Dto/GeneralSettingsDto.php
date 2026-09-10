@@ -20,6 +20,30 @@ final class GeneralSettingsDto
     #[Assert\Length(max: 120)]
     public string $siteTitle = 'FullJam Dev';
 
+    #[Assert\Choice(choices: ['', 'Person', 'Organization'])]
+    public string $structuredIdentityType = '';
+
+    #[Assert\When(
+        expression: 'this.structuredIdentityType != ""',
+        constraints: [new Assert\NotBlank(message: 'Renseignez le nom de l’identité structurée.')],
+    )]
+    #[Assert\Length(max: 160)]
+    public ?string $structuredIdentityName = null;
+
+    #[Assert\When(
+        expression: 'this.structuredIdentityUrl != null and this.structuredIdentityUrl != ""',
+        constraints: [
+            new Assert\Length(max: 2048),
+            new Assert\Regex(pattern: '#^(?:https?://[^\s]+|/[^\s]*)$#i', message: 'Saisissez une URL HTTP(S) ou un chemin commençant par /.'),
+        ],
+    )]
+    public ?string $structuredIdentityUrl = null;
+
+    /** @var list<array{name: string, value: string}> */
+    public array $structuredIdentitySameAs = [];
+
+    public bool $structuredIdentityIsArticleAuthor = false;
+
     public ?string $logoPath = null;
 
     #[Ignore]

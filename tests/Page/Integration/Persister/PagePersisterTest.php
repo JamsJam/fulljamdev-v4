@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Page\Integration\Writer;
+namespace App\Tests\Page\Integration\Persister;
 
 use App\Application\Page\Block\Asset\BlockAssetProcessor;
 use App\Application\Page\Block\Library\Hero\Shared\HeroDTO;
@@ -10,12 +10,12 @@ use App\Application\Page\Element\Image\ImageSource;
 use App\Application\Page\Page\Builder\PageBuilder;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\Page\Page\Dto\PageDTO;
-use App\Application\Page\Page\Writer\PageWriter;
+use App\Application\Page\Page\Persister\PagePersister;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class PageWriterTest extends KernelTestCase
+final class PagePersisterTest extends KernelTestCase
 {
     public function testItWritesOrderedBlocksAndBuildsTypedPageBack(): void
     {
@@ -26,7 +26,7 @@ final class PageWriterTest extends KernelTestCase
         $entityManager->expects(self::once())->method('flush');
         $mapper = $container->get(BlockDataMapper::class);
         $serializer = $container->get(SerializerInterface::class);
-        $writer = new PageWriter($container->get(BlockRegistry::class), $mapper, $serializer, $entityManager, $container->get(BlockAssetProcessor::class));
+        $persister = new PagePersister($container->get(BlockRegistry::class), $mapper, $serializer, $entityManager, $container->get(BlockAssetProcessor::class));
 
         $hero = new HeroDTO();
         $hero->title->content = 'Accueil';
@@ -43,7 +43,7 @@ final class PageWriterTest extends KernelTestCase
         $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $hero, 1);
         $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $firstHero, 0);
 
-        $page = $writer->save($dto);
+        $page = $persister->save($dto);
         $rebuilt = (new PageBuilder($mapper, $serializer))->build($page);
 
         self::assertCount(2, $page->getBlocks());

@@ -2,6 +2,7 @@
 {% block title %}Blog{% endblock %}
 {% block metadescription %}Conseils, retours d’expérience et ressources pour concevoir des projets web performants, accessibles et durables.{% endblock %}
 {% block canonical %}{{ url('app_front_blog') }}{% endblock %}
+{% block robots %}{{ query or selected_category ? 'noindex, follow' : parent() }}{% endblock %}
 {% block main_attributes %} data-page="blog-catalog"{% endblock %}
 {% block body %}
 <section class="blog-catalog" aria-labelledby="blog-catalog-title">

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Réserver — {{ planning.title }}{% endblock %}
+{% block robots %}{{ planning.online ? parent() : 'noindex, nofollow' }}{% endblock %}
 
 {% block body %}
     <turbo-frame id="{{ booking_frame }}">

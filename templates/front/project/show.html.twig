@@ -4,7 +4,6 @@
 {% block metadescription %}{{ project.excerpt }}{% endblock %}
 {% block canonical %}{{ url('app_front_project_show', {slug: project.slug}) }}{% endblock %}
 {% block main_attributes %} data-page="project-detail"{% endblock %}
-{% block openGraph %}<meta property="og:type" content="website"><meta property="og:title" content="{{ project.title }}"><meta property="og:description" content="{{ project.excerpt }}"><meta property="og:url" content="{{ url('app_front_project_show', {slug: project.slug}) }}">{% if main_image %}<meta property="og:image" content="{{ absolute_url(asset(main_image.path)) }}">{% endif %}{% endblock %}
 {% block body %}
 <article class="project-detail" aria-labelledby="project-title">
     <header class="project-detail__hero">

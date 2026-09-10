@@ -22,7 +22,7 @@ Ne jamais placer de secret réel dans `.env`. Utiliser `.env.local`, `.env.dev.l
 
 ## Réglages YAML
 
-La configuration administrable est stockée dans `src/Config/config.yaml` :
+La configuration administrable est stockée dans `src/Config/config.yaml`, ignoré par Git. Lors de l'installation, copier `src/Config/config.example.yaml` vers ce fichier :
 
 - `parameters` : paramètres généraux et fuseau horaire ;
 - `account` : informations publiques du compte ;

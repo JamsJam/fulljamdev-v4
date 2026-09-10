@@ -31,3 +31,7 @@ phpstan.neon
 ###> symfony/page-builder###
 /public/uploads/pages/*
 ###< symfony/page-builder###
+
+###> application settings ###
+/src/Config/config.yaml
+###< application settings ###

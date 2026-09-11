@@ -16,6 +16,11 @@
         {% include 'dashboard/_form.html.twig' with {
             form: form,
             cancel_path: path('app_dashboard_project'),
+            field_widget_attrs: {
+                content: {
+                    'data-suneditor-upload-token-value': csrf_token('project-media-upload')
+                }
+            },
             dropzone_fields: ['imageFiles'],
             dropzone_current_image_lists: {
                 imageFiles: project ? project.images|map(image => image.path) : []

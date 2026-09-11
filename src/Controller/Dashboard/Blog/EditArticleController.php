@@ -21,7 +21,7 @@ final class EditArticleController extends AbstractController
     {
         $article = $finder->find($id) ?? throw $this->createNotFoundException('Cet article n’existe pas.');
         $dto = $factory->fromEntity($article);
-        $form = $this->createForm(ArticleType::class, $dto);
+        $form = $this->createForm(ArticleType::class, $dto, ['article_id' => $article->getId()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $save->save($dto, $article);

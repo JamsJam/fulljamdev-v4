@@ -6,11 +6,16 @@ use App\Application\Project\Dto\ProjectDto;
 use App\Application\Project\Factory\ProjectFactory;
 use App\Application\Project\Persister\ProjectPersister;
 use App\Entity\Project\Project;
+use App\Repository\Project\ProjectMediaRepository;
 
 final readonly class SaveProjectService
 {
-    public function __construct(private ProjectFactory $factory, private ProjectSlugGenerator $slugGenerator, private ProjectPersister $persister)
-    {
+    public function __construct(
+        private ProjectFactory $factory,
+        private ProjectSlugGenerator $slugGenerator,
+        private ProjectPersister $persister,
+        private ProjectMediaRepository $media,
+    ) {
     }
 
     public function save(ProjectDto $dto, ?Project $project = null): Project
@@ -18,6 +23,7 @@ final readonly class SaveProjectService
         $project = $this->factory->create($dto, $project);
         $this->slugGenerator->generate($project);
         $this->persister->persist($project);
+        $this->media->attachReferencedMedia($project);
 
         return $project;
     }

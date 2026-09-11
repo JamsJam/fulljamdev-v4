@@ -44,9 +44,17 @@ services:
         arguments:
             $targetDirectory: '%blog_upload_directory%'
 
+    App\Application\Blog\Article\Asset\ArticleMediaUploader:
+        arguments:
+            $targetDirectory: '%blog_upload_directory%/media'
+
     App\Application\Project\Asset\ProjectImageUploader:
         arguments:
             $targetDirectory: '%project_upload_directory%'
+
+    App\Application\Project\Asset\ProjectMediaUploader:
+        arguments:
+            $targetDirectory: '%project_upload_directory%/media'
 
     App\Service\Google\GoogleOAuthService:
         arguments:

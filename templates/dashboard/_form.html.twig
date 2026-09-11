@@ -6,7 +6,7 @@
                 {% if field.vars.name in dropzone_fields|default([]) %}
                     <twig:Form:Dropzone :field="field" :currentImage="dropzone_current_images[field.vars.name]|default(null)" :currentImages="dropzone_current_image_lists[field.vars.name]|default([])" />
                 {% else %}
-                    <twig:Form:Field :field="field" />
+                    <twig:Form:Field :field="field" :widgetAttr="field_widget_attrs[field.vars.name]|default({})" />
                 {% endif %}
             {% endif %}
         {% endfor %}

@@ -8,6 +8,10 @@ export default class extends Controller {
     static values = {
         profile: { type: String, default: 'full' },
         maxCharacters: { type: Number, default: 1000 },
+        uploadUrl: String,
+        uploadToken: String,
+        articleId: String,
+        projectId: String,
     };
 
     connect() {
@@ -56,7 +60,15 @@ export default class extends Controller {
                 'blockquote', 
                 'pre'
             ],
-            'videoFileInput': false,
+            'imageUploadUrl': this.uploadUrlValue || null,
+            'videoUploadUrl': this.uploadUrlValue || null,
+            'imageUploadHeader': this.uploadHeaders(),
+            'videoUploadHeader': this.uploadHeaders(),
+            'imageUploadSizeLimit': 5 * 1024 * 1024,
+            'videoUploadSizeLimit': 50 * 1024 * 1024,
+            'imageMultipleFile': false,
+            'videoMultipleFile': false,
+            'videoFileInput': Boolean(this.uploadUrlValue),
             'tabDisable': false,
             'paragraphStyles': [
                 'spaced',
@@ -120,5 +132,58 @@ export default class extends Controller {
             // "lang(In nodejs)": "fr"
         });
         this.editor.onChange = () => this.editor.save();
+
+        if (!this.uploadUrlValue) {
+            return;
+        }
+
+        this.editor.onImageUploadBefore = (files, info, uploadHandler) => this.upload(files, uploadHandler);
+        this.editor.onVideoUploadBefore = (files, info, uploadHandler) => this.upload(files, uploadHandler);
+    }
+
+    upload(files, uploadHandler) {
+        if (!this.uploadUrlValue) {
+            return undefined;
+        }
+
+        const body = new FormData();
+        body.append('file', files[0]);
+        const resource = this.resourceIdentifier();
+        if (resource) {
+            body.append(resource.name, resource.id);
+        }
+
+        fetch(this.uploadUrlValue, {
+            method: 'POST',
+            headers: this.uploadHeaders() || {},
+            body,
+            credentials: 'same-origin',
+        })
+            .then(async (response) => {
+                const payload = await response.json();
+                if (!response.ok) {
+                    throw new Error(payload.errorMessage || 'L’envoi du média a échoué.');
+                }
+                uploadHandler(payload);
+            })
+            .catch((error) => uploadHandler(error.message));
+
+        return false;
+    }
+
+    uploadHeaders() {
+        return this.uploadTokenValue ? { 'X-CSRF-TOKEN': this.uploadTokenValue } : null;
+    }
+
+    resourceIdentifier() {
+        if (this.articleIdValue) {
+            return { name: 'articleId', id: this.articleIdValue };
+        }
+
+        if (this.projectIdValue) {
+            return { name: 'projectId', id: this.projectIdValue };
+        }
+
+        return null;
     }
 }

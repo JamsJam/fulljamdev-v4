@@ -4,6 +4,8 @@ namespace App\Entity\Blog;
 
 use App\Application\Blog\Workflow\Enum\ArticleStatus;
 use App\Repository\Blog\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -48,6 +50,15 @@ class Article
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /** @var Collection<int, ArticleMedia> */
+    #[ORM\OneToMany(targetEntity: ArticleMedia::class, mappedBy: 'article')]
+    private Collection $media;
+
+    public function __construct()
+    {
+        $this->media = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -178,6 +189,12 @@ class Article
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /** @return Collection<int, ArticleMedia> */
+    public function getMedia(): Collection
+    {
+        return $this->media;
     }
 
     #[ORM\PrePersist]

@@ -34,5 +34,4 @@ final class BlockJsonLdIntegrationTest extends KernelTestCase
         $page->seo->noIndex = true;
         self::assertSame([], $provider->provide('app_front_page', ['page' => $page])->contributions);
     }
-
 }

@@ -53,6 +53,12 @@
         gap: 0.25rem;
     }
 
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
     article span {
         color: var(--text-muted);
     }

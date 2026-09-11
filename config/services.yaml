@@ -55,6 +55,10 @@ services:
             $redirectUri: '%env(GOOGLE_REDIRECT_URI)%'
             $refreshToken: '%env(GOOGLE_REFRESH_TOKEN)%'
 
+    App\Application\Shared\Notification\LogChannel:
+        tags:
+            - { name: notifier.channel, channel: log }
+
     App\Application\Reservation\Appointment\Meeting\MeetingLinkCreatorInterface:
         alias: App\Application\Reservation\Appointment\Meeting\GoogleCalendarMeetingCreator
 

@@ -7,6 +7,7 @@ use App\Application\Page\Page\Builder\PageBuilder;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\Page\Page\Dto\PageDTO;
 use App\Application\Page\Page\Form\PageType;
+use App\Application\Page\Page\Notification\InvalidPageFormNotifier;
 use App\Application\Page\Page\Service\CheckPagePathAvailabilityService;
 use App\Application\Page\Page\Service\FindPageService;
 use App\Application\Page\Page\Service\SavePageService;
@@ -23,17 +24,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class PageController extends AbstractController
 {
     #[Route('/new', name: 'app_dashboard_page_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService): Response
+    public function new(Request $request, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier): Response
     {
-        return $this->editForm($request, new PageDTO(), null, $saveService, $registry, $pathService);
+        return $this->editForm($request, new PageDTO(), null, $saveService, $registry, $pathService, $invalidFormNotifier);
     }
 
     #[Route('/{id}/edit', name: 'app_dashboard_page_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, PageBuilder $builder, SavePageService $saveService, BlockRegistry $registry, FindPageService $findService, CheckPagePathAvailabilityService $pathService): Response
+    public function edit(int $id, Request $request, PageBuilder $builder, SavePageService $saveService, BlockRegistry $registry, FindPageService $findService, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier): Response
     {
         $page = $findService->find($id) ?? throw $this->createNotFoundException('Cette page n’existe pas.');
 
-        return $this->editForm($request, $builder->build($page), $page, $saveService, $registry, $pathService);
+        return $this->editForm($request, $builder->build($page), $page, $saveService, $registry, $pathService, $invalidFormNotifier);
     }
 
     #[Route('/blocks/new/{type}/{index}', name: 'app_dashboard_page_block_new', requirements: ['type' => '[a-z0-9._-]+', 'index' => '\d+'], methods: ['GET'])]
@@ -50,7 +51,7 @@ final class PageController extends AbstractController
         ]);
     }
 
-    private function editForm(Request $request, PageDTO $dto, ?Page $page, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService): Response
+    private function editForm(Request $request, PageDTO $dto, ?Page $page, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier): Response
     {
         $form = $this->createForm(PageType::class, $dto);
         $form->handleRequest($request);
@@ -66,6 +67,10 @@ final class PageController extends AbstractController
 
                 return $this->redirectToRoute('app_dashboard_page_edit', ['id' => $page->getId()], Response::HTTP_SEE_OTHER);
             }
+        }
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $invalidFormNotifier->notify($form, $request, $page?->getId());
         }
 
         return $this->render('dashboard/page/edit.html.twig', [

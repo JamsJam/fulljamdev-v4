@@ -3,9 +3,7 @@
 namespace App\Application\Page\Block\Library\CardDisplay\Shared;
 
 use App\Application\Page\Block\Interface\InitializableBlockDataInterface;
-use App\Application\Page\Block\Library\CardDisplay\Data\CardContentType;
 use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayItemDTO;
-use App\Application\Page\Data\Enum\ValueSource;
 use App\Application\Page\Element\Cta\CtaDTO;
 use App\Application\Page\Element\Heading\HeadingDTO;
 use App\Application\Page\Element\Heading\HeadingLevel;
@@ -19,12 +17,6 @@ final class CardDisplayDTO implements InitializableBlockDataInterface
 
     #[Assert\Valid]
     public TextDTO $text;
-
-    public CardContentType $contentType = CardContentType::GENERIC;
-
-    public ValueSource $source = ValueSource::STATIC;
-
-    public ?string $sourceKey = 'featured_projects';
 
     /** @var list<CardDisplayItemDTO> */
     #[Assert\Valid]

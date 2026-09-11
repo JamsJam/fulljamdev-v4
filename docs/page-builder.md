@@ -99,20 +99,17 @@ Blocs pris en charge :
   les questions sont reliées par `mentions`, sans ajouter `FAQPage`.
 - `blog.latest` : `ItemList` des articles effectivement affichés, avec références
   `BlogPosting` utilisant les mêmes identifiants que les pages articles.
-- `project.featured` et cartes dynamiques `featured_projects` : `ItemList` des
-  projets publiés sélectionnés, représentés par des `CreativeWork`.
-- `card_display.with_image` et `services.main` : liste des cartes manuelles.
-  Le champ **Contenu des cartes** permet de déclarer explicitement des services
-  (`Service`). Les anciennes cartes restent en mode **Contenu général**.
-  Les cartes générales liées par une route article ou projet sont typées en
-  conséquence ; les autres restent des `Thing`. Le nom historique `services.main`
-  désigne une présentation avec logo et ne suffit pas à qualifier un service.
+- `project.featured` : `ItemList` des projets publiés sélectionnés, représentés
+  par des `CreativeWork`. Ce bloc porte seul la source dynamique des projets.
+- `services.main` : liste statique de cartes décrites comme des `Service`.
+- `card_display.with_image` : liste statique de cartes. Une carte liée par une
+  route article ou projet est typée en conséquence ; les autres restent des
+  `Thing`.
 
 Les listes sont reliées à la page par `mentions` : afficher une liste d’articles
 ne transforme pas la page en article. Les identifiants des services sont propres
 aux cartes ; un bouton vers une page contact commune ne fusionne pas les services.
-Les sources dynamiques ignorent les cartes manuelles et leur choix de contenu.
-Les sélections d’articles et de projets sont partagées avec Twig et mémorisées
+Les sélections des blocs dynamiques d’articles et de projets sont partagées avec Twig et mémorisées
 sur la requête courante, pour garder les mêmes contenus et éviter une seconde
 requête SQL. Les pages `noindex` ne déclenchent pas la collecte.
 

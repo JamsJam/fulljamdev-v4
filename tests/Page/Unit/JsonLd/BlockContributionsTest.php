@@ -4,14 +4,12 @@ namespace App\Tests\Page\Unit\JsonLd;
 
 use App\Application\Page\Block\Library\Blog\Latest\LatestArticlesDTO;
 use App\Application\Page\Block\Library\Blog\Latest\LatestArticlesProvider;
-use App\Application\Page\Block\Library\CardDisplay\Data\CardContentType;
-use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayCardsProvider;
 use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayItemDTO;
 use App\Application\Page\Block\Library\CardDisplay\Data\FeaturedProjectsProviderInterface;
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
 use App\Application\Page\Block\Library\Faq\Main\FaqDTO;
 use App\Application\Page\Block\Library\Faq\Main\FaqItemDTO;
-use App\Application\Page\Data\Enum\ValueSource;
+use App\Application\Page\Block\Library\Project\Featured\FeaturedProjectsDTO;
 use App\Application\Page\Element\Cta\CtaTarget;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\SEO\JsonLd\Builder\BreadcrumbBuilder;
@@ -88,7 +86,7 @@ final class BlockContributionsTest extends TestCase
     public function testServicesAreExplicitAndDoNotShareTheirContactLinkAsIdentity(): void
     {
         $projects = $this->createStub(FeaturedProjectsProviderInterface::class);
-        $contributor = new CardsJsonLdContributor(new CardDisplayCardsProvider($projects), $projects, $this->urls(), new ItemListContributionBuilder());
+        $contributor = new CardsJsonLdContributor($projects, $this->urls(), new ItemListContributionBuilder());
         $data = new CardDisplayDTO();
         foreach (['Développement', 'Accompagnement'] as $title) {
             $card = new CardDisplayItemDTO();
@@ -99,9 +97,6 @@ final class BlockContributionsTest extends TestCase
             $data->cards[] = $card;
         }
         $block = new PageBlockDTO(1, 'services.main', $data);
-        $generic = $contributor->contribute($block, self::URL.'#block-1');
-        self::assertSame('Thing', $generic->nodes[1]['@type']);
-        $data->contentType = CardContentType::SERVICE;
         $services = $contributor->contribute($block, self::URL.'#block-1');
         self::assertSame('Service', $services->nodes[1]['@type']);
         self::assertNotSame($services->nodes[1]['@id'], $services->nodes[2]['@id']);
@@ -110,7 +105,7 @@ final class BlockContributionsTest extends TestCase
         self::assertSame([1, 2], array_column($services->nodes[0]['itemListElement'], 'position'));
     }
 
-    public function testDynamicProjectCardsIgnoreStaticCardsAndDeduplicateAcrossBlocks(): void
+    public function testFeaturedProjectsUseTheirDedicatedBlockAndDeduplicateAcrossBlocks(): void
     {
         $card = new CardDisplayItemDTO();
         $card->title = 'Projet publié';
@@ -120,27 +115,22 @@ final class BlockContributionsTest extends TestCase
         $card->cta->routeParameters = ['slug' => 'projet'];
         $projects = $this->createStub(FeaturedProjectsProviderInterface::class);
         $projects->method('provide')->willReturn([$card]);
-        $contributor = new CardsJsonLdContributor(new CardDisplayCardsProvider($projects), $projects, $this->urls(), new ItemListContributionBuilder());
-        $data = new CardDisplayDTO();
-        $data->source = ValueSource::DYNAMIC;
-        $data->contentType = CardContentType::SERVICE;
-        $data->cards = [new CardDisplayItemDTO()];
+        $contributor = new CardsJsonLdContributor($projects, $this->urls(), new ItemListContributionBuilder());
+        $data = new FeaturedProjectsDTO();
         $contributions = (new BlockJsonLdCollector([$contributor]))->collect([
-            new PageBlockDTO(null, 'services.main', $data), new PageBlockDTO(null, 'card_display.with_image', $data),
+            new PageBlockDTO(null, 'project.featured', $data), new PageBlockDTO(null, 'project.featured', $data),
         ], self::URL);
         $graph = $this->builder()->build(new PageContext(PageType::STANDARD, self::URL, 'Page', contributions: $contributions))['@graph'];
         self::assertCount(4, $graph); // page, two lists, one shared project
         self::assertSame('CreativeWork', $graph[2]['@type']);
         self::assertSame('https://example.com/projects/projet#project', $graph[2]['@id']);
         self::assertCount(2, $graph[0]['mentions']);
-        $data->sourceKey = 'unsupported';
-        self::assertSame([], $contributor->contribute(new PageBlockDTO(1, 'services.main', $data), self::URL.'#block-1')->nodes);
     }
 
     public function testInvalidCardRouteDoesNotBreakThePage(): void
     {
         $projects = $this->createStub(FeaturedProjectsProviderInterface::class);
-        $contributor = new CardsJsonLdContributor(new CardDisplayCardsProvider($projects), $projects, $this->urls(), new ItemListContributionBuilder());
+        $contributor = new CardsJsonLdContributor($projects, $this->urls(), new ItemListContributionBuilder());
         $data = new CardDisplayDTO();
         $card = new CardDisplayItemDTO();
         $card->title = 'Carte';

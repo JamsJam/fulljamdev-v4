@@ -2,7 +2,6 @@
 
 namespace App\Twig\Components\Page\Block;
 
-use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayCardsProvider;
 use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayItemDTO;
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
 
@@ -11,14 +10,10 @@ abstract class AbstractCardDisplay
     public CardDisplayDTO $data;
     public ?int $blockId = null;
 
-    public function __construct(private readonly CardDisplayCardsProvider $cards)
-    {
-    }
-
     /** @return list<CardDisplayItemDTO> */
     public function getCards(): array
     {
-        return $this->cards->provide($this->data);
+        return $this->data->cards;
     }
 
     /** @param array<string, mixed> $attributes */

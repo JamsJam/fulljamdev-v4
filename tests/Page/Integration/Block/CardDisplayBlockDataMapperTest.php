@@ -25,7 +25,7 @@ final class CardDisplayBlockDataMapperTest extends KernelTestCase
         self::assertSame('Ancienne carte', $block->cards[0]->title);
     }
 
-    public function testItMapsOnlyBlockContentAndNotDynamicCards(): void
+    public function testItMapsOnlyStaticCards(): void
     {
         self::bootKernel();
         $mapper = self::getContainer()->get(BlockDataMapper::class);
@@ -46,6 +46,7 @@ final class CardDisplayBlockDataMapperTest extends KernelTestCase
 
         self::assertInstanceOf(CardDisplayDTO::class, $block);
         self::assertSame([], $block->cards);
-        self::assertSame('static', $mapper->normalize($block)['source']);
+        self::assertArrayNotHasKey('source', $mapper->normalize($block));
+        self::assertArrayNotHasKey('sourceKey', $mapper->normalize($block));
     }
 }

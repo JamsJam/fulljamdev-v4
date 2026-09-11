@@ -30,7 +30,11 @@ final class ImageType extends AbstractType
                 'help' => 'JPEG, PNG, WebP ou GIF — 5 Mo maximum.',
                 'attr' => ['accept' => 'image/jpeg,image/png,image/webp,image/gif'],
             ])
-            ->add('url', UrlType::class, ['label' => 'URL externe', 'required' => false])
+            ->add('url', UrlType::class, [
+                'label' => 'URL externe',
+                'required' => false,
+                'default_protocol' => 'https',
+            ])
             ->add('alt', null, ['label' => 'Texte alternatif', 'empty_data' => ''])
             ->add('title', null, ['required' => false]);
     }

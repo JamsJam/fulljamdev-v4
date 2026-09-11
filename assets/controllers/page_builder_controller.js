@@ -69,14 +69,25 @@ export default class extends Controller {
         block.dataset.dragReady = 'true';
         const handle = block.querySelector('[data-page-builder-drag-handle]');
         if (!handle) return;
-        handle.addEventListener('dragstart', (event) => {
+
+        handle.addEventListener('pointerdown', () => {
+            block.draggable = true;
+        });
+
+        handle.addEventListener('pointerup', () => {
+            block.draggable = false;
+        });
+
+        block.addEventListener('dragstart', (event) => {
             this.dragged = block;
             block.classList.add('is-dragging');
             event.dataTransfer.effectAllowed = 'move';
             event.dataTransfer.setData('text/plain', 'page-block');
         });
-        handle.addEventListener('dragend', () => {
+
+        block.addEventListener('dragend', () => {
             block.classList.remove('is-dragging');
+            block.draggable = false;
             this.dragged = null;
             this.syncPositions();
         });

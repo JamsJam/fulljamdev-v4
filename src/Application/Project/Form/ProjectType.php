@@ -17,13 +17,51 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ProjectType extends AbstractType
 {
-    public function __construct(private readonly TechnologyRepository $technologies, private readonly UrlGeneratorInterface $urls)
-    {
+    public function __construct(
+        private readonly TechnologyRepository $technologies,
+        private readonly UrlGeneratorInterface $urls,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('title', null, ['label' => 'Titre'])->add('excerpt', TextareaType::class, ['label' => 'Résumé', 'required' => false, 'attr' => ['rows' => 5, 'maxlength' => 1000]])->add('content', TextareaType::class, ['label' => 'Contenu', 'attr' => ['rows' => 12, 'data-controller' => 'suneditor', 'data-suneditor-max-characters-value' => 50000]])->add('imageFiles', FileType::class, ['label' => 'Images du projet', 'required' => false, 'multiple' => true, 'help' => 'JPEG, PNG ou WebP — 5 Mo maximum par image.', 'attr' => ['accept' => 'image/jpeg,image/png,image/webp']])->add('technologies', TextType::class, ['label' => 'Technologies', 'required' => false, 'help' => 'Recherchez une technologie ou saisissez-en une nouvelle, puis validez avec Entrée.', 'attr' => ['data-controller' => 'technology-select', 'data-technology-select-url-value' => $this->urls->generate('app_dashboard_project_technology_autocomplete'), 'data-technology-select-placeholder-value' => 'Rechercher ou ajouter une technologie…']])->add('websiteUrl', null, ['label' => 'URL du site', 'required' => false])->add('repositoryUrl', null, ['label' => 'URL du dépôt', 'required' => false])->add('isFeatured', CheckboxType::class, ['label' => 'Mettre en avant', 'required' => false]);
+        $builder
+            ->add('title', null, ['label' => 'Titre'])
+            ->add('excerpt', TextareaType::class, [
+                'label' => 'Résumé',
+                'required' => false,
+                'attr' => ['rows' => 5, 'maxlength' => 1000],
+            ])
+            ->add('content', TextareaType::class, [
+                'label' => 'Contenu',
+                'attr' => [
+                    'rows' => 12,
+                    'data-controller' => 'suneditor',
+                    'data-suneditor-max-characters-value' => 50000,
+                    'data-suneditor-upload-url-value' => $this->urls->generate('app_dashboard_project_media_upload'),
+                    'data-suneditor-project-id-value' => $options['project_id'] ?? '',
+                ],
+            ])
+            ->add('imageFiles', FileType::class, [
+                'label' => 'Images du projet',
+                'required' => false,
+                'multiple' => true,
+                'help' => 'JPEG, PNG ou WebP — 5 Mo maximum par image.',
+                'attr' => ['accept' => 'image/jpeg,image/png,image/webp'],
+            ])
+            ->add('technologies', TextType::class, [
+                'label' => 'Technologies',
+                'required' => false,
+                'help' => 'Recherchez une technologie ou saisissez-en une nouvelle, puis validez avec Entrée.',
+                'attr' => [
+                    'data-controller' => 'technology-select',
+                    'data-technology-select-url-value' => $this->urls->generate('app_dashboard_project_technology_autocomplete'),
+                    'data-technology-select-placeholder-value' => 'Rechercher ou ajouter une technologie…',
+                ],
+            ])
+            ->add('websiteUrl', null, ['label' => 'URL du site', 'required' => false])
+            ->add('repositoryUrl', null, ['label' => 'URL du dépôt', 'required' => false])
+            ->add('isFeatured', CheckboxType::class, ['label' => 'Mettre en avant', 'required' => false]);
         $builder->get('technologies')->addModelTransformer(new CallbackTransformer(
             static fn (array $items): string => implode(',', array_map(static fn (Technology $technology): string => $technology->getName(), $items)),
             function (?string $value): array {
@@ -42,6 +80,7 @@ final class ProjectType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => ProjectDto::class]);
+        $resolver->setDefaults(['data_class' => ProjectDto::class, 'project_id' => null]);
+        $resolver->setAllowedTypes('project_id', ['null', 'int']);
     }
 }

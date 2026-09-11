@@ -1,6 +1,9 @@
 framework:
     html_sanitizer:
         sanitizers:
+            default:
+                allow_safe_elements: true
+                allow_relative_medias: true
             app.experience_sanitizer:
                 allow_elements:
                     p: []

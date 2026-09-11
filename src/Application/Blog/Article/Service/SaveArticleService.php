@@ -6,6 +6,7 @@ use App\Application\Blog\Article\Dto\ArticleDto;
 use App\Application\Blog\Article\Factory\ArticleFactory;
 use App\Application\Blog\Article\Persister\ArticlePersister;
 use App\Entity\Blog\Article;
+use App\Repository\Blog\ArticleMediaRepository;
 
 final readonly class SaveArticleService
 {
@@ -13,6 +14,7 @@ final readonly class SaveArticleService
         private ArticleFactory $factory,
         private ArticleSlugGenerator $slugGenerator,
         private ArticlePersister $persister,
+        private ArticleMediaRepository $media,
     ) {
     }
 
@@ -21,6 +23,7 @@ final readonly class SaveArticleService
         $article = $this->factory->create($dto, $article);
         $this->slugGenerator->generate($article);
         $this->persister->persist($article);
+        $this->media->attachReferencedMedia($article);
 
         return $article;
     }

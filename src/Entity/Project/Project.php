@@ -44,11 +44,15 @@ class Project
     private ?\DateTimeImmutable $createdAt = null;
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+    /** @var Collection<int, ProjectMedia> */
+    #[ORM\OneToMany(targetEntity: ProjectMedia::class, mappedBy: 'project')]
+    private Collection $media;
 
     public function __construct()
     {
         $this->technologies = new ArrayCollection();
         $this->images = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +112,12 @@ class Project
     public function getImages(): Collection
     {
         return $this->images;
+    }
+
+    /** @return Collection<int, ProjectMedia> */
+    public function getMedia(): Collection
+    {
+        return $this->media;
     }
 
     public function addImage(ProjectImage $image): static

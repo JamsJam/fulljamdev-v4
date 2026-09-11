@@ -31,8 +31,22 @@ final class ArticleType extends AbstractType
                     'data-category-autocomplete-url-value' => $this->urls->generate('app_dashboard_blog_category_autocomplete'),
                 ],
             ])
-            ->add('summary', TextareaType::class, ['label' => 'Résumé', 'required' => false, 'attr' => ['rows' => 3, 'maxlength' => 160]])
-            ->add('content', TextareaType::class, ['label' => 'Contenu', 'required' => false, 'attr' => ['rows' => 16, 'data-controller' => 'suneditor', 'data-suneditor-max-characters-value' => 50000]])
+            ->add('summary', TextareaType::class, [
+                'label' => 'Résumé',
+                'required' => false,
+                'attr' => ['rows' => 3, 'maxlength' => 160],
+            ])
+            ->add('content', TextareaType::class, [
+                'label' => 'Contenu',
+                'required' => false,
+                'attr' => [
+                    'rows' => 16,
+                    'data-controller' => 'suneditor',
+                    'data-suneditor-max-characters-value' => 50000,
+                    'data-suneditor-upload-url-value' => $this->urls->generate('app_dashboard_blog_media_upload'),
+                    'data-suneditor-article-id-value' => $options['article_id'] ?? '',
+                ],
+            ])
             ->add('coverImageFile', FileType::class, [
                 'label' => 'Image de couverture',
                 'required' => false,
@@ -43,6 +57,7 @@ final class ArticleType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => ArticleDto::class]);
+        $resolver->setDefaults(['data_class' => ArticleDto::class, 'article_id' => null]);
+        $resolver->setAllowedTypes('article_id', ['null', 'int']);
     }
 }

@@ -16,6 +16,11 @@
         {% include 'dashboard/_form.html.twig' with {
             form: form,
             cancel_path: path('app_dashboard_blog'),
+            field_widget_attrs: {
+                content: {
+                    'data-suneditor-upload-token-value': csrf_token('blog-media-upload')
+                }
+            },
             dropzone_fields: ['coverImageFile'],
             dropzone_current_images: {
                 coverImageFile: article ? article.coverImage : null

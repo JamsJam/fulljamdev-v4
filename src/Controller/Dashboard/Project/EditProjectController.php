@@ -21,7 +21,7 @@ final class EditProjectController extends AbstractController
     {
         $project = $finder->find($id) ?? throw $this->createNotFoundException('Ce projet n’existe pas.');
         $dto = $factory->fromEntity($project);
-        $form = $this->createForm(ProjectType::class, $dto);
+        $form = $this->createForm(ProjectType::class, $dto, ['project_id' => $project->getId()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $save->save($dto, $project);

@@ -15,24 +15,15 @@
         </div>
     </details>
 
-    <section class="page-builder__settings-content" data-controller="card-data-source">
-        <div data-action="change->card-data-source#toggle"><twig:Form:Field :field="data.source" label="Origine des cartes" /></div>
-
-        <div data-card-data-source-target="dynamic">
-            <twig:Form:Field :field="data.sourceKey" />
-            <p class="page-builder__feedback">Les projets mis en avant seront disponibles après le développement du module Projets.</p>
-        </div>
-
+    <section class="page-builder__settings-content">
         {% set card_prototype %}{% include 'dashboard/page/block/_card_display_item_form.html.twig' with {card: data.cards.vars.prototype, mediaField: mediaField, mediaLabel: mediaLabel} only %}{% endset %}
         <fieldset
             class="page-builder__display-cards"
-            data-card-data-source-target="manual"
             data-controller="form-collection"
             data-form-collection-index-value="{{ data.cards|length }}"
             data-form-collection-prototype-value="{{ card_prototype|e('html_attr') }}"
         >
             <legend>Cartes saisies manuellement</legend>
-            <twig:Form:Field :field="data.contentType" />
             <ul data-form-collection-target="collectionContainer">
                 {% for card in data.cards %}{% include 'dashboard/page/block/_card_display_item_form.html.twig' with {card: card, mediaField: mediaField, mediaLabel: mediaLabel} only %}{% endfor %}
             </ul>

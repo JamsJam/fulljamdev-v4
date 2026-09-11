@@ -2,13 +2,10 @@
 
 namespace App\Application\SEO\JsonLd\Contributor;
 
-use App\Application\Page\Block\Library\CardDisplay\Data\CardContentType;
-use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayCardsProvider;
 use App\Application\Page\Block\Library\CardDisplay\Data\CardDisplayItemDTO;
 use App\Application\Page\Block\Library\CardDisplay\Data\FeaturedProjectsProviderInterface;
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
 use App\Application\Page\Block\Library\Project\Featured\FeaturedProjectsDTO;
-use App\Application\Page\Data\Enum\ValueSource;
 use App\Application\Page\Element\Cta\CtaTarget;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\SEO\JsonLd\Builder\ItemListContributionBuilder;
@@ -19,7 +16,6 @@ use App\Application\SEO\JsonLd\Interface\BlockJsonLdContributorInterface;
 final readonly class CardsJsonLdContributor implements BlockJsonLdContributorInterface
 {
     public function __construct(
-        private CardDisplayCardsProvider $cards,
         private FeaturedProjectsProviderInterface $projects,
         private PublicUrlGenerator $urls,
         private ItemListContributionBuilder $lists,
@@ -38,8 +34,8 @@ final readonly class CardsJsonLdContributor implements BlockJsonLdContributorInt
         if (!$data instanceof CardDisplayDTO && !$data instanceof FeaturedProjectsDTO) {
             return new JsonLdContribution();
         }
-        $cards = $data instanceof FeaturedProjectsDTO ? $this->projects->provide() : $this->cards->provide($data);
-        $service = $data instanceof CardDisplayDTO && ValueSource::STATIC === $data->source && CardContentType::SERVICE === $data->contentType;
+        $cards = $data instanceof FeaturedProjectsDTO ? $this->projects->provide() : $data->cards;
+        $service = 'services.main' === $block->type;
         $items = [];
         foreach ($cards as $index => $card) {
             if ('' === trim($card->title)) {

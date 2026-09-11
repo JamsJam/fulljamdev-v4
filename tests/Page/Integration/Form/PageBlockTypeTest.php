@@ -86,7 +86,7 @@ final class PageBlockTypeTest extends KernelTestCase
         self::assertSame('Second Hero', $page->blocks[9]->data->title->content);
     }
 
-    public function testLegacyCardBlockCanBeSubmittedWithoutContentType(): void
+    public function testLegacyDynamicCardFieldsAreIgnoredOnSubmit(): void
     {
         self::bootKernel();
         $mapper = self::getContainer()->get(\App\Application\Page\Block\Mapper\BlockDataMapper::class);
@@ -123,9 +123,7 @@ final class PageBlockTypeTest extends KernelTestCase
         ]);
 
         self::assertTrue($form->isSynchronized(), (string) $form->getErrors(true));
-        self::assertSame(
-            \App\Application\Page\Block\Library\CardDisplay\Data\CardContentType::GENERIC,
-            $page->blocks[0]->data->contentType,
-        );
+        self::assertFalse(property_exists($page->blocks[0]->data, 'source'));
+        self::assertFalse(property_exists($page->blocks[0]->data, 'sourceKey'));
     }
 }

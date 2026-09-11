@@ -18,16 +18,18 @@
                     <strong>{{ page.title }}</strong>
                     <a href="{{ path('app_front_page', {path: page.path}) }}" target="_blank" rel="noopener noreferrer">/{{ page.path }}</a>
                 </div>
-                <twig:Admin:Button
-                    variant="outline"
-                    href="{{ path('app_dashboard_page_edit', {id: page.id}) }}"
-                    label="Modifier"
-                    data-turbo-frame="_top"
-                />
-                <form method="post" action="{{ path('app_dashboard_page_delete', {id: page.id}) }}" onsubmit="return confirm('Supprimer cette page et ses médias non utilisés ?')">
-                    <input type="hidden" name="_token" value="{{ csrf_token('delete_page_' ~ page.id) }}">
-                    <twig:Admin:Button variant="outline" type="submit" label="Supprimer" />
-                </form>
+                <div class="page-list__actions">
+                    <twig:Admin:Button
+                        variant="outline"
+                        href="{{ path('app_dashboard_page_edit', {id: page.id}) }}"
+                        label="Modifier"
+                        data-turbo-frame="_top"
+                    />
+                    <form method="post" action="{{ path('app_dashboard_page_delete', {id: page.id}) }}" onsubmit="return confirm('Supprimer cette page et ses médias non utilisés ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_page_' ~ page.id) }}">
+                        <twig:Admin:Button variant="outline" type="submit" label="Supprimer" />
+                    </form>
+                </div>
             </article>
         {% else %}
             <p>Aucune page n’a encore été créée.</p>

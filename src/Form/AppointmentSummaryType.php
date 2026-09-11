@@ -16,7 +16,11 @@ final class AppointmentSummaryType extends AbstractType
         $builder
             ->add('content', TextareaType::class, ['label' => 'Compte rendu', 'empty_data' => '', 'attr' => ['rows' => 6]])
             ->add('internalNotes', TextareaType::class, ['label' => 'Notes internes', 'required' => false, 'attr' => ['rows' => 3]])
-            ->add('recordingLink', UrlType::class, ['label' => 'Lien de l’enregistrement', 'required' => false]);
+            ->add('recordingLink', UrlType::class, [
+                'label' => 'Lien de l’enregistrement',
+                'required' => false,
+                'default_protocol' => 'https',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -20,7 +20,11 @@ final class SeoType extends AbstractType
         $builder
             ->add('title', null, ['label' => 'Titre SEO', 'empty_data' => ''])
             ->add('description', TextareaType::class, ['empty_data' => '', 'attr' => ['rows' => 3]])
-            ->add('canonicalUrl', UrlType::class, ['label' => 'URL canonique', 'required' => false])
+            ->add('canonicalUrl', UrlType::class, [
+                'label' => 'URL canonique',
+                'required' => false,
+                'default_protocol' => 'https',
+            ])
             ->add('noIndex', CheckboxType::class, ['label' => 'Ne pas indexer cette page', 'required' => false])
             ->add('profilePage', CheckboxType::class, [
                 'label' => 'Cette page présente principalement l’identité configurée',

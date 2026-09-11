@@ -26,3 +26,96 @@
         text-wrap: pretty;
     }
 }
+
+.cta-glow {
+    --cta-glow-color: oklch(72% 0.18 290);
+
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 32rem;
+    overflow: hidden;
+    color: var(--text, #111827);
+
+    &__content {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        justify-items: center;
+        gap: var(--padding-xl);
+        width: min(100%, 64rem);
+        text-align: center;
+    }
+
+    &__title {
+        color: inherit;
+        font-size: var(--h2);
+        text-wrap: balance;
+    }
+
+    &__text {
+        color: inherit;
+        font-size: var(--text-l);
+        line-height: 1.55;
+        text-wrap: pretty;
+    }
+
+    &__spot {
+        position: absolute;
+        z-index: -1;
+        display: block;
+        width: clamp(19rem, 30vw, 38rem);
+        aspect-ratio: 1;
+        background: color-mix(in oklch, var(--cta-glow-color) 42%, transparent);
+        border-radius: 50%;
+        filter: blur(clamp(4.5rem, 8vw, 8rem));
+        pointer-events: none;
+    }
+
+    &__spot--left {
+        inset-block-start: 8%;
+        inset-inline-start: clamp(-18rem, -12vw, -8rem);
+    }
+
+    &__spot--top {
+        width: clamp(14rem, 22vw, 28rem);
+        inset-block-start: clamp(-17rem, -12vw, -7rem);
+        inset-inline-start: 52%;
+        opacity: 0.72;
+        transform: translateX(-50%);
+    }
+
+    &__spot--right {
+        inset-block-end: -22%;
+        inset-inline-end: clamp(-17rem, -10vw, -7rem);
+        opacity: 0.8;
+    }
+}
+
+@media (max-width: 48rem) {
+    .cta-glow {
+        min-height: 28rem;
+
+        &__spot {
+            width: clamp(15rem, 65vw, 22rem);
+            filter: blur(4.5rem);
+        }
+
+        &__spot--left {
+            inset-block-start: 14%;
+            inset-inline-start: -13rem;
+        }
+
+        &__spot--top {
+            inset-block-start: -14rem;
+            inset-inline-start: 50%;
+            opacity: 0.5;
+        }
+
+        &__spot--right {
+            inset-block-end: 8%;
+            inset-inline-end: -13rem;
+        }
+    }
+}

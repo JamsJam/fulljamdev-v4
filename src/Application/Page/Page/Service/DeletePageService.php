@@ -85,7 +85,7 @@ final readonly class DeletePageService
     }
 
     /** @param array<string, mixed> $seo
-     *  @param array<string, true> $filenames
+     * @param array<string, true> $filenames
      */
     private function collectSeoMedia(array $seo, array &$filenames): void
     {

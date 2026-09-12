@@ -135,4 +135,8 @@ jobs:
             echo "Deploiement de production termine avec succes."
 
             echo "==========[10/10] Redemarrage des workers Messenger=========="
-            make restart-messenger-workers
+            supervisorctl restart messenger-article-publication:*
+            supervisorctl restart messenger-page-asset-cleanup:*
+            supervisorctl restart messenger-appointment-reminders:*
+            supervisorctl restart messenger-emails:*
+            supervisorctl restart messenger-notifications:*

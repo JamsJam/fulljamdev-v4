@@ -2,7 +2,7 @@
 
 .hero-with-xl-image {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr);
+    grid-template-columns: minmax(0, 0.5fr) minmax(20rem, 0.8fr);
     align-items: center;
     gap: clamp(3rem, 7vw, 7rem);
     min-height: min(48rem, calc(100dvh - 6rem));

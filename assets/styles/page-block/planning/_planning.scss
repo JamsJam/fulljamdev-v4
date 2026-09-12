@@ -30,13 +30,36 @@
     }
 
     &__loading {
+        display: grid;
+        place-items: center;
         padding: var(--padding-xl);
         color: var(--text-mute);
         text-align: center;
     }
 
+    &__spinner {
+        width: 2rem;
+        height: 2rem;
+        border: 3px solid color-mix(in srgb, var(--planning-color, var(--primary)) 25%, transparent);
+        border-top-color: var(--planning-color, var(--primary));
+        border-radius: 50%;
+        animation: planning-block-spin 650ms linear infinite;
+    }
+
     .public-booking {
         width: min(100%, 62rem);
         margin-block: 0;
+    }
+}
+
+@keyframes planning-block-spin {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .planning-block__spinner {
+        animation: none;
     }
 }

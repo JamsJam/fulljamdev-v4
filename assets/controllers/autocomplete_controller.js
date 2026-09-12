@@ -35,8 +35,9 @@ export default class extends Controller {
         // add or remove classes, attributes, dispatch custom events, etc.
         // this.fooTarget.addEventListener('click', this._fooBar)
 
-
-        this.injectAutocomplete();
+        if (!this.hasAutocompleteTarget) {
+            this.injectAutocomplete();
+        }
     }
 
     // Add custom controller actions here
@@ -46,8 +47,7 @@ export default class extends Controller {
         // Called anytime its element is disconnected from the DOM
         // (on page change, when it's removed from or moved in the DOM, etc.)
 
-        // Here you should remove all event listeners added in "connect()" 
-        // this.fooTarget.removeEventListener('click', this._fooBar)
+        this.abortController?.abort();
     }
 
 
@@ -150,7 +150,7 @@ export default class extends Controller {
 
     clickOut(event){
         // console.log(event.target, ! (event.target == this.containerTarget ||  event.target == this.inputTarget ))
-        if(! (event.target == this.containerTarget ||  event.target == this.inputTarget )){
+        if (!this.containerTarget.contains(event.target)) {
             this.removeAutocompleteChoices();
         }
     }
@@ -160,17 +160,23 @@ export default class extends Controller {
         const urlToFetch = window.location.origin + this.urlProviderValue;
         // console.log(urlToFetch )
         this.loadingValue = true;
+        this.abortController?.abort();
+        const abortController = new AbortController();
+        this.abortController = abortController;
         try {
-            const response = await fetch(urlToFetch);
+            const response = await fetch(urlToFetch, { signal: abortController.signal });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
             this.collectionDataValue = data.member; // <-- ici on ne garde que les entités
         } catch (error) {
+            if (error.name === 'AbortError') return;
             console.error('Fetch error: ', error);
         } finally {
-            this.loadingValue = false;
+            if (this.abortController === abortController) {
+                this.loadingValue = false;
+            }
         }
 
 

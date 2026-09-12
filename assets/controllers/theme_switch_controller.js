@@ -41,8 +41,6 @@ export default class extends Controller {
     }
 
     async switchTheme(){
-        console.log('THEME');
-        const menu = document.querySelector('.menu');
         const actualTheme = Array.from(this.menuTarget.classList).some((el => el.endsWith('--dark'))) ? 'dark' : 'light';
         const newTheme = actualTheme === 'dark' ? 'light' : 'dark';
         const success = await this.switchThemeConfig(newTheme);
@@ -50,7 +48,7 @@ export default class extends Controller {
             console.error('Erreur lors de la mise à jour du thème côté serveur');
             return;
         }
-        const items = document.querySelectorAll(`[class *="--${actualTheme}"`);
+        const items = document.querySelectorAll(`[class*="--${actualTheme}"]`);
         items.forEach(element => {
             const oldClass = Array.from(element.classList).find((el => el.endsWith(`--${actualTheme}`)));
             const newClass = oldClass.replace(`--${actualTheme}`,`--${newTheme}`);
@@ -70,10 +68,7 @@ export default class extends Controller {
                 },
                 body:JSON.stringify({theme})
             });
-            if(response.ok){
-    
-                return true;
-            }
+            return response.ok;
         }catch (error) {
             console.error('Erreur fetch:', error);
             return false;

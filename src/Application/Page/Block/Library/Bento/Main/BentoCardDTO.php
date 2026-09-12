@@ -8,5 +8,5 @@ final class BentoCardDTO
 {
     #[Assert\NotBlank] #[Assert\Length(max: 120)] public string $title = '';
     #[Assert\NotBlank] #[Assert\Length(max: 700)] public string $text = '';
-    #[Assert\Choice(['standard', 'wide', 'tall'])] public string $size = 'standard';
+    #[Assert\Choice(choices: ['standard', 'wide', 'tall'])] public string $size = 'standard';
 }

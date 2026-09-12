@@ -1,0 +1,6 @@
+<li data-form-collection-item>
+    <div class="page-builder__grid"><twig:Form:Field :field="item.title" /><twig:Form:Field :field="item.description" /><twig:Form:Field :field="item.price" /><twig:Form:Field :field="item.period" /><twig:Form:Field :field="item.featured" /></div>
+    {% set feature_prototype %}{% include 'dashboard/page/block/_pricing_feature_form.html.twig' with {feature: item.features.vars.prototype} only %}{% endset %}
+    <details class="page-builder__subsettings"><summary>Fonctionnalités incluses</summary><fieldset class="page-builder__settings-content" data-controller="form-collection" data-form-collection-index-value="{{ item.features|length }}" data-form-collection-placeholder-value="__feature__" data-form-collection-prototype-value="{{ feature_prototype|e('html_attr') }}"><legend class="visually-hidden">Fonctionnalités incluses</legend><ul data-form-collection-target="collectionContainer">{% for feature in item.features %}{% include 'dashboard/page/block/_pricing_feature_form.html.twig' with {feature: feature} only %}{% endfor %}</ul><twig:Admin:Button variant="outline" label="Ajouter une fonctionnalité" data-action="form-collection#addCollectionElement" /></fieldset></details>
+    <twig:Admin:Button variant="destructive" label="Supprimer l’offre" data-action="form-collection#removeCollectionElement" />
+</li>

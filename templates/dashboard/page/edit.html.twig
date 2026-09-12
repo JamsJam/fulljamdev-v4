@@ -11,7 +11,7 @@
     >
         {{ form_start(form, {attr: {id: 'page-builder-form', class: 'page-builder__form'}}) }}
             <header class="page-builder__header">
-                <div><a href="{{ path('app_dashboard_settings', {section: 'pages'}) }}">← Pages</a><h1>{{ page.id ? page.title : 'Nouvelle page' }}</h1></div>
+                <div><a href="{{ path('app_dashboard_page') }}">← Pages</a><h1>{{ page.id ? page.title : 'Nouvelle page' }}</h1></div>
                 <twig:Admin:Button type="submit" label="Enregistrer" />
             </header>
 

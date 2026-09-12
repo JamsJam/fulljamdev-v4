@@ -15,3 +15,6 @@
     </ul>
     <twig:Admin:Button variant="outline" :label="addLabel" data-action="form-collection#addCollectionElement" />
 </fieldset>
+
+{# The collection is rendered manually above; prevent form_end() from rendering it again. #}
+{% do field.setRendered %}

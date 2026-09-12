@@ -72,7 +72,7 @@ jobs:
 
             PROJECT_DIR="/var/www/${APP_USER}/${APP_DOMAIN}"
 
-            echo "==========[1/9] Verification de la configuration=========="
+            echo "==========[1/10] Verification de la configuration=========="
             for VARIABLE_NAME in APP_USER APP_DOMAIN APP_SECRET DATABASE_URL CORS_ALLOW_ORIGIN MAILER_DSN MESSENGER_TRANSPORT_DSN GOOGLE_CLIENT_ID GOOGLE_CLIENT_SECRET GOOGLE_REDIRECT_URI GOOGLE_REFRESH_TOKEN; do
               if [ -z "${!VARIABLE_NAME:-}" ]; then
                 echo "Erreur : ${VARIABLE_NAME} est absente ou vide." >&2
@@ -80,19 +80,19 @@ jobs:
               fi
             done
 
-            echo "==========[2/9] Acces au dossier du projet=========="
+            echo "==========[2/10] Acces au dossier du projet=========="
             if [ ! -d "$PROJECT_DIR/.git" ]; then
               echo "Erreur : ${PROJECT_DIR} n'est pas un depot Git." >&2
               exit 1
             fi
             cd "$PROJECT_DIR"
 
-            echo "==========[3/9] Recuperation de main=========="
+            echo "==========[3/10] Recuperation de main=========="
             git fetch --prune origin main
             git checkout -B main origin/main
             git reset --hard origin/main
 
-            echo "==========[4/9] Creation de la configuration Symfony=========="
+            echo "==========[4/10] Creation de la configuration Symfony=========="
             dotenv_quote() {
               php -r 'echo json_encode($argv[1], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);' "$1"
             }
@@ -114,22 +114,25 @@ jobs:
             chmod 600 .env.local
             rm -f .env.local.php
 
-            echo "==========[5/9] Validation et installation Composer=========="
+            echo "==========[5/10] Validation et installation Composer=========="
             composer validate --no-check-publish
             composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
             composer dump-env prod
 
-            echo "==========[6/9] Nettoyage du cache=========="
+            echo "==========[6/10] Nettoyage du cache=========="
             APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear --no-warmup
 
-            echo "==========[7/9] Execution des migrations=========="
+            echo "==========[7/10] Execution des migrations=========="
             APP_ENV=prod APP_DEBUG=0 php bin/console doctrine:migrations:migrate --no-interaction
 
-            echo "==========[8/9] Compilation des assets=========="
+            echo "==========[8/10] Compilation des assets=========="
             APP_ENV=prod APP_DEBUG=0 php bin/console sass:build
             APP_ENV=prod APP_DEBUG=0 php bin/console asset-map:compile
 
-            echo "==========[9/9] Rechauffement du cache=========="
+            echo "==========[9/10] Rechauffement du cache=========="
             APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup
 
             echo "Deploiement de production termine avec succes."
+
+            echo "==========[10/10] Redemarrage des workers Messenger=========="
+            make restart-messenger-workers

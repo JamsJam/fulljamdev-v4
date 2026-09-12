@@ -10,8 +10,10 @@ use App\Application\Page\Page\Form\PageType;
 use App\Application\Page\Page\Notification\InvalidPageFormNotifier;
 use App\Application\Page\Page\Service\CheckPagePathAvailabilityService;
 use App\Application\Page\Page\Service\FindPageService;
+use App\Application\Page\Page\Service\GetPagesService;
 use App\Application\Page\Page\Service\SavePageService;
 use App\Entity\Page\Page;
+use App\Service\Breadcrumb\BreadcrumbService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,22 +21,31 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/dashboard/settings/pages')]
+#[Route('/dashboard/pages')]
 #[IsGranted('ROLE_ADMIN')]
 final class PageController extends AbstractController
 {
-    #[Route('/new', name: 'app_dashboard_page_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier): Response
+    #[Route('', name: 'app_dashboard_page', methods: ['GET'])]
+    public function index(Request $request, GetPagesService $pages, BreadcrumbService $breadcrumbs): Response
     {
-        return $this->editForm($request, new PageDTO(), null, $saveService, $registry, $pathService, $invalidFormNotifier);
+        return $this->render('dashboard/page/index.html.twig', [
+            'pages' => $pages->get(),
+            'breadcrumb' => $breadcrumbs->getBreadcrumb($request->attributes->getString('_route')),
+        ]);
+    }
+
+    #[Route('/new', name: 'app_dashboard_page_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier, BreadcrumbService $breadcrumbs): Response
+    {
+        return $this->editForm($request, new PageDTO(), null, $saveService, $registry, $pathService, $invalidFormNotifier, $breadcrumbs);
     }
 
     #[Route('/{id}/edit', name: 'app_dashboard_page_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, PageBuilder $builder, SavePageService $saveService, BlockRegistry $registry, FindPageService $findService, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier): Response
+    public function edit(int $id, Request $request, PageBuilder $builder, SavePageService $saveService, BlockRegistry $registry, FindPageService $findService, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier, BreadcrumbService $breadcrumbs): Response
     {
         $page = $findService->find($id) ?? throw $this->createNotFoundException('Cette page n’existe pas.');
 
-        return $this->editForm($request, $builder->build($page), $page, $saveService, $registry, $pathService, $invalidFormNotifier);
+        return $this->editForm($request, $builder->build($page), $page, $saveService, $registry, $pathService, $invalidFormNotifier, $breadcrumbs);
     }
 
     #[Route('/blocks/new/{type}/{index}', name: 'app_dashboard_page_block_new', requirements: ['type' => '[a-z0-9._-]+', 'index' => '\d+'], methods: ['GET'])]
@@ -51,7 +62,7 @@ final class PageController extends AbstractController
         ]);
     }
 
-    private function editForm(Request $request, PageDTO $dto, ?Page $page, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier): Response
+    private function editForm(Request $request, PageDTO $dto, ?Page $page, SavePageService $saveService, BlockRegistry $registry, CheckPagePathAvailabilityService $pathService, InvalidPageFormNotifier $invalidFormNotifier, BreadcrumbService $breadcrumbs): Response
     {
         $form = $this->createForm(PageType::class, $dto);
         $form->handleRequest($request);
@@ -78,6 +89,7 @@ final class PageController extends AbstractController
             'page' => $dto,
             'block_groups' => $registry->grouped(),
             'definitions' => $registry->all(),
+            'breadcrumb' => $breadcrumbs->getBreadcrumb($request->attributes->getString('_route')),
         ], new Response(status: $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 }

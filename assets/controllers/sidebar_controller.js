@@ -5,7 +5,7 @@ export default class extends Controller {
     static targets = ['trigger', 'overlay'];
 
     connect() {
-        this.collapsed = window.localStorage.getItem('admin-sidebar-collapsed') === 'true';
+        this.collapsed = true;
     }
 
     toggle() {
@@ -31,7 +31,5 @@ export default class extends Controller {
             this.overlayTarget.classList.toggle('is-visible', !value);
             this.overlayTarget.setAttribute('aria-hidden', String(value));
         }
-
-        window.localStorage.setItem('admin-sidebar-collapsed', String(value));
     }
 }

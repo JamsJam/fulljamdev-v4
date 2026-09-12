@@ -1,5 +1,5 @@
 <header class="public-booking__header" style="--planning-color: {{ planning.color }}">
-    <h1>{{ planning.title }}</h1>
+    <{{ booking_heading_level|default('h1') }}>{{ planning.title }}</{{ booking_heading_level|default('h1') }}>
     {% if planning.description %}
         <div class="public-booking__description">
             {{ planning.description|raw }}
@@ -22,7 +22,7 @@
     <p class="public-booking__empty">Aucun créneau n’est disponible pour le moment.</p>
 {% else %}
     {{ form_start(form, {
-        action: path('app_front_planning_appointment', {slug: planning.slug, access: app.request.query.get('access'), _frame: booking_frame}),
+        action: path('app_front_planning_appointment', {slug: planning.slug, access: app.request.query.get('access'), _frame: booking_frame, _heading: booking_heading_level|default('h1')}),
         attr: {
         class: 'public-booking__form',
         'data-public-booking-target': 'form',

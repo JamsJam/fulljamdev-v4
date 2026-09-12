@@ -1,0 +1,1 @@
+<section class="bento" data-block-id="{{ blockId }}"><header><{{ data.title.level.value }}>{{ data.title.content }}</{{ data.title.level.value }}><p>{{ data.text.content }}</p></header><div class="bento__grid">{% for card in data.cards %}<article class="bento__card bento__card--{{ card.size }}"><h3>{{ card.title }}</h3><p>{{ card.text }}</p></article>{% endfor %}</div></section>

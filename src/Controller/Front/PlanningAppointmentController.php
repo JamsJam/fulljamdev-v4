@@ -46,6 +46,7 @@ final class PlanningAppointmentController extends AbstractController
 
         $bookingFrame = $this->resolveBookingFrame($request);
         $bookingTarget = sprintf('%s-flow', $bookingFrame);
+        $bookingHeadingLevel = 'h2' === $request->query->getString('_heading') ? 'h2' : 'h1';
 
         $slots = $slotResolver->resolve($planning);
         $submittedData = $request->request->all('public_appointment');
@@ -120,6 +121,7 @@ final class PlanningAppointmentController extends AbstractController
             'show_errors' => $form->isSubmitted() && 'submit' === $requestedStep,
             'booking_frame' => $bookingFrame,
             'booking_target' => $bookingTarget,
+            'booking_heading_level' => $bookingHeadingLevel,
         ];
 
         if (str_contains((string) $request->headers->get('Accept'), TurboBundle::STREAM_MEDIA_TYPE)) {

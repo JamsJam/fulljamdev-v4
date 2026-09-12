@@ -1,4 +1,6 @@
 {% set planning = this.planning %}
+{% set hasBlockTitle = data.title.content|trim is not empty %}
+{% set hasBlockText = data.text.content|trim is not empty %}
 {% if planning %}
     {% set bookingFrame = 'planning-booking-' ~ (blockId ?? planning.id) %}
     <section
@@ -6,14 +8,20 @@
         data-block-id="{{ blockId }}"
         style="--planning-color: {{ planning.color }}"
     >
-        <header class="planning-block__header">
-            <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
-            <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
-        </header>
+        {% if hasBlockTitle or hasBlockText %}
+            <header class="planning-block__header">
+                {% if hasBlockTitle %}
+                    <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+                {% endif %}
+                {% if hasBlockText %}
+                    <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+                {% endif %}
+            </header>
+        {% endif %}
 
         <turbo-frame
             id="{{ bookingFrame }}"
-            src="{{ path('app_front_planning_appointment', {slug: planning.slug, _frame: bookingFrame}) }}"
+            src="{{ path('app_front_planning_appointment', {slug: planning.slug, _frame: bookingFrame, _heading: hasBlockTitle ? 'h2' : 'h1'}) }}"
             loading="lazy"
             class="planning-block__booking"
         >
@@ -24,10 +32,16 @@
     </section>
 {% else %}
     <section class="planning-block" data-block-id="{{ blockId }}">
-        <header class="planning-block__header">
-            <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
-            <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
-        </header>
+        {% if hasBlockTitle or hasBlockText %}
+            <header class="planning-block__header">
+                {% if hasBlockTitle %}
+                    <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+                {% endif %}
+                {% if hasBlockText %}
+                    <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+                {% endif %}
+            </header>
+        {% endif %}
         <p class="planning-block__loading">La prise de rendez-vous est momentanément indisponible. Vous pouvez utiliser les autres moyens de contact proposés sur cette page.</p>
     </section>
 {% endif %}

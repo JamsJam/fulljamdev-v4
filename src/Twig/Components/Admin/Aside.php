@@ -81,6 +81,12 @@ final class Aside
                     'icon' => 'material-symbols:work-outline-rounded',
                     'activePrefixes' => ['app_dashboard_cv_'],
                 ],
+                [
+                    'label' => 'Pages',
+                    'route' => 'app_dashboard_page',
+                    'icon' => 'material-symbols:article-outline-rounded',
+                    'activePrefixes' => ['app_dashboard_page_'],
+                ],
             ],
         ],
         [

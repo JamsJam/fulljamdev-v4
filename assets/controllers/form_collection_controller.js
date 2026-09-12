@@ -18,12 +18,13 @@ export default class extends Controller {
     static values = {
         index    : Number,
         prototype: String,
+        placeholder: { type: String, default: '__name__' },
     };
 
     addCollectionElement(event)
     {
         const template = document.createElement('template');
-        template.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue).trim();
+        template.innerHTML = this.prototypeValue.split(this.placeholderValue).join(this.indexValue).trim();
         const item = template.content.firstElementChild;
         if (!item) return;
         this.collectionContainerTarget.appendChild(item);

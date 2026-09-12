@@ -139,4 +139,4 @@ jobs:
             supervisorctl restart messenger-page-asset-cleanup:*
             supervisorctl restart messenger-appointment-reminders:*
             supervisorctl restart messenger-emails:*
-            supervisorctl restart messenger-notifications:*
+

@@ -19,7 +19,7 @@ TEST_OPTIONS ?=
 BDI := vendor/bin/bdi
 PHPSTAN := vendor/bin/phpstan
 
-.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-assets test-db test-unit test-integration test-application test-e2e test-page test-reservation test-settings test-shared test-ui
+.PHONY: quality migrate lint lint-container lint-twig lint-xliff lint-yaml cs-scan phpstan test test-assets test-db test-unit test-integration test-application test-e2e test-page test-reservation test-settings test-shared test-ui restart-messenger-workers
 
 # * Le scan de style est non modifiant par défaut
 DR ?= 1
@@ -27,6 +27,14 @@ DR ?= 1
 # * Commandes combinées 
 # ==============================================================================
 quality: lint cs-scan phpstan
+
+# Relance tous les workers Messenger gérés par Supervisor.
+restart-messenger-workers:
+	supervisorctl restart messenger-article-publication:*
+	supervisorctl restart messenger-page-asset-cleanup:*
+	supervisorctl restart messenger-appointment-reminders:*
+	supervisorctl restart messenger-emails:*
+	supervisorctl restart messenger-notifications:*
 
 # ? Vérifie le projet et simule les migrations avant de les exécuter
 migrate:

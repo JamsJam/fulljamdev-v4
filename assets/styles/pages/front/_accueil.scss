@@ -5,6 +5,10 @@
 @use "../../page-block/faq" as *;
 @use "../../page-block/planning" as *;
 @use "../../page-block/blog" as *;
+@use "../../page-block/hero/positioning" as *;
+@use "../../page-block/bento" as *;
+@use "../../page-block/testimonials" as *;
+@use "../../page-block/pricing" as *;
 
 // .front--accueil main > section:first-child {
 //     background: var(--gradient-vertical);

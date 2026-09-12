@@ -13,6 +13,7 @@
 | [Tests et qualité](tests-and-quality.md) | Suites PHPUnit, base de test, PHPStan, CS Fixer et linters |
 | [Workflow Git](git-workflow.md) | Branches, Conventional Commits Angular et pull requests |
 | [Déploiement](deployment.md) | Compilation, migrations, secrets et workflows GitHub Actions |
+| [Workers](workers.md) | Files Messenger, parallélisme et exploitation des traitements asynchrones |
 
 ## Principes du projet
 

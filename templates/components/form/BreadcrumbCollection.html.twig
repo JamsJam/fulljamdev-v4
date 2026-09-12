@@ -15,3 +15,6 @@
     </ul>
     <twig:Admin:Button variant="outline" label="Ajouter une page parente" data-action="form-collection#addCollectionElement" />
 </fieldset>
+
+{# The collection is rendered manually above; prevent form_end() from rendering it again. #}
+{% do field.setRendered %}

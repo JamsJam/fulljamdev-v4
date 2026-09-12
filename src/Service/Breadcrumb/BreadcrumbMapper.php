@@ -39,6 +39,10 @@ final class BreadcrumbMapper
         'cv' => [
             'label' => 'CV',
         ],
+        'page' => [
+            'label' => 'Pages',
+            'route' => 'app_dashboard_page',
+        ],
         'article' => [
             'label' => 'Articles',
             'route' => 'app_dashboard_blog',

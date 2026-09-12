@@ -1,0 +1,31 @@
+/* Service pages share the same neutral Hero media treatment. */
+main:is(
+    [data-page="service/developpement"],
+    [data-page="service/seo"],
+    [data-page="service/automatisation"]
+) {
+    .hero-classic-square__media {
+        position: relative;
+        width: clamp(24rem, -5.5385rem + 46.1538vw, 36rem);
+        aspect-ratio: auto;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: transparent;
+        border: 1px solid #d1d5db;
+        border-radius: clamp(1.5rem, 4vw, 3rem);
+        box-shadow: 0 2rem 6rem rgb(0 0 0 / 28%);
+        transform: none;
+        backdrop-filter: none;
+    }
+}
+
+main:is(
+    [data-page="service/developpement"],
+    [data-page="service/seo"],
+    [data-page="service/automatisation"]
+) .pricing__badge {
+    color: var(--background-dark);
+    background: var(--text-mute);
+    border: 1px solid var(--background-dark);
+}

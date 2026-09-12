@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 final class DeletePageController extends AbstractController
 {
-    #[Route('/dashboard/settings/pages/{id}/delete', name: 'app_dashboard_page_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route('/dashboard/pages/{id}/delete', name: 'app_dashboard_page_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function __invoke(
         int $id,
         Request $request,
@@ -29,6 +29,6 @@ final class DeletePageController extends AbstractController
         $delete->delete($page);
         $this->addFlash('success', 'La page et ses médias non utilisés ont été supprimés.');
 
-        return $this->redirectToRoute('app_dashboard_settings', ['section' => 'pages'], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_dashboard_page', status: Response::HTTP_SEE_OTHER);
     }
 }

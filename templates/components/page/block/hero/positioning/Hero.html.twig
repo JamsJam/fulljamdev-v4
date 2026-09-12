@@ -1,0 +1,5 @@
+<section class="positioning-hero{% if data.reverse %} positioning-hero--reverse{% endif %}" data-block-id="{{ blockId }}">
+    <div class="positioning-hero__content"><{{ data.title.level.value }}>{{ data.title.content }}</{{ data.title.level.value }}><p>{{ data.text.content }}</p>{% if data.cta and data.cta.label %}<twig:Front:Button :cta="data.cta" variant="primary" />{% endif %}{% if data.proofs %}<ul class="positioning-hero__proofs">{% for proof in data.proofs %}<li><strong>{{ proof.value }}</strong><span>{{ proof.label }}</span></li>{% endfor %}</ul>{% endif %}</div>
+    <figure class="positioning-hero__media"><img src="{{ data.image.source.value == 'url' ? this.safeImageUrl(data.image.url) : this.safeMediaUrl(data.image.mediaId) }}" alt="{{ data.image.alt }}"{% if data.image.title %} title="{{ data.image.title }}"{% endif %}></figure>
+    {% if data.cards %}<div class="positioning-hero__cards">{% for card in data.cards %}<article><h2>{{ card.title }}</h2><p>{{ card.text }}</p></article>{% endfor %}</div>{% endif %}
+</section>

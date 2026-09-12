@@ -46,3 +46,5 @@ php bin/console debug:container --env=prod
 ```
 
 Vérifier ensuite la page d’accueil, une page construite, le parcours de réservation, l’envoi d’un email et l’accès sécurisé au dashboard.
+
+Les consommateurs Messenger sont aussi des processus de production : leur topologie et les commandes à superviser sont détaillées dans le [guide des workers](workers.md).

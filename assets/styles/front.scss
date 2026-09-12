@@ -1,6 +1,11 @@
 @use "base/front" as *;
 @use "components/front" as *;
 @use "layout/front" as *;
+@use "page-block/bento" as *;
+@use "page-block/testimonials" as *;
+@use "page-block/pricing" as *;
+@use "page-block/hero/positioning" as *;
+@use "page-block/blog" as *;
 @use "pages/front" as *;
 @forward "components/admin/stepper/stepper";
 @forward "components/form/date-picker";

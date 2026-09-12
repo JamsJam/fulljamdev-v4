@@ -2,12 +2,10 @@
 
 namespace App\Controller\Dashboard;
 
-use App\Application\Page\Page\Service\GetPagesService;
 use App\Application\Settings\Account\Dto\UserAccountDto;
 use App\Application\Settings\Account\Service\UpdateUserAccountService;
 use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Application\Settings\Service\UpdateGeneralSettingsService;
-use App\Entity\Page\Page;
 use App\Entity\User;
 use App\Form\GeneralSettingsType;
 use App\Form\UserAccountType;
@@ -25,14 +23,13 @@ final class SettingsController extends AbstractController
     private const SECTION_TEMPLATES = [
         'general' => 'dashboard/settings/sections/general.html.twig',
         'reservation' => 'dashboard/settings/sections/reservation.html.twig',
-        'pages' => 'dashboard/settings/sections/pages.html.twig',
         'account' => 'dashboard/settings/sections/account.html.twig',
     ];
 
     #[Route(
         '/dashboard/settings/{section}',
         name: 'app_dashboard_settings',
-        requirements: ['section' => 'general|reservation|pages|account'],
+        requirements: ['section' => 'general|reservation|account'],
         defaults: ['section' => 'general'],
         methods: ['GET', 'POST'],
     )]
@@ -40,19 +37,13 @@ final class SettingsController extends AbstractController
         string $section,
         Request $request,
         BreadcrumbService $breadcrumbService,
-        GetPagesService $getPagesService,
         GetGeneralSettingsService $getGeneralSettingsService,
         UpdateGeneralSettingsService $updateGeneralSettingsService,
         UpdateUserAccountService $updateUserAccountService,
     ): Response {
-        $pages = $getPagesService->get();
         $settings = $getGeneralSettingsService->get();
         $form = $this->createForm(GeneralSettingsType::class, $settings, [
             'action' => $this->generateUrl('app_dashboard_settings', ['section' => 'general']),
-            'page_choices' => array_combine(
-                array_map(static fn (Page $page): string => sprintf('%s (/%s)', $page->getTitle(), $page->getPath()), $pages),
-                array_map(static fn (Page $page): int => (int) $page->getId(), $pages),
-            ),
         ]);
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -95,7 +86,6 @@ final class SettingsController extends AbstractController
             'section_template' => self::SECTION_TEMPLATES[$section],
             'general_form' => $form,
             'user_account_form' => $userAccountForm,
-            'pages' => 'pages' === $section ? $pages : [],
         ]);
     }
 }

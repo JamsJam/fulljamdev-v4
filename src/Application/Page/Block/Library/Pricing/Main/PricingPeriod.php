@@ -12,7 +12,7 @@ enum PricingPeriod: string
     public function label(): string
     {
         return match ($this) {
-            self::FIXED => 'paiement unique',self::DAILY => '/ jour',self::MONTHLY => '/ mois',self::YEARLY => '/ an'
+            self::FIXED => 'paiement unique',self::DAILY => '/ jour',self::MONTHLY => '/ mois',self::YEARLY => '/ an',
         };
     }
 }

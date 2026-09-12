@@ -29,8 +29,10 @@ export default class extends Controller {
         // Here you can add event listeners on the element or target elements,
         // add or remove classes, attributes, dispatch custom events, etc.
         // this.fooTarget.addEventListener('click', this._fooBar)
-        document.addEventListener('click',(e) => this.closeDropDown(e));
-        this.togglelerTarget.addEventListener('click',(e)=>this.toggleDropDown(e));
+        this.closeDropDown = this.closeDropDown.bind(this);
+        this.toggleDropDown = this.toggleDropDown.bind(this);
+        document.addEventListener('click', this.closeDropDown);
+        this.togglelerTarget.addEventListener('click', this.toggleDropDown);
     }
 
     // Add custom controller actions here
@@ -40,8 +42,8 @@ export default class extends Controller {
         // Called anytime its element is disconnected from the DOM
         // (on page change, when it's removed from or moved in the DOM, etc.)
 
-        // Here you should remove all event listeners added in "connect()" 
-        // this.fooTarget.removeEventListener('click', this._fooBar)
+        document.removeEventListener('click', this.closeDropDown);
+        this.togglelerTarget.removeEventListener('click', this.toggleDropDown);
     }
 
 

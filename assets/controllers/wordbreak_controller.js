@@ -18,13 +18,11 @@ export default class extends Controller {
     connect(){}
 
     descriptionTargetConnected(element){
-        element.innerText = element.innerText.replaceAll('<div>','');
-        element.innerText = element.innerText.replaceAll('</div>','');
-        element.innerText = element.innerText.replaceAll('&nbsp;','');
+        element.textContent = this.normalizedText(element.textContent);
         
         if(element.innerText.length > this.numBeforeBeakValue){
 
-            element.innerText =   element.innerText.slice(0, this.numBeforeBeakValue) + '...'; 
+            element.textContent = element.textContent.slice(0, this.numBeforeBeakValue) + '...';
         }
         
 
@@ -32,13 +30,15 @@ export default class extends Controller {
     }
 
     descriptionFullTargetConnected(element){
-        element.innerText = element.innerText.replaceAll('<div>','');
-        element.innerText = element.innerText.replaceAll('</div>','');
-        element.innerText = element.innerText.replaceAll('&nbsp;','');
+        element.textContent = this.normalizedText(element.textContent);
         
 
         
         
         
+    }
+
+    normalizedText(value) {
+        return value.replace(/\u00a0/g, ' ');
     }
 }

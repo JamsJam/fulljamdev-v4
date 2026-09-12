@@ -16,13 +16,13 @@ export default class extends Controller {
     connect(){}
 
     flashTargetConnected(){
-        setTimeout(() => {
+        this.fadeTimeout = window.setTimeout(() => {
             
             this.flashFadeDown();
         }, 2000);
         
         
-        setTimeout(() => {
+        this.hideTimeout = window.setTimeout(() => {
             this.flashContainerHide();
         }, this.countdownValue);
     }
@@ -33,5 +33,10 @@ export default class extends Controller {
     }
     flashContainerHide(){
         this.element.style.display = 'none';
+    }
+
+    disconnect() {
+        window.clearTimeout(this.fadeTimeout);
+        window.clearTimeout(this.hideTimeout);
     }
 }

@@ -17,7 +17,9 @@
             loading="lazy"
             class="planning-block__booking"
         >
-            <p class="planning-block__loading">Chargement du planning…</p>
+            <div class="planning-block__loading" role="status" aria-label="Chargement du planning">
+                <span class="planning-block__spinner" aria-hidden="true"></span>
+            </div>
         </turbo-frame>
     </section>
 {% else %}

@@ -18,18 +18,17 @@ export default class extends Controller {
     }
 
     connect() {
+        this.onResize = this.onResize.bind(this);
+        window.addEventListener('resize', this.onResize);
+    }
 
-
-        window.addEventListener('resize',()=>{
+    onResize() {
             this.getInnerWidth();
 
             if (this.widthSizeValue > 769) {
                 this.closeMobileNav();
                 this.isOpenValue = false;
             }
-
-        });
-
     }
 
     // Add custom controller actions here
@@ -39,8 +38,7 @@ export default class extends Controller {
         // Called anytime its element is disconnected from the DOM
         // (on page change, when it's removed from or moved in the DOM, etc.)
 
-        // Here you should remove all event listeners added in "connect()" 
-        // this.fooTarget.removeEventListener('click', this._fooBar)
+        window.removeEventListener('resize', this.onResize);
     }
 
     onToggleNav(){

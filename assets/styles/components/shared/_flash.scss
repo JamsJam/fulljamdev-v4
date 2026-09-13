@@ -9,7 +9,7 @@
     display: grid;
     place-items: center;
     opacity: 1;
-    transition: opacity 4s ease-out;
+    transition: opacity 300ms ease-out;
     font-weight: 700;
     color: var(--text);
     background: var(--card);

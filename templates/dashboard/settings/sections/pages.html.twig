@@ -27,7 +27,7 @@
                     />
                     <form method="post" action="{{ path('app_dashboard_page_delete', {id: page.id}) }}" onsubmit="return confirm('Supprimer cette page et ses médias non utilisés ?')">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_page_' ~ page.id) }}">
-                        <twig:Admin:Button variant="outline" type="submit" label="Supprimer" />
+                        <twig:Admin:Button variant="destructive" type="submit" label="Supprimer" />
                     </form>
                 </div>
             </article>

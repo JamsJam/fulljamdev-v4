@@ -1,5 +1,5 @@
 <div class="{{ hero_class }}__content">
-    <{{ data.title.level.value }} class="{{ hero_class }}__title"{{ this.safeAttributes(data.title.attributes)|raw }}>
+    <{{ data.title.level.value }} id="{{ hero_class }}-title-{{ blockId|default('preview') }}" class="{{ hero_class }}__title"{{ this.safeAttributes(data.title.attributes)|raw }}>
         {{ data.title.content }}
     </{{ data.title.level.value }}>
 

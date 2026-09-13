@@ -8,35 +8,26 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     static targets = ['flash'];
     static values = {
-        countdown: {type:Number, default: 5000},
+        countdown: { type: Number, default: 5000 },
+        transition: { type: Number, default: 300 },
     };
-    
-    initialize(){}
 
-    connect(){}
-
-    flashTargetConnected(){
+    connect() {
         this.fadeTimeout = window.setTimeout(() => {
-            
             this.flashFadeDown();
-        }, 2000);
-        
-        
-        this.hideTimeout = window.setTimeout(() => {
-            this.flashContainerHide();
         }, this.countdownValue);
     }
 
-
-    flashFadeDown(){
+    flashFadeDown() {
         this.flashTarget.classList.add('hide');
-    }
-    flashContainerHide(){
-        this.element.style.display = 'none';
+
+        this.removeTimeout = window.setTimeout(() => {
+            this.element.remove();
+        }, this.transitionValue);
     }
 
     disconnect() {
         window.clearTimeout(this.fadeTimeout);
-        window.clearTimeout(this.hideTimeout);
+        window.clearTimeout(this.removeTimeout);
     }
 }

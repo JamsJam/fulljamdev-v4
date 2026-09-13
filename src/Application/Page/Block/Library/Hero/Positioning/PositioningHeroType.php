@@ -18,6 +18,7 @@ final class PositioningHeroType extends AbstractType
     {
         $builder->add('title', HeadingType::class)->add('text', TextType::class)->add('image', ImageType::class)
             ->add('cta', CtaType::class, ['required' => false])->add('reverse', CheckboxType::class, ['required' => false])
+            ->add('showGlow', CheckboxType::class, ['required' => false])
             ->add('proofs', CollectionType::class, ['entry_type' => SocialProofType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false, 'prototype' => true])
             ->add('cards', CollectionType::class, ['entry_type' => PositioningCardType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false, 'prototype' => true]);
     }

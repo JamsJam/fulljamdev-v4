@@ -22,6 +22,7 @@ final class BlockJsonLdIntegrationTest extends KernelTestCase
         $page->blocks = [
             new PageBlockDTO(11, 'faq.main', $mapper->denormalize('faq.main', ['items' => [['question' => 'Comment ?', 'answer' => 'Ensemble.']]])),
             new PageBlockDTO(12, 'services.main', $mapper->denormalize('services.main', ['cards' => [['title' => 'Développement', 'text' => 'Sur mesure.']]])),
+            new PageBlockDTO(13, 'pricing.main', $mapper->denormalize('pricing.main', ['cards' => [['title' => 'Accompagnement', 'description' => 'Suivi mensuel.', 'price' => 4999, 'period' => 'monthly']]])),
         ];
         $provider = $container->get(BuiltPageContextProvider::class);
         $context = $provider->provide('app_front_page', ['page' => $page]);
@@ -30,7 +31,8 @@ final class BlockJsonLdIntegrationTest extends KernelTestCase
         self::assertSame('Question', $graph[1]['@type']);
         self::assertSame('ItemList', $graph[2]['@type']);
         self::assertSame('Service', $graph[3]['@type']);
-        self::assertSame([['@id' => $graph[2]['@id']]], $graph[0]['mentions']);
+        self::assertContains(['@id' => $graph[2]['@id']], $graph[0]['mentions']);
+        self::assertContains('Offer', array_column($graph, '@type'));
         $page->seo->noIndex = true;
         self::assertSame([], $provider->provide('app_front_page', ['page' => $page])->contributions);
     }

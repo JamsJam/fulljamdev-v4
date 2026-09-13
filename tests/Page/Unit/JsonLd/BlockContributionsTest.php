@@ -10,6 +10,9 @@ use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
 use App\Application\Page\Block\Library\Faq\Main\FaqDTO;
 use App\Application\Page\Block\Library\Faq\Main\FaqItemDTO;
 use App\Application\Page\Block\Library\Project\Featured\FeaturedProjectsDTO;
+use App\Application\Page\Block\Library\Pricing\Main\PricingCardDTO;
+use App\Application\Page\Block\Library\Pricing\Main\PricingDTO;
+use App\Application\Page\Block\Library\Pricing\Main\PricingPeriod;
 use App\Application\Page\Element\Cta\CtaTarget;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\SEO\JsonLd\Builder\BreadcrumbBuilder;
@@ -21,6 +24,7 @@ use App\Application\SEO\JsonLd\Context\PublicUrlGenerator;
 use App\Application\SEO\JsonLd\Contributor\CardsJsonLdContributor;
 use App\Application\SEO\JsonLd\Contributor\FaqJsonLdContributor;
 use App\Application\SEO\JsonLd\Contributor\LatestArticlesJsonLdContributor;
+use App\Application\SEO\JsonLd\Contributor\PricingJsonLdContributor;
 use App\Application\SEO\JsonLd\Definition\WebPageDefinition;
 use App\Application\SEO\JsonLd\Dto\IdentityData;
 use App\Application\SEO\JsonLd\Dto\PageContext;
@@ -163,6 +167,30 @@ final class BlockContributionsTest extends TestCase
         $requests->push(Request::create(self::URL));
         $requests->getCurrentRequest()->attributes->set(LatestArticlesProvider::class, []);
         self::assertSame([], $component->getArticles());
+    }
+
+    public function testPricingCreatesOffersAndKeepsTheBillingPeriod(): void
+    {
+        $monthly = new PricingCardDTO();
+        $monthly->title = 'Accompagnement';
+        $monthly->description = 'Un suivi mensuel.';
+        $monthly->price = 4999;
+        $monthly->period = PricingPeriod::MONTHLY;
+        $empty = new PricingCardDTO();
+        $pricing = new PricingDTO();
+        $pricing->cards = [$monthly, $empty];
+
+        $result = (new PricingJsonLdContributor())->contribute(
+            new PageBlockDTO(1, 'pricing.main', $pricing),
+            self::URL.'#block-1',
+        );
+
+        self::assertCount(1, $result->nodes);
+        self::assertSame('Offer', $result->nodes[0]['@type']);
+        self::assertSame('49.99', $result->nodes[0]['price']);
+        self::assertSame('EUR', $result->nodes[0]['priceCurrency']);
+        self::assertSame('MON', $result->nodes[0]['priceSpecification']['billingDuration']['unitCode']);
+        self::assertSame([$result->nodes[0]['@id']], $result->mentions);
     }
 
     private function faq(): FaqDTO

@@ -7,11 +7,12 @@
         class="planning-block"
         data-block-id="{{ blockId }}"
         style="--planning-color: {{ planning.color }}"
+        {% if hasBlockTitle %}aria-labelledby="planning-block-title-{{ blockId|default('preview') }}"{% endif %}
     >
         {% if hasBlockTitle or hasBlockText %}
             <header class="planning-block__header">
                 {% if hasBlockTitle %}
-                    <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+                    <{{ data.title.level.value }} id="planning-block-title-{{ blockId|default('preview') }}" class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
                 {% endif %}
                 {% if hasBlockText %}
                     <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
@@ -31,11 +32,11 @@
         </turbo-frame>
     </section>
 {% else %}
-    <section class="planning-block" data-block-id="{{ blockId }}">
+    <section class="planning-block" data-block-id="{{ blockId }}"{% if hasBlockTitle %} aria-labelledby="planning-block-title-{{ blockId|default('preview') }}"{% endif %}>
         {% if hasBlockTitle or hasBlockText %}
             <header class="planning-block__header">
                 {% if hasBlockTitle %}
-                    <{{ data.title.level.value }} class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
+                    <{{ data.title.level.value }} id="planning-block-title-{{ blockId|default('preview') }}" class="planning-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
                 {% endif %}
                 {% if hasBlockText %}
                     <p class="planning-block__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>

@@ -16,6 +16,7 @@ final class PositioningHeroDTO
     #[Assert\Valid] public ImageDTO $image;
     #[Assert\Valid] public ?CtaDTO $cta;
     public bool $reverse = false;
+    public bool $showGlow = true;
     /** @var list<SocialProofDTO> */
     #[Assert\Valid]
     #[Assert\Count(max: 2)]

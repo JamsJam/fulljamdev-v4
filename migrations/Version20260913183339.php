@@ -30,4 +30,3 @@ final class Version20260913183339 extends AbstractMigration
         $this->addSql('DROP TABLE content_legal_page');
     }
 }
-

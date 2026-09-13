@@ -22,12 +22,44 @@ class LegalPage
     #[ORM\Column(type: Types::TEXT)]
     private string $content = '';
 
-    public function getId(): ?int { return $this->id; }
-    public function getSlug(): string { return $this->slug; }
-    public function getTitle(): string { return $this->title; }
-    public function getContent(): string { return $this->content; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-    public function setSlug(string $slug): static { $this->slug = trim($slug); return $this; }
-    public function setTitle(string $title): static { $this->title = trim($title); return $this; }
-    public function setContent(string $content): static { $this->content = trim($content); return $this; }
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = trim($slug);
+
+        return $this;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = trim($title);
+
+        return $this;
+    }
+
+    public function setContent(string $content): static
+    {
+        $this->content = trim($content);
+
+        return $this;
+    }
 }

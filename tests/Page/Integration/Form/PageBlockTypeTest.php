@@ -19,6 +19,7 @@ final class PageBlockTypeTest extends KernelTestCase
         $form = self::getContainer()->get(FormFactoryInterface::class)->create(PageBlockType::class, $block, ['csrf_protection' => false]);
 
         self::assertTrue($form->has('data'));
+        self::assertFalse($form->get('anchorId')->getConfig()->getRequired());
         self::assertSame(HeroDTO::class, $form->get('data')->getConfig()->getDataClass());
 
         $form->submit([
@@ -35,6 +36,7 @@ final class PageBlockTypeTest extends KernelTestCase
         self::assertTrue($form->isSynchronized());
         self::assertInstanceOf(HeroDTO::class, $block->data);
         self::assertSame('Titre', $block->data->title->content);
+        self::assertNull($block->anchorId);
     }
 
     public function testItRejectsUnknownSubmittedType(): void

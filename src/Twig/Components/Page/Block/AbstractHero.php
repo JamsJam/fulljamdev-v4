@@ -4,6 +4,8 @@ namespace App\Twig\Components\Page\Block;
 
 abstract class AbstractHero
 {
+    public ?string $anchorId = null;
+
     /** @param array<string, mixed> $attributes */
     public function safeAttributes(array $attributes): string
     {

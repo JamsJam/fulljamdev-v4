@@ -1,4 +1,4 @@
-<section class="cta-glow" data-block-id="{{ blockId }}" aria-labelledby="cta-glow-title-{{ blockId|default('preview') }}">
+<section{% if anchorId %} id="{{ anchorId }}"{% endif %} class="cta-glow" data-block-id="{{ blockId }}" aria-labelledby="cta-glow-title-{{ blockId|default('preview') }}">
     <span class="cta-glow__spot cta-glow__spot--left" aria-hidden="true"></span>
     <span class="cta-glow__spot cta-glow__spot--top" aria-hidden="true"></span>
     <span class="cta-glow__spot cta-glow__spot--right" aria-hidden="true"></span>

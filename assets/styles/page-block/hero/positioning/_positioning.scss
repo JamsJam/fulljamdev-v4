@@ -17,7 +17,7 @@
     &__content { display: grid; gap: 1.25rem; align-items: start; > h1 { font-size: var(--h1); line-height: 1.1; } > p { color: var(--text-mute); font-size: var(--text-l); line-height: 1.55; } }
     &__media { margin: 0; overflow: hidden; border-radius: 1rem; aspect-ratio: 4 / 5; img { width: 100%; height: 100%; object-fit: cover; } }
     &__proofs, &__cards { display: grid; gap: 1rem; padding: 0; margin: 0; list-style: none; }
-    &__proofs { grid-template-columns: repeat(2, minmax(0, 1fr)); li { display: grid; justify-items: center; gap: .2rem; text-align: center; strong { font-size: var(--h3); } span { color: var(--text-mute); } } }
+    &__proofs { grid-template-columns: repeat(3, minmax(0, 1fr)); li { display: grid; justify-items: center; gap: .2rem; text-align: center; strong { font-size: var(--h3); } span { color: var(--text-mute); } } }
     &__cards { grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0, 1fr)); article { padding: 1.5rem; border: 1px solid var(--border-mute); border-radius: 1rem; background: color-mix(in srgb, var(--background-purple) 55%, var(--background-dark)); h2 { font-size: var(--text-l); } p { margin-top: .6rem; color: var(--text-mute); line-height: 1.5; } } }
 }
 

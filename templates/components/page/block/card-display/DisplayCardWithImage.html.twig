@@ -1,4 +1,4 @@
-<section class="card-display card-display--with-image" data-block-id="{{ blockId }}" aria-labelledby="card-display-title-{{ blockId|default('preview') }}">
+<section{% if anchorId %} id="{{ anchorId }}"{% endif %} class="card-display card-display--with-image" data-block-id="{{ blockId }}" aria-labelledby="card-display-title-{{ blockId|default('preview') }}">
     <header class="card-display__header">
         <{{ data.title.level.value }} id="card-display-title-{{ blockId|default('preview') }}" class="card-display__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
         <p class="card-display__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>

@@ -12,6 +12,7 @@ final class ResumeTimeline
 {
     public ResumeTimelineDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     public function __construct(private readonly GetExperienceTimelineService $timeline)
     {

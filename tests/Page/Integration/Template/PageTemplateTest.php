@@ -57,6 +57,25 @@ final class PageTemplateTest extends KernelTestCase
         self::assertStringContainsString('page_blocks_0_data_badges', $html);
     }
 
+    public function testBlockAnchorIsOptionalAndRenderedOnTheRootSection(): void
+    {
+        self::bootKernel();
+        $definition = new HeroClassicSquareBlock();
+        $page = new PageDTO();
+        $page->title = 'Accueil';
+        $page->blocks[] = new PageBlockDTO(42, $definition->type(), $definition->createDefaultData(), 0, 'contact');
+
+        $html = self::getContainer()->get(Environment::class)->render('front/page/show.html.twig', ['page' => $page]);
+
+        self::assertMatchesRegularExpression('/<section\s+id="contact"\s+class="hero-classic-square/', $html);
+        self::assertSame(1, substr_count($html, '<section'));
+
+        $page->blocks[0]->anchorId = null;
+        $html = self::getContainer()->get(Environment::class)->render('front/page/show.html.twig', ['page' => $page]);
+
+        self::assertStringNotContainsString('id="contact"', $html);
+    }
+
     public function testHeroTemplateRendersTypedDataAndFiltersUnsafeValues(): void
     {
         self::bootKernel();

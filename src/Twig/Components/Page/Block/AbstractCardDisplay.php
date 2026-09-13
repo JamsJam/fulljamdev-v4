@@ -9,6 +9,7 @@ abstract class AbstractCardDisplay
 {
     public CardDisplayDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     /** @return list<CardDisplayItemDTO> */
     public function getCards(): array

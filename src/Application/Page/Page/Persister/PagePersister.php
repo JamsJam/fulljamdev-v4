@@ -59,7 +59,7 @@ final readonly class PagePersister
             $this->assetProcessor->process($blockDto->data);
 
             $block = null !== $blockDto->id && isset($existing[$blockDto->id]) ? $existing[$blockDto->id] : new PageBlock();
-            $block->setType($blockDto->type)->setPosition($position)->setData($this->blockMapper->normalize($blockDto->data));
+            $block->setType($blockDto->type)->setPosition($position)->setAnchorId($blockDto->anchorId)->setData($this->blockMapper->normalize($blockDto->data));
             $page->addBlock($block);
             $kept[spl_object_id($block)] = true;
         }

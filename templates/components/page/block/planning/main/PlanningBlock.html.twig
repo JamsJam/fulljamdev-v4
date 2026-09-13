@@ -4,6 +4,7 @@
 {% if planning %}
     {% set bookingFrame = 'planning-booking-' ~ (blockId ?? planning.id) %}
     <section
+        {% if anchorId %}id="{{ anchorId }}"{% endif %}
         class="planning-block"
         data-block-id="{{ blockId }}"
         style="--planning-color: {{ planning.color }}"
@@ -32,7 +33,7 @@
         </turbo-frame>
     </section>
 {% else %}
-    <section class="planning-block" data-block-id="{{ blockId }}"{% if hasBlockTitle %} aria-labelledby="planning-block-title-{{ blockId|default('preview') }}"{% endif %}>
+    <section{% if anchorId %} id="{{ anchorId }}"{% endif %} class="planning-block" data-block-id="{{ blockId }}"{% if hasBlockTitle %} aria-labelledby="planning-block-title-{{ blockId|default('preview') }}"{% endif %}>
         {% if hasBlockTitle or hasBlockText %}
             <header class="planning-block__header">
                 {% if hasBlockTitle %}

@@ -180,10 +180,13 @@
     }
 
     &__block-content {
-        display: grid;
         min-width: 0;
-        gap: 1rem;
         padding: clamp(0.875rem, 2cqi, 1.5rem);
+    }
+
+    &__block-content:not([hidden]) {
+        display: grid;
+        gap: 1rem;
     }
 
     &__remove {

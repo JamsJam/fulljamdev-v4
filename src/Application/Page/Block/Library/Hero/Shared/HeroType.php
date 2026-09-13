@@ -19,7 +19,7 @@ final class HeroType extends AbstractType
     {
         $builder
             ->add('title', HeadingType::class)
-            ->add('text', TextType::class)
+            ->add('text', TextType::class, ['rich_text' => true])
             ->add('cta1', CtaType::class, ['label' => 'CTA principal', 'required' => false])
             ->add('cta2', CtaType::class, ['label' => 'CTA secondaire', 'required' => false])
             ->add('image', ImageType::class)

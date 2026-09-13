@@ -1,0 +1,8 @@
+{% macro list(form) %}
+    {% for error in form.vars.errors %}
+        <li>{{ error.message }}</li>
+    {% endfor %}
+    {% for child in form %}
+        {{ _self.list(child) }}
+    {% endfor %}
+{% endmacro %}

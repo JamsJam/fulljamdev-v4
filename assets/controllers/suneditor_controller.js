@@ -30,6 +30,7 @@ export default class extends Controller {
 
         const isBasic = this.profileValue === 'basic';
         const isLegal = this.profileValue === 'legal';
+        const isPageText = this.profileValue === 'page-text';
 
         this.editor = suneditor.create(this.element, {
             'mode': 'classic',
@@ -49,7 +50,7 @@ export default class extends Controller {
                 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72
             ],
             'fontSizeUnit': 'px',
-            'formats': isBasic ? ['p'] : isLegal ? ['p', 'h2', 'h3', 'h4', 'h5', 'h6'] : [
+            'formats': isBasic || isPageText ? ['p'] : isLegal ? ['p', 'h2', 'h3', 'h4', 'h5', 'h6'] : [
                 'p', 
                 'h1', 
                 'h2', 
@@ -88,6 +89,8 @@ export default class extends Controller {
             ],
             'buttonList': isBasic ? [
                 ['undo', 'redo', 'bold', 'italic', 'list', 'removeFormat']
+            ] : isPageText ? [
+                ['undo', 'redo', 'formatBlock', 'bold', 'italic', 'removeFormat']
             ] : isLegal ? [
                 ['undo', 'redo', 'formatBlock', 'list', 'outdent', 'indent', 'removeFormat']
             ] : [

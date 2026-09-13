@@ -13,7 +13,17 @@ final class FaqItemType extends AbstractType
     {
         $builder
             ->add('question', null, ['label' => 'Question', 'empty_data' => ''])
-            ->add('answer', TextareaType::class, ['label' => 'Réponse', 'empty_data' => '']);
+            ->add('answer', TextareaType::class, [
+                'label' => 'Réponse',
+                'empty_data' => '',
+                'sanitize_html' => true,
+                'sanitizer' => 'app.page_text_sanitizer',
+                'attr' => [
+                    'data-controller' => 'suneditor',
+                    'data-suneditor-profile-value' => 'page-text',
+                    'data-suneditor-max-characters-value' => 2000,
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -15,7 +15,7 @@ final class FaqType extends AbstractType
     {
         $builder
             ->add('title', HeadingType::class)
-            ->add('text', TextType::class)
+            ->add('text', TextType::class, ['rich_text' => true])
             ->add('items', CollectionType::class, [
                 'entry_type' => FaqItemType::class,
                 'allow_add' => true,

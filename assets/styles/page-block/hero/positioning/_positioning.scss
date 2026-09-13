@@ -14,7 +14,8 @@
     &__glow { position: absolute; z-index: -1; width: min(38rem, 60vw); aspect-ratio: 1; border-radius: 50%; filter: blur(7rem); opacity: .42; pointer-events: none; }
     &__glow--start { top: -18rem; left: -16rem; background: var(--button-primary-background); }
     &__glow--end { right: -18rem; bottom: -20rem; background: var(--background-accent); }
-    &__content { display: grid; gap: 1.25rem; align-items: start; > h1 { font-size: var(--h1); line-height: 1.1; } > p { color: var(--text-mute); font-size: var(--text-l); line-height: 1.55; } }
+    &__content { display: grid; gap: 1.25rem; align-items: start; > h1 { font-size: var(--h1); line-height: 1.1; } }
+    &__lead { color: var(--text-mute); font-size: var(--text-l); line-height: 1.55; }
     &__media { margin: 0; overflow: hidden; border-radius: 1rem; aspect-ratio: 4 / 5; img { width: 100%; height: 100%; object-fit: cover; } }
     &__proofs, &__cards { display: grid; gap: 1rem; padding: 0; margin: 0; list-style: none; }
     &__proofs { grid-template-columns: repeat(3, minmax(0, 1fr)); li { display: grid; justify-items: center; gap: .2rem; text-align: center; strong { font-size: var(--h3); } span { color: var(--text-mute); } } }

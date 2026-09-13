@@ -23,3 +23,8 @@ framework:
                     ul: []
                     ol: []
                     li: []
+            app.page_text_sanitizer:
+                allow_elements:
+                    p: []
+                    strong: []
+                    em: []

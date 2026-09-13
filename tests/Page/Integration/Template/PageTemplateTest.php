@@ -8,6 +8,7 @@ use App\Application\Page\Element\Cta\CtaDTO;
 use App\Application\Page\Element\Image\ImageSource;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\Page\Page\Dto\PageDTO;
+use App\Application\Page\Page\Form\PageBlockType;
 use App\Application\Page\Page\Form\PageType;
 use App\Twig\Components\Page\Block\HeroClassicSquare;
 use App\Twig\Components\Page\Block\HeroWithFsImage;
@@ -73,6 +74,43 @@ final class PageTemplateTest extends KernelTestCase
         self::assertStringContainsString('page_blocks_0_data_badges', $html);
     }
 
+    public function testCollapsedBlockDisplaysNestedErrorsOutsideItsContent(): void
+    {
+        self::bootKernel();
+        $definition = new HeroClassicSquareBlock();
+        $block = new PageBlockDTO(null, $definition->type(), $definition->createDefaultData());
+        $form = self::getContainer()->get(FormFactoryInterface::class)->create(PageBlockType::class, $block, ['csrf_protection' => false]);
+        $form->submit([
+            'id' => '',
+            'type' => $definition->type(),
+            'position' => '0',
+            'anchorId' => '',
+            'data' => [
+                'title' => ['content' => '', 'level' => 'h1', 'attributes' => []],
+                'text' => ['content' => '', 'attributes' => []],
+                'cta1' => [],
+                'cta2' => [],
+                'image' => ['source' => 'url', 'url' => '', 'alt' => ''],
+                'reverse' => '0',
+                'badges' => [],
+            ],
+        ]);
+        self::assertFalse($form->isValid());
+
+        $html = self::getContainer()->get(Environment::class)->render('dashboard/page/_block_form.html.twig', [
+            'block' => $form->createView(),
+            'definition' => $definition,
+            'expanded' => false,
+        ]);
+
+        self::assertStringContainsString('class="page-builder__block-errors"', $html);
+        self::assertStringContainsString('data-page-builder-target="content" hidden', $html);
+        self::assertLessThan(
+            strpos($html, 'data-page-builder-target="content"'),
+            strpos($html, 'class="page-builder__block-errors"'),
+        );
+    }
+
     public function testBlockAnchorIsOptionalAndRenderedOnTheRootSection(): void
     {
         self::bootKernel();
@@ -98,7 +136,7 @@ final class PageTemplateTest extends KernelTestCase
         $hero = new HeroDTO();
         $hero->title->content = 'Un titre sûr';
         $hero->title->attributes = ['id' => 'main-title', 'onclick' => 'alert(1)'];
-        $hero->text->content = 'Une description.';
+        $hero->text->content = '<p>Une <strong>description</strong>.</p><script>alert(1)</script>';
         $hero->cta1 = new CtaDTO();
         $hero->cta1->label = 'Action';
         $hero->cta1->href = 'javascript:alert(1)';
@@ -113,6 +151,8 @@ final class PageTemplateTest extends KernelTestCase
         self::assertStringContainsString('data-block-id="42"', $html);
         self::assertStringContainsString('id="main-title"', $html);
         self::assertStringNotContainsString('onclick', $html);
+        self::assertStringContainsString('<strong>description</strong>', $html);
+        self::assertStringNotContainsString('<script', $html);
         self::assertStringContainsString('href="#"', $html);
     }
 

@@ -37,7 +37,14 @@ final readonly class PricingJsonLdContributor implements BlockJsonLdContributorI
             if ('' !== trim($card->description)) {
                 $offer['description'] = $card->description;
             }
-            if (PricingPeriod::FIXED !== $card->period) {
+            $billingUnit = match ($card->period) {
+                PricingPeriod::DAILY => 'DAY',
+                PricingPeriod::MONTHLY => 'MON',
+                PricingPeriod::YEARLY => 'ANN',
+                default => null,
+            };
+
+            if (null !== $billingUnit) {
                 $offer['priceSpecification'] = [
                     '@type' => 'UnitPriceSpecification',
                     'price' => $offer['price'],
@@ -45,12 +52,7 @@ final readonly class PricingJsonLdContributor implements BlockJsonLdContributorI
                     'billingDuration' => [
                         '@type' => 'QuantitativeValue',
                         'value' => 1,
-                        'unitCode' => match ($card->period) {
-                            PricingPeriod::DAILY => 'DAY',
-                            PricingPeriod::MONTHLY => 'MON',
-                            PricingPeriod::YEARLY => 'ANN',
-                            PricingPeriod::FIXED => throw new \LogicException('A fixed price has no billing duration.'),
-                        },
+                        'unitCode' => $billingUnit,
                     ],
                 ];
             }

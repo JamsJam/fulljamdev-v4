@@ -53,6 +53,8 @@
         small { display: block; margin-top: .35rem; color: var(--text-mute); font-size: var(--text-s); font-weight: 500; letter-spacing: 0; }
     }
 
+    &__price-prefix { margin-inline-end: .35rem; font-size: var(--text-s); font-weight: 500; letter-spacing: 0; }
+
     &__card--featured {
         position: relative;
         z-index: 1;

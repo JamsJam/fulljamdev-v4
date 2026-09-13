@@ -12,5 +12,6 @@ final class PricingCardDTO
     public PricingPeriod $period = PricingPeriod::FIXED;
 
     public bool $featured = false;
+    public bool $showStartingAt = false;
     /** @var list<string> */ #[Assert\All([new Assert\NotBlank(), new Assert\Length(max: 180)])] public array $features = [];
 }

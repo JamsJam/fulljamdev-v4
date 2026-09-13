@@ -9,10 +9,10 @@ use App\Application\Page\Block\Library\CardDisplay\Data\FeaturedProjectsProvider
 use App\Application\Page\Block\Library\CardDisplay\Shared\CardDisplayDTO;
 use App\Application\Page\Block\Library\Faq\Main\FaqDTO;
 use App\Application\Page\Block\Library\Faq\Main\FaqItemDTO;
-use App\Application\Page\Block\Library\Project\Featured\FeaturedProjectsDTO;
 use App\Application\Page\Block\Library\Pricing\Main\PricingCardDTO;
 use App\Application\Page\Block\Library\Pricing\Main\PricingDTO;
 use App\Application\Page\Block\Library\Pricing\Main\PricingPeriod;
+use App\Application\Page\Block\Library\Project\Featured\FeaturedProjectsDTO;
 use App\Application\Page\Element\Cta\CtaTarget;
 use App\Application\Page\Page\Dto\PageBlockDTO;
 use App\Application\SEO\JsonLd\Builder\BreadcrumbBuilder;

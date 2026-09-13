@@ -19,7 +19,6 @@ final class PositioningHeroDTO
     public bool $showGlow = true;
     /** @var list<SocialProofDTO> */
     #[Assert\Valid]
-    #[Assert\Count(max: 2)]
     public array $proofs = [];
     /** @var list<PositioningCardDTO> */
     #[Assert\Valid]

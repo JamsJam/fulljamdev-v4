@@ -41,6 +41,22 @@ final class PageTemplateTest extends KernelTestCase
         self::assertStringContainsString('<main data-page="accueil">', $html);
     }
 
+    public function testFooterExposesServicesAndLegalPagesWithoutLoginLink(): void
+    {
+        self::bootKernel();
+        $page = new PageDTO();
+        $page->title = 'Accueil';
+
+        $html = self::getContainer()->get(Environment::class)->render('front/page/show.html.twig', ['page' => $page]);
+
+        self::assertStringContainsString('href="/service/developpement"', $html);
+        self::assertStringContainsString('href="/service/seo"', $html);
+        self::assertStringContainsString('href="/mention-legal"', $html);
+        self::assertStringContainsString('href="/politique-confidentialite"', $html);
+        self::assertStringContainsString('href="/polotique-cookies"', $html);
+        self::assertStringNotContainsString('href="/login"', $html);
+    }
+
     public function testItRendersHeroFormFragmentWithSymfonyFieldNames(): void
     {
         self::bootKernel();
@@ -55,6 +71,25 @@ final class PageTemplateTest extends KernelTestCase
 
         self::assertStringContainsString('page[blocks][0][data][title][content]', $html);
         self::assertStringContainsString('page_blocks_0_data_badges', $html);
+    }
+
+    public function testBlockAnchorIsOptionalAndRenderedOnTheRootSection(): void
+    {
+        self::bootKernel();
+        $definition = new HeroClassicSquareBlock();
+        $page = new PageDTO();
+        $page->title = 'Accueil';
+        $page->blocks[] = new PageBlockDTO(42, $definition->type(), $definition->createDefaultData(), 0, 'contact');
+
+        $html = self::getContainer()->get(Environment::class)->render('front/page/show.html.twig', ['page' => $page]);
+
+        self::assertMatchesRegularExpression('/<section\s+id="contact"\s+class="hero-classic-square/', $html);
+        self::assertSame(1, substr_count($html, '<section'));
+
+        $page->blocks[0]->anchorId = null;
+        $html = self::getContainer()->get(Environment::class)->render('front/page/show.html.twig', ['page' => $page]);
+
+        self::assertStringNotContainsString('id="contact"', $html);
     }
 
     public function testHeroTemplateRendersTypedDataAndFiltersUnsafeValues(): void

@@ -1,7 +1,7 @@
 {% set articles = this.articles %}
 
 {% if articles is not empty %}
-    <section class="latest-articles" data-block-id="{{ blockId }}" aria-labelledby="latest-articles-title-{{ blockId|default('preview') }}">
+    <section{% if anchorId %} id="{{ anchorId }}"{% endif %} class="latest-articles" data-block-id="{{ blockId }}" aria-labelledby="latest-articles-title-{{ blockId|default('preview') }}">
         <header class="latest-articles__header">
             <{{ data.title.level.value }} id="latest-articles-title-{{ blockId|default('preview') }}" class="latest-articles__title">{{ data.title.content }}</{{ data.title.level.value }}>
             <p class="latest-articles__intro">{{ data.text.content }}</p>

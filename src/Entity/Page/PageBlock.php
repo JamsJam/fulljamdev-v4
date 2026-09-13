@@ -26,6 +26,9 @@ class PageBlock
     #[ORM\Column]
     private int $position = 0;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $anchorId = null;
+
     /** @var array<string, mixed> */
     #[ORM\Column(type: Types::JSON)]
     private array $data = [];
@@ -67,6 +70,18 @@ class PageBlock
     public function setPosition(int $position): static
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getAnchorId(): ?string
+    {
+        return $this->anchorId;
+    }
+
+    public function setAnchorId(?string $anchorId): static
+    {
+        $this->anchorId = null === $anchorId || '' === trim($anchorId) ? null : trim($anchorId);
 
         return $this;
     }

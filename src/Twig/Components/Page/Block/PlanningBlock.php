@@ -15,6 +15,7 @@ final class PlanningBlock
 {
     public PlanningBlockDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     public function __construct(private readonly FindPlanningService $findPlanning)
     {

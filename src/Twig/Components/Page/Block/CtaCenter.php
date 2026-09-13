@@ -13,6 +13,7 @@ final class CtaCenter
 {
     public CtaCenterDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     /** @param array<string, mixed> $attributes */
     public function safeAttributes(array $attributes): string

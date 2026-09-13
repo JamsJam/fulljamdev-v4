@@ -179,7 +179,8 @@ body.admin .settings {
             line-height: 1.45;
         }
 
-        ul {
+        > ul,
+        > .field__error ul {
             display: grid;
             gap: 0.25rem;
             margin: 0;

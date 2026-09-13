@@ -15,6 +15,7 @@ final class FeaturedProjects
 {
     public FeaturedProjectsDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     public function __construct(private readonly FeaturedProjectsProviderInterface $projects)
     {

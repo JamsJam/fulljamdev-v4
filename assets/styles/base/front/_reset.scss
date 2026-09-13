@@ -21,6 +21,7 @@
     --border-mute: #{front.$border-mute};
     --text: #{front.$text};
     --text-mute: hsl(from var(--text) h s l / 0.75);
+    --text-muted: var(--text-mute);
     --shadow: #{front.$shadow};
     --gradient-vertical: #{front.$gradient-vertical};
     --gradient-vertical-reverse: #{front.$gradient-vertical-reverse};

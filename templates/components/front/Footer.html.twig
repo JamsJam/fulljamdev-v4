@@ -28,14 +28,11 @@
             </ul>
         </nav>
 
-        <nav class="footer__navigation" aria-label="Accès à l’espace d’administration">
-            <p class="footer__title">Espace</p>
+        <nav class="footer__navigation" aria-label="Nos services">
+            <p class="footer__title">Services</p>
             <ul class="footer__links">
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="{{ path('app_dashboard') }}">Dashboard</a></li>
-                {% else %}
-                    <li><a href="{{ path('app_login') }}">Connexion</a></li>
-                {% endif %}
+                <li><a href="{{ path('app_front_page', {path: 'service/developpement'}) }}">Développement web</a></li>
+                <li><a href="{{ path('app_front_page', {path: 'service/seo'}) }}">SEO et référencement</a></li>
             </ul>
         </nav>
 
@@ -58,5 +55,10 @@
 
     <div class="footer__bottom">
         <p>&copy; {{ 'now'|date('Y') }} {{ site.siteTitle }}. Tous droits réservés.</p>
+        <nav aria-label="Pages légales">
+            <a href="{{ path('app_front_legal_notice') }}">Mentions légales</a>
+            <a href="{{ path('app_front_privacy_policy') }}">Confidentialité</a>
+            <a href="{{ path('app_front_cookie_policy') }}">Cookies</a>
+        </nav>
     </div>
 </footer>

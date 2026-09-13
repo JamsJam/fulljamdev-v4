@@ -15,6 +15,7 @@ final class LatestArticles
 {
     public LatestArticlesDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     public function __construct(private readonly LatestArticlesProvider $articles)
     {

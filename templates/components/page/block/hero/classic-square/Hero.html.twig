@@ -1,4 +1,5 @@
 <section
+    {% if anchorId|default(null) %}id="{{ anchorId }}" {% endif %}
     class="hero-classic-square{% if data.reverse %} hero-classic-square--reverse{% endif %}"
     data-block-id="{{ blockId }}"
     aria-labelledby="hero-classic-square-title-{{ blockId|default('preview') }}"

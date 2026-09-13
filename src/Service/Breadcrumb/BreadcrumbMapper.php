@@ -43,6 +43,9 @@ final class BreadcrumbMapper
             'label' => 'Pages',
             'route' => 'app_dashboard_page',
         ],
+        'legal' => [
+            'label' => 'Legal',
+        ],
         'article' => [
             'label' => 'Articles',
             'route' => 'app_dashboard_blog',

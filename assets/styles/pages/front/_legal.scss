@@ -1,0 +1,15 @@
+main[data-page="legal"] {
+    padding: clamp(2rem, 6vw, 5rem) 1rem;
+    color: var(--text);
+}
+
+.legal-page {
+    width: min(100%, 52rem);
+    margin-inline: auto;
+
+    h1, h2, h3, h4, h5, h6 { color: var(--text); }
+    h1 { margin-bottom: clamp(2rem, 5vw, 4rem); }
+    h2, h3, h4, h5, h6 { margin-block: 2rem 0.75rem; }
+    p, li { color: var(--text-muted); line-height: 1.75; }
+    ul, ol { display: grid; gap: 0.5rem; padding-inline-start: 1.5rem; }
+}

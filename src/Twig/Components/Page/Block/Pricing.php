@@ -9,6 +9,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 {
     public PricingDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 
     public function formatPrice(int $cents): string
     {

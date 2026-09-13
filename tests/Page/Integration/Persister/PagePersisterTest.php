@@ -41,7 +41,7 @@ final class PagePersisterTest extends KernelTestCase
         $dto->title = 'Accueil';
         $dto->path = 'accueil';
         $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $hero, 1);
-        $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $firstHero, 0);
+        $dto->blocks[] = new PageBlockDTO(null, 'hero.main', $firstHero, 0, 'presentation');
 
         $page = $persister->save($dto);
         $rebuilt = (new PageBuilder($mapper, $serializer))->build($page);
@@ -49,6 +49,7 @@ final class PagePersisterTest extends KernelTestCase
         self::assertCount(2, $page->getBlocks());
         self::assertSame(0, $page->getBlocks()->first()->getPosition());
         self::assertInstanceOf(HeroDTO::class, $rebuilt->blocks[0]->data);
+        self::assertSame('presentation', $rebuilt->blocks[0]->anchorId);
         self::assertSame('Premier bloc', $rebuilt->blocks[0]->data->title->content);
         self::assertSame('Accueil', $rebuilt->blocks[1]->data->title->content);
     }

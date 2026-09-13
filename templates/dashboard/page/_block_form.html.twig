@@ -27,6 +27,12 @@
     </header>
     <div class="page-builder__block-content" data-page-builder-target="content"{% if not expanded|default(false) %} hidden{% endif %}>
         {{ form_widget(block.id) }}{{ form_widget(block.type) }}{{ form_widget(block.position, {attr: {'data-page-builder-position': ''}}) }}
+        <details class="page-builder__settings">
+            <summary>Ancre du bloc</summary>
+            <div class="page-builder__settings-content">
+                <twig:Form:Field :field="block.anchorId" />
+            </div>
+        </details>
         {% include definition.formTemplate with {data: block.data} only %}
         {{ form_errors(block) }}
     </div>

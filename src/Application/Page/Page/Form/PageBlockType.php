@@ -24,7 +24,13 @@ final class PageBlockType extends AbstractType
         $builder
             ->add('id', HiddenType::class)
             ->add('type', HiddenType::class)
-            ->add('position', HiddenType::class);
+            ->add('position', HiddenType::class)
+            ->add('anchorId', null, [
+                'label' => 'ID d’ancrage',
+                'required' => false,
+                'attr' => ['placeholder' => 'ex. contact'],
+                'help' => 'Facultatif. Utilisez ensuite #cet-id dans un lien.',
+            ]);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
             $block = $event->getData();

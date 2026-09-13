@@ -9,4 +9,5 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 {
     public TestimonialsDTO $data;
     public ?int $blockId = null;
+    public ?string $anchorId = null;
 }

@@ -1,4 +1,4 @@
-<section class="cta-center" data-block-id="{{ blockId }}" aria-labelledby="cta-center-title-{{ blockId|default('preview') }}">
+<section{% if anchorId %} id="{{ anchorId }}"{% endif %} class="cta-center" data-block-id="{{ blockId }}" aria-labelledby="cta-center-title-{{ blockId|default('preview') }}">
     <div class="cta-center__content">
         <{{ data.title.level.value }} id="cta-center-title-{{ blockId|default('preview') }}" class="cta-center__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
         <p class="cta-center__text"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>

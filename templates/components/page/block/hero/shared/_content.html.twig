@@ -3,9 +3,9 @@
         {{ data.title.content }}
     </{{ data.title.level.value }}>
 
-    <p class="{{ hero_class }}__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>
-        {{ data.text.content }}
-    </p>
+    <div class="{{ hero_class }}__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>
+        {{ data.text.content|sanitize_html('app.page_text_sanitizer') }}
+    </div>
 
     {% if data.cta1 and data.cta1.label or data.cta2 and data.cta2.label %}
         <div class="{{ hero_class }}__actions">

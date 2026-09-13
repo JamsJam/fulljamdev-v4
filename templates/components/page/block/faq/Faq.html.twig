@@ -1,7 +1,7 @@
 <section{% if anchorId %} id="{{ anchorId }}"{% endif %} class="faq-block" data-block-id="{{ blockId }}" aria-labelledby="faq-block-title-{{ blockId|default('preview') }}">
     <header class="faq-block__header">
         <{{ data.title.level.value }} id="faq-block-title-{{ blockId|default('preview') }}" class="faq-block__title"{{ this.safeAttributes(data.title.attributes)|raw }}>{{ data.title.content }}</{{ data.title.level.value }}>
-        <p class="faq-block__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content }}</p>
+        <div class="faq-block__lead"{{ this.safeAttributes(data.text.attributes)|raw }}>{{ data.text.content|sanitize_html('app.page_text_sanitizer') }}</div>
     </header>
 
     {% if data.items is not empty %}

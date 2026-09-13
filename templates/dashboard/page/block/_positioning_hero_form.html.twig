@@ -1,5 +1,14 @@
 <div class="page-builder__block-fields">
-    <div class="page-builder__grid page-builder__essentials"><twig:Form:Field :field="data.title.content" label="Titre" /><twig:Form:Field :field="data.text.content" label="Texte" /><twig:Form:Field :field="data.reverse" /><twig:Form:Field :field="data.showGlow" label="Afficher les lueurs d’arrière-plan" /></div>
+    <div class="page-builder__grid page-builder__essentials">
+        <twig:Form:Field :field="data.title.content" label="Titre" />
+        <div class="page-builder__grid">
+            <twig:Form:Field :field="data.reverse" />
+            <twig:Form:Field :field="data.showGlow" label="Afficher les lueurs d’arrière-plan" />
+        </div>
+    </div>
+    <div class="page-builder__rich-text">
+        <twig:Form:Field :field="data.text.content" label="Texte" />
+    </div>
     <details class="page-builder__settings" data-controller="image-source" data-image-source-current-media-value="{{ data.image.mediaId.vars.value|default('') }}"><summary>Image</summary><div class="page-builder__settings-content"><div data-action="change->image-source#change"><twig:Form:Field :field="data.image.source" /></div>{{ form_widget(data.image.mediaId) }}<div data-image-source-target="fileField"><twig:Form:Field :field="data.image.file" /></div><div data-image-source-target="urlField"><twig:Form:Field :field="data.image.url" /></div><div class="page-builder__image-preview" data-image-source-target="previewContainer" hidden><img data-image-source-target="preview" alt="Aperçu de l’image sélectionnée"></div><div class="page-builder__grid"><twig:Form:Field :field="data.image.alt" /><twig:Form:Field :field="data.image.title" /></div></div></details>
     <details class="page-builder__settings" data-controller="link-target"><summary>CTA facultatif</summary><div class="page-builder__settings-content"><twig:Form:Field :field="data.cta.label" /><twig:Form:Field :field="data.cta.target" :widgetAttr="{'data-link-target-target': 'type', 'data-action': 'link-target#toggle'}" /><div data-link-target-target="route"><twig:Form:Field :field="data.cta.routeName" /></div><div data-link-target-target="url"><twig:Form:Field :field="data.cta.href" /></div><twig:Form:KeyValueCollection :field="data.cta.routeParameters" legend="Paramètres de route" /><twig:Form:KeyValueCollection :field="data.cta.attributes" legend="Attributs HTML" /></div></details>
     {% set proof_prototype %}{% include 'dashboard/page/block/_social_proof_form.html.twig' with {item: data.proofs.vars.prototype} only %}{% endset %}

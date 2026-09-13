@@ -1,4 +1,6 @@
 <article class="page-builder__block" data-page-builder-target="block">
+    {% import 'dashboard/page/_block_errors.html.twig' as block_errors %}
+    {% set error_items = block_errors.list(block)|trim %}
     <header class="page-builder__block-header">
         <twig:Admin:Button
             variant="ghost"
@@ -25,6 +27,12 @@
             data-action="page-builder#removeBlock"
         />
     </header>
+    {% if error_items is not empty %}
+        <div class="page-builder__block-errors" role="alert">
+            <strong>Ce bloc contient des erreurs</strong>
+            <ul>{{ error_items|raw }}</ul>
+        </div>
+    {% endif %}
     <div class="page-builder__block-content" data-page-builder-target="content"{% if not expanded|default(false) %} hidden{% endif %}>
         {{ form_widget(block.id) }}{{ form_widget(block.type) }}{{ form_widget(block.position, {attr: {'data-page-builder-position': ''}}) }}
         <details class="page-builder__settings">
@@ -34,6 +42,5 @@
             </div>
         </details>
         {% include definition.formTemplate with {data: block.data} only %}
-        {{ form_errors(block) }}
     </div>
 </article>

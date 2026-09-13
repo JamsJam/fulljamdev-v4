@@ -87,6 +87,11 @@ final class Aside
                     'icon' => 'material-symbols:article-outline-rounded',
                     'activePrefixes' => ['app_dashboard_page_'],
                 ],
+                [
+                    'label' => 'Legal',
+                    'route' => 'app_dashboard_legal',
+                    'icon' => 'material-symbols:gavel-rounded',
+                ],
             ],
         ],
         [

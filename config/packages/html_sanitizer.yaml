@@ -12,3 +12,14 @@ framework:
                     li: []
                     strong: []
                     em: []
+            app.legal_sanitizer:
+                allow_elements:
+                    h2: []
+                    h3: []
+                    h4: []
+                    h5: []
+                    h6: []
+                    p: []
+                    ul: []
+                    ol: []
+                    li: []

@@ -1,0 +1,37 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Pages légales{% endblock %}
+
+{% block body %}
+    <section class="settings legal-editor" aria-labelledby="legal-settings-title">
+        <header class="settings__header legal-editor__header">
+            <div>
+                <p class="legal-editor__eyebrow">Contenus du site</p>
+                <h1 id="legal-settings-title">Pages légales</h1>
+                <p>Rédigez les textes réglementaires publiés dans le pied de page.</p>
+            </div>
+        </header>
+
+        {{ form_start(form, {attr: {class: 'settings__form legal-editor__form'}}) }}
+            {{ form_errors(form) }}
+            {% for field, page in {
+                legalNotice: {label: 'Mentions légales', route: 'app_front_legal_notice'},
+                privacyPolicy: {label: 'Politique de confidentialité', route: 'app_front_privacy_policy'},
+                cookiePolicy: {label: 'Politique relative aux cookies', route: 'app_front_cookie_policy'}
+            } %}
+                <fieldset class="settings__fieldset legal-editor__page">
+                    <legend>{{ page.label }}</legend>
+                    <div class="legal-editor__page-meta">
+                        <code>{{ path(page.route) }}</code>
+                        <a href="{{ path(page.route) }}" target="_blank" rel="noopener">Voir la page<span class="visually-hidden"> {{ page.label }}</span></a>
+                    </div>
+                    <twig:Form:Field :field="attribute(form, field).title" class="settings__field" />
+                    <twig:Form:Field :field="attribute(form, field).content" class="settings__field legal-editor__content" />
+                </fieldset>
+            {% endfor %}
+            <div class="settings__form-actions legal-editor__actions">
+                <twig:Admin:Button type="submit" label="Enregistrer les pages légales" />
+            </div>
+        {{ form_end(form) }}
+    </section>
+{% endblock %}

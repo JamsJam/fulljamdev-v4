@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ legal_page.title }}{% endblock %}
+{% block robots %}noindex, nofollow{% endblock %}
 {% block main_attributes %} data-page="legal"{% endblock %}
 
 {% block body %}

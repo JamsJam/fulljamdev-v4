@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Project;
 
 use App\Application\Project\Service\FindPublishedProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

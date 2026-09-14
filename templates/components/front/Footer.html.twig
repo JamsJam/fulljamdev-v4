@@ -57,9 +57,9 @@
     <div class="footer__bottom">
         <p>&copy; {{ 'now'|date('Y') }} {{ site.siteTitle }}. Tous droits réservés.</p>
         <nav aria-label="Pages légales">
-            <a href="{{ path('app_front_legal_notice') }}">Mentions légales</a>
-            <a href="{{ path('app_front_privacy_policy') }}">Confidentialité</a>
-            <a href="{{ path('app_front_cookie_policy') }}">Cookies</a>
+            <a href="{{ path('app_front_legal', {slug: 'mention-legal'}) }}">Mentions légales</a>
+            <a href="{{ path('app_front_legal', {slug: 'politique-confidentialite'}) }}">Confidentialité</a>
+            <a href="{{ path('app_front_legal', {slug: 'politique-cookies'}) }}">Cookies</a>
         </nav>
     </div>
 </footer>

@@ -10,14 +10,16 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class LegalPageTypeTest extends KernelTestCase
 {
-    public function testRoutesUseTheRequestedPaths(): void
+    public function testLegalPagesUseOneRestrictedRoute(): void
     {
         self::bootKernel();
-        $routes = self::getContainer()->get(RouterInterface::class)->getRouteCollection();
+        $route = self::getContainer()->get(RouterInterface::class)->getRouteCollection()->get('app_front_legal');
 
-        self::assertSame('/mention-legal', $routes->get('app_front_legal_notice')?->getPath());
-        self::assertSame('/politique-confidentialite', $routes->get('app_front_privacy_policy')?->getPath());
-        self::assertSame('/polotique-cookies', $routes->get('app_front_cookie_policy')?->getPath());
+        self::assertSame('/legal/{slug}', $route?->getPath());
+        self::assertSame(
+            'mention-legal|politique-confidentialite|politique-cookies',
+            $route?->getRequirement('slug'),
+        );
     }
 
     public function testEditorOnlyKeepsLegalTextElements(): void

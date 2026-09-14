@@ -24,10 +24,10 @@
     </header>
     <div class="project-dashboard__stats">
         {% for stat in [
-            {label: 'Total des projets', value: counts.all, icon: 'material-symbols:folder-open-outline-rounded'},
-            {label: 'Projets publiés', value: counts.published, icon: 'material-symbols:check-circle-outline-rounded', tone: 'success'},
-            {label: 'Brouillons', value: counts.draft, icon: 'material-symbols:edit-note-rounded'},
-            {label: 'Mis en avant', value: counts.featured, icon: 'material-symbols:star-outline-rounded', tone: 'featured'}
+            {label: 'Total des projets', value: counts.all, icon: 'grommet-icons:projects'},
+            {label: 'Projets publiés', value: counts.published, icon: 'material-symbols:star-rounded', tone: 'success'},
+            {label: 'Brouillons', value: counts.draft, icon: 'pepicons-pencil:cv'},
+            {label: 'Mis en avant', value: counts.featured, icon: 'material-symbols:star-rounded', tone: 'featured'}
         ] %}
             <article class="project-dashboard__stat project-dashboard__stat--{{ stat.tone|default('neutral') }}">
                 <span class="project-dashboard__stat-icon">{{ ux_icon(stat.icon) }}</span>

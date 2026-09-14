@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Blog;
 
 use App\Application\Blog\Article\Service\FindPublishedArticleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

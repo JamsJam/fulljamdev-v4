@@ -65,6 +65,10 @@ body.admin {
     background: var(--bg-light);
     font-family: var(--font-text);
 
+    strong {
+        color: var(--text);
+    }
+
     h1,
     h2,
     h3,

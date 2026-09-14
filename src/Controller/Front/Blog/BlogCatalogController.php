@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Blog;
 
 use App\Application\Blog\Article\Service\BrowsePublishedArticlesService;
 use App\Application\Blog\Category\Service\GetCategoriesService;

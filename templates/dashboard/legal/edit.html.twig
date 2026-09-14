@@ -15,15 +15,15 @@
         {{ form_start(form, {attr: {class: 'settings__form legal-editor__form'}}) }}
             {{ form_errors(form) }}
             {% for field, page in {
-                legalNotice: {label: 'Mentions légales', route: 'app_front_legal_notice'},
-                privacyPolicy: {label: 'Politique de confidentialité', route: 'app_front_privacy_policy'},
-                cookiePolicy: {label: 'Politique relative aux cookies', route: 'app_front_cookie_policy'}
+                legalNotice: {label: 'Mentions légales', slug: 'mention-legal'},
+                privacyPolicy: {label: 'Politique de confidentialité', slug: 'politique-confidentialite'},
+                cookiePolicy: {label: 'Politique relative aux cookies', slug: 'politique-cookies'}
             } %}
                 <fieldset class="settings__fieldset legal-editor__page">
                     <legend>{{ page.label }}</legend>
                     <div class="legal-editor__page-meta">
-                        <code>{{ path(page.route) }}</code>
-                        <a href="{{ path(page.route) }}" target="_blank" rel="noopener">Voir la page<span class="visually-hidden"> {{ page.label }}</span></a>
+                        <code>{{ path('app_front_legal', {slug: page.slug}) }}</code>
+                        <a href="{{ path('app_front_legal', {slug: page.slug}) }}" target="_blank" rel="noopener">Voir la page<span class="visually-hidden"> {{ page.label }}</span></a>
                     </div>
                     <twig:Form:Field :field="attribute(form, field).title" class="settings__field" />
                     <twig:Form:Field :field="attribute(form, field).content" class="settings__field legal-editor__content" />

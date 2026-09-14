@@ -16,8 +16,7 @@
                     <small>{{ card.period.label }}</small>
                 </p>
                 {% if card.features %}
-                    <ul class="pricing__features pricing__features--full">{% for feature in card.features %}<li>{{ feature }}</li>{% endfor %}</ul>
-                    <ul class="pricing__features pricing__features--compact">{% for feature in card.features|slice(0, 3) %}<li>{{ feature }}</li>{% endfor %}</ul>
+                    <ul class="pricing__features">{% for feature in card.features|slice(0, 3) %}<li>{{ feature }}</li>{% endfor %}</ul>
                     {% if card.features|length > 3 %}
                         <details class="pricing__details">
                             <summary>Voir tout ce qui est inclus</summary>

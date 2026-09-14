@@ -9,6 +9,7 @@ use App\Application\Page\Block\Library\Testimonials\Main\TestimonialDTO;
 use App\Twig\Components\Page\Block\Pricing;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Twig\Environment;
 
 final class NewBlockValidationTest extends KernelTestCase
 {
@@ -41,5 +42,33 @@ final class NewBlockValidationTest extends KernelTestCase
         $pricing->cards = [$first, $second];
 
         self::assertGreaterThan(0, self::getContainer()->get(ValidatorInterface::class)->validate($pricing)->count());
+    }
+
+    public function testPricingCardRendersItsOptionalCtaAndCompactFeatures(): void
+    {
+        self::bootKernel();
+        $card = new PricingCardDTO();
+        $card->title = 'Audit SEO';
+        $card->description = 'Audit rapide et corrections prioritaires.';
+        $card->price = 40000;
+        $card->features = ['Audit technique', 'Structure', 'Backlinks', 'Correctifs'];
+        $card->cta->label = 'Auditer mon site';
+        $card->cta->href = '/contact';
+        $pricing = new PricingDTO();
+        $pricing->title->content = 'Tarifs';
+        $pricing->text->content = 'Des offres adaptées.';
+        $pricing->cards = [$card];
+
+        $html = self::getContainer()->get(Environment::class)->render('components/page/block/pricing/Pricing.html.twig', [
+            'data' => $pricing,
+            'blockId' => 1,
+            'anchorId' => null,
+            'this' => new Pricing(),
+        ]);
+
+        self::assertStringContainsString('class="button button--primary pricing__cta"', $html);
+        self::assertStringContainsString('href="/contact"', $html);
+        self::assertStringContainsString('pricing__features--compact', $html);
+        self::assertStringContainsString('Voir tout ce qui est inclus', $html);
     }
 }

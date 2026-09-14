@@ -2,6 +2,7 @@
 
 namespace App\Application\Page\Block\Library\Pricing\Main;
 
+use App\Application\Page\Element\Cta\CtaDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class PricingCardDTO
@@ -14,4 +15,12 @@ final class PricingCardDTO
     public bool $featured = false;
     public bool $showStartingAt = false;
     /** @var list<string> */ #[Assert\All([new Assert\NotBlank(), new Assert\Length(max: 180)])] public array $features = [];
+
+    #[Assert\Valid]
+    public CtaDTO $cta;
+
+    public function __construct()
+    {
+        $this->cta = new CtaDTO();
+    }
 }

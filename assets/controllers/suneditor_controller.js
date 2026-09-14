@@ -90,7 +90,7 @@ export default class extends Controller {
             'buttonList': isBasic ? [
                 ['undo', 'redo', 'bold', 'italic', 'list', 'removeFormat']
             ] : isPageText ? [
-                ['undo', 'redo', 'formatBlock', 'bold', 'italic', 'removeFormat']
+                ['bold', 'italic']
             ] : isLegal ? [
                 ['undo', 'redo', 'formatBlock', 'list', 'outdent', 'indent', 'removeFormat']
             ] : [

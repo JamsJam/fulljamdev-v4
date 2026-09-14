@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Reservation;
 
 use App\Application\Reservation\Appointment\Dto\PublicAppointmentDto;
 use App\Application\Reservation\Appointment\Resolver\PublicSlotResolver;

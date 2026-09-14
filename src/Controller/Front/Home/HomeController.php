@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Home;
 
 use App\Application\Page\Page\Builder\PageBuilder;
 use App\Application\Page\Page\Service\HomepageService;

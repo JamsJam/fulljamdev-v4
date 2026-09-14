@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Reservation;
 
 use App\Application\Reservation\Planner\Service\FindPlanningService;
 use App\Application\Reservation\Planner\Service\PlanningInvitationService;

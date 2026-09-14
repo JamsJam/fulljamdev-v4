@@ -52,9 +52,9 @@ final class PageTemplateTest extends KernelTestCase
 
         self::assertStringContainsString('href="/service/developpement"', $html);
         self::assertStringContainsString('href="/service/seo"', $html);
-        self::assertStringContainsString('href="/mention-legal"', $html);
-        self::assertStringContainsString('href="/politique-confidentialite"', $html);
-        self::assertStringContainsString('href="/polotique-cookies"', $html);
+        self::assertStringContainsString('href="/legal/mention-legal"', $html);
+        self::assertStringContainsString('href="/legal/politique-confidentialite"', $html);
+        self::assertStringContainsString('href="/legal/politique-cookies"', $html);
         self::assertStringNotContainsString('href="/login"', $html);
     }
 

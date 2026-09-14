@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Front;
+namespace App\Controller\Front\Project;
 
 use App\Application\Project\Service\BrowsePublishedProjectsService;
 use App\Repository\Project\TechnologyRepository;

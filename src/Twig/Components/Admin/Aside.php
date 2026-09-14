@@ -78,19 +78,19 @@ final class Aside
                 [
                     'label' => 'CV',
                     'route' => 'app_dashboard_cv',
-                    'icon' => 'material-symbols:work-outline-rounded',
+                    'icon' => 'pepicons-pencil:cv',
                     'activePrefixes' => ['app_dashboard_cv_'],
                 ],
                 [
                     'label' => 'Pages',
                     'route' => 'app_dashboard_page',
-                    'icon' => 'material-symbols:article-outline-rounded',
+                    'icon' => 'iconoir:post',
                     'activePrefixes' => ['app_dashboard_page_'],
                 ],
                 [
                     'label' => 'Legal',
                     'route' => 'app_dashboard_legal',
-                    'icon' => 'material-symbols:gavel-rounded',
+                    'icon' => 'qlementine-icons:resume-16',
                 ],
             ],
         ],
@@ -105,7 +105,7 @@ final class Aside
                 [
                     'label' => 'Déconnexion',
                     'route' => 'app_logout',
-                    'icon' => 'material-symbols:logout-rounded',
+                    'icon' => 'bx:log-out',
                     'logout' => true,
                 ],
             ],

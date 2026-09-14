@@ -29,10 +29,10 @@
 
     <div class="blog-dashboard__stats">
         {% for stat in [
-            {label: 'Articles', value: counts.all, icon: 'material-symbols:article-outline-rounded'},
-            {label: 'Brouillons', value: counts.draft, icon: 'material-symbols:edit-note-rounded'},
-            {label: 'Planifiés', value: counts.scheduled, icon: 'material-symbols:schedule-rounded', tone: 'info'},
-            {label: 'Publiés', value: counts.published, icon: 'material-symbols:check-circle-outline-rounded', tone: 'success'}
+            {label: 'Articles', value: counts.all, icon: 'iconoir:post'},
+            {label: 'Brouillons', value: counts.draft, icon: 'pepicons-pencil:cv'},
+            {label: 'Planifiés', value: counts.scheduled, icon: 'material-symbols:calendar-month-outline-rounded', tone: 'info'},
+            {label: 'Publiés', value: counts.published, icon: 'material-symbols:star-rounded', tone: 'success'}
         ] %}
             <article class="blog-dashboard__stat blog-dashboard__stat--{{ stat.tone|default('neutral') }}">
                 <span class="blog-dashboard__stat-icon">{{ ux_icon(stat.icon) }}</span>

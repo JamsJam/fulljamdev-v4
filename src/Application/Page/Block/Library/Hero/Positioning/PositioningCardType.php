@@ -10,13 +10,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class PositioningCardType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $b, array $o): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $b->add('title', TextType::class)->add('text', TextareaType::class);
+        $builder
+            ->add('title', TextType::class)
+            ->add('text', TextareaType::class);
     }
 
-    public function configureOptions(OptionsResolver $r): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $r->setDefaults(['data_class' => PositioningCardDTO::class]);
+        $resolver->setDefaults([
+            'data_class' => PositioningCardDTO::class,
+        ]);
     }
 }

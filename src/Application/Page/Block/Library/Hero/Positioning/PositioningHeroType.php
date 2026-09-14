@@ -16,15 +16,33 @@ final class PositioningHeroType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('title', HeadingType::class)->add('text', TextType::class, ['rich_text' => true])->add('image', ImageType::class)
-            ->add('cta', CtaType::class, ['required' => false])->add('reverse', CheckboxType::class, ['required' => false])
+        $builder
+            ->add('title', HeadingType::class)
+            ->add('text', TextType::class, ['rich_text' => true])
+            ->add('image', ImageType::class)
+            ->add('cta', CtaType::class, ['required' => false])
+            ->add('reverse', CheckboxType::class, ['required' => false])
             ->add('showGlow', CheckboxType::class, ['required' => false])
-            ->add('proofs', CollectionType::class, ['entry_type' => SocialProofType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false, 'prototype' => true])
-            ->add('cards', CollectionType::class, ['entry_type' => PositioningCardType::class, 'allow_add' => true, 'allow_delete' => true, 'by_reference' => false, 'prototype' => true]);
+            ->add('proofs', CollectionType::class, [
+                'entry_type' => SocialProofType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'prototype' => true,
+            ])
+            ->add('cards', CollectionType::class, [
+                'entry_type' => PositioningCardType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'prototype' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => PositioningHeroDTO::class]);
+        $resolver->setDefaults([
+            'data_class' => PositioningHeroDTO::class,
+        ]);
     }
 }

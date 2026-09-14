@@ -13,11 +13,19 @@ final class CardWithLogoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('logo', ImageType::class)->add('title')->add('text')->add('cta', CtaType::class, ['required' => false]);
+        $builder
+            ->add('logo', ImageType::class)
+            ->add('title')
+            ->add('text')
+            ->add('cta', CtaType::class, [
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => CardDisplayItemDTO::class]);
+        $resolver->setDefaults([
+            'data_class' => CardDisplayItemDTO::class,
+        ]);
     }
 }

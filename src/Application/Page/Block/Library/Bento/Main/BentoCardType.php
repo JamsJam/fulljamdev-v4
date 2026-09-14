@@ -11,13 +11,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class BentoCardType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $b, array $o): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $b->add('title', TextType::class)->add('text', TextareaType::class)->add('size', ChoiceType::class, ['choices' => ['Standard' => 'standard', 'Large' => 'wide', 'Haute' => 'tall']]);
+        $builder
+            ->add('title', TextType::class)
+            ->add('text', TextareaType::class)
+            ->add('size', ChoiceType::class, [
+                'choices' => [
+                    'Standard' => 'standard',
+                    'Large' => 'wide',
+                    'Haute' => 'tall',
+                ],
+            ]);
     }
 
-    public function configureOptions(OptionsResolver $r): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $r->setDefaults(['data_class' => BentoCardDTO::class]);
+        $resolver->setDefaults([
+            'data_class' => BentoCardDTO::class,
+        ]);
     }
 }

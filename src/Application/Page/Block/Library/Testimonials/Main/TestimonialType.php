@@ -10,13 +10,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class TestimonialType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $b, array $o): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $b->add('rating', IntegerType::class)->add('comment', TextareaType::class);
+        $builder
+            ->add('rating', IntegerType::class)
+            ->add('comment', TextareaType::class);
     }
 
-    public function configureOptions(OptionsResolver $r): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $r->setDefaults(['data_class' => TestimonialDTO::class]);
+        $resolver->setDefaults([
+            'data_class' => TestimonialDTO::class,
+        ]);
     }
 }

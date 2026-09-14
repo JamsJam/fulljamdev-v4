@@ -9,13 +9,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class SocialProofType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $b, array $o): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $b->add('value', TextType::class)->add('label', TextType::class);
+        $builder
+            ->add('value', TextType::class)
+            ->add('label', TextType::class);
     }
 
-    public function configureOptions(OptionsResolver $r): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $r->setDefaults(['data_class' => SocialProofDTO::class]);
+        $resolver->setDefaults([
+            'data_class' => SocialProofDTO::class,
+        ]);
     }
 }

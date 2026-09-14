@@ -16,7 +16,7 @@
 
     &__grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 2rem));
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 20rem));
         gap: 1rem;
         justify-content: space-around;
     }
@@ -113,6 +113,10 @@
         &__card {
             min-height: 0;
             padding: clamp(1.25rem, 4vw, 1.75rem);
+        }
+
+        &__card--featured {
+            order: -1;
         }
 
         &__features--full { display: none; }

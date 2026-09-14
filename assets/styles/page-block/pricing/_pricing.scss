@@ -55,11 +55,11 @@
     &__price-prefix { margin-inline-end: .35rem; font-size: var(--text-s); font-weight: 500; letter-spacing: 0; }
 
     &__details {
-        display: contents;
+        display: block;
     }
 
     &__details summary {
-        display: none;
+        display: list-item;
         color: var(--text);
         font-size: var(--text-s);
         font-weight: 700;
@@ -71,8 +71,8 @@
     }
 
     &__details .pricing__features {
-        padding-block-start: 0;
-        border-block-start: 0;
+        padding-block-start: 1rem;
+        border-block-start: 1px solid var(--border-mute);
     }
 
     &__cta {
@@ -124,12 +124,6 @@
             order: -1;
         }
 
-        &__card &__details { display: block; }
-        &__details summary { display: list-item; }
-        &__details .pricing__features {
-            padding-block-start: 1rem;
-            border-block-start: 1px solid var(--border-mute);
-        }
     }
 }
 

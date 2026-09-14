@@ -15,7 +15,7 @@ final readonly class LegalPageService
     private const PAGES = [
         'legalNotice' => ['mention-legal', 'Mentions légales'],
         'privacyPolicy' => ['politique-confidentialite', 'Politique de confidentialité'],
-        'cookiePolicy' => ['polotique-cookies', 'Politique relative aux cookies'],
+        'cookiePolicy' => ['politique-cookies', 'Politique relative aux cookies'],
     ];
 
     public function __construct(

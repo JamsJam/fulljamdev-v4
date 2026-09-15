@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front\Sitemap;
 
+use App\Application\Page\Page\Service\HomepageService;
 use App\Repository\Blog\ArticleRepository;
 use App\Repository\Page\PageRepository;
 use App\Repository\Project\ProjectRepository;
@@ -18,6 +19,7 @@ final class SitemapController extends AbstractController
         PageRepository $pageRepository,
         ArticleRepository $articleRepository,
         ProjectRepository $projectRepository,
+        HomepageService $homepageService,
         ClockInterface $clock,
     ): Response {
         $urls = [
@@ -26,8 +28,14 @@ final class SitemapController extends AbstractController
             ['loc' => $this->generateUrl('app_front_projects', referenceType: UrlGeneratorInterface::ABSOLUTE_URL)],
         ];
 
+        $homepagePageId = $homepageService->getConfiguredPageId();
+
         foreach ($pageRepository->findAll() as $page) {
-            if ('' === $page->getPath() || true === ($page->getSeo()['noIndex'] ?? false)) {
+            if (
+                $page->getId() === $homepagePageId
+                || '' === $page->getPath()
+                || true === ($page->getSeo()['noIndex'] ?? false)
+            ) {
                 continue;
             }
 

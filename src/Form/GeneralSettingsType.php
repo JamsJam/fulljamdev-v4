@@ -87,7 +87,7 @@ final class GeneralSettingsType extends AbstractType
             ->add('homepagePageId', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Page d’accueil',
-                'placeholder' => 'Sélectionnez une page',
+                'placeholder' => 'Aucune page sélectionnée',
                 'choices' => $options['page_choices'],
                 'choice_translation_domain' => false,
             ])

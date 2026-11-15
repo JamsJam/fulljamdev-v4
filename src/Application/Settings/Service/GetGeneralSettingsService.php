@@ -2,9 +2,9 @@
 
 namespace App\Application\Settings\Service;
 
+use App\Application\QrVisitCard\Provider\QrVisitCardProvider;
 use App\Application\Settings\General\Dto\GeneralSettingsDto;
 use App\Application\Settings\General\Proxy\GeneralSettingsProxy;
-use App\Application\QrVisitCard\Provider\QrVisitCardProvider;
 
 final readonly class GetGeneralSettingsService
 {

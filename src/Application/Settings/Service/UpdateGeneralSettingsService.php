@@ -3,6 +3,7 @@
 namespace App\Application\Settings\Service;
 
 use App\Application\Page\Page\Provider\PageProvider;
+use App\Application\QrVisitCard\Service\QrVisitCardRouteService;
 use App\Application\Settings\General\Asset\SiteAssetUploader;
 use App\Application\Settings\General\Cache\GeneralSettingsCache;
 use App\Application\Settings\General\Dto\GeneralSettingsDto;
@@ -15,6 +16,7 @@ final readonly class UpdateGeneralSettingsService
         private GeneralSettingsCache $cache,
         private PageProvider $pageProvider,
         private SiteAssetUploader $assetUploader,
+        private QrVisitCardRouteService $qrVisitCardRouteService,
     ) {
     }
 
@@ -38,6 +40,7 @@ final readonly class UpdateGeneralSettingsService
             $dto->appleTouchIconPath = $this->assetUploader->upload($dto->appleTouchIconFile, 'apple-touch-icon');
         }
 
+        $this->qrVisitCardRouteService->write($dto->qrVisitCardPath);
         $this->writer->write($dto);
         $this->cache->invalidate();
     }

@@ -75,4 +75,12 @@ final class GeneralSettingsDto
     #[Assert\When(expression: '!this.maintenanceEnabled', constraints: [new Assert\NotNull(message: 'Sélectionnez une page d’accueil.')])]
     #[Assert\Positive(message: 'La page d’accueil sélectionnée n’est pas valide.')]
     public ?int $homepagePageId = null;
+
+    #[Assert\Length(max: 2048)]
+    #[Assert\Regex(
+        pattern: '#^/(?!/)[^\s]*$#',
+        message: 'Saisissez un chemin interne commençant par /, par exemple /contact.',
+        groups: ['Default'],
+    )]
+    public ?string $qrVisitCardPath = null;
 }

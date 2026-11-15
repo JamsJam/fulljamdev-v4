@@ -91,6 +91,12 @@ final class GeneralSettingsType extends AbstractType
                 'choices' => $options['page_choices'],
                 'choice_translation_domain' => false,
             ])
+            ->add('qrVisitCardPath', TextType::class, [
+                'required' => false,
+                'empty_data' => null,
+                'label' => 'Route de redirection du QR code',
+                'help' => 'Chemin interne vers lequel redirige le QR code, par exemple /contact. Laissez vide pour utiliser la page d’accueil.',
+            ])
             ->add('submit', SubmitType::class, ['label' => 'Enregistrer']);
     }
 

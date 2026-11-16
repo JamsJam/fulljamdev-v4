@@ -16,8 +16,9 @@
                 <ul class="sidebar__menu" role="list">
                     {% for item in group.items %}
                         {% set hasChildren = item.children is defined and item.children is not empty %}
-                        {% set active = item.route is defined and this.isActive(item.route, item.activePrefixes|default([])) %}
-                        {% set childActive = hasChildren and this.hasActiveChild(item.children) %}
+                        {% set active = item.route is defined and this.isActive(item.route, item.activePrefixes|default([]), item.routeParameters|default({})) %}
+                        {# {% dump(item.children)%} #}
+                        {% set childActive = hasChildren and this.hasActiveChild(item.children ) %}
 
                         <li
                             class="sidebar__menu-item{{ hasChildren ? ' sidebar__menu-item--collapsible' : '' }}"
@@ -37,7 +38,7 @@
                             {% else %}
                                 <a
                                     class="sidebar__menu-link{{ active ? ' is-active' : '' }}"
-                                    href="{{ path(item.route) }}"
+                                    href="{{ path(item.route, item.routeParameters|default({})) }}"
                                     {% if item.logout|default(false) %}data-turbo="false"{% endif %}
                                     {% if active %}aria-current="page"{% endif %}
                                 >
@@ -66,11 +67,12 @@
                                 >
                                     <ul class="sidebar__submenu" role="list">
                                         {% for child in item.children %}
-                                            {% set childIsActive = this.isActive(child.route, child.activePrefixes|default([])) %}
+                                            {% if child.route is defined and child.route is not empty %}
+                                            {% set childIsActive = this.isActive(child.route, child.activePrefixes|default([]), child.routeParameters|default({})) %}
                                             <li>
                                                 <a
                                                     class="sidebar__submenu-link{{ childIsActive ? ' is-active' : '' }}"
-                                                    href="{{ path(child.route) }}"
+                                                    href="{{ path(child.route, child.routeParameters|default({})) }}"
                                                     {% if childIsActive %}aria-current="page"{% endif %}
                                                 >
                                                     <span>{{ child.label }}</span>
@@ -79,6 +81,7 @@
                                                     {% endif %}
                                                 </a>
                                             </li>
+                                            {% endif %}
                                         {% endfor %}
                                     </ul>
                                 </div>

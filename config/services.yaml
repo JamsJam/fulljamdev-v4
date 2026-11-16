@@ -8,6 +8,7 @@ parameters:
     settings_upload_directory: '%kernel.project_dir%/public/uploads/settings'
     blog_upload_directory: '%kernel.project_dir%/public/uploads/blog'
     project_upload_directory: '%kernel.project_dir%/public/uploads/projects'
+    linktree_upload_directory: '%kernel.project_dir%/public/uploads/linktree'
 
 services:
     # default configuration for services in *this* file
@@ -55,6 +56,10 @@ services:
     App\Application\Project\Asset\ProjectMediaUploader:
         arguments:
             $targetDirectory: '%project_upload_directory%/media'
+
+    App\Application\LinkTree\Asset\LinkTreePhotoUploader:
+        arguments:
+            $targetDirectory: '%linktree_upload_directory%'
 
     App\Service\Google\GoogleOAuthService:
         arguments:

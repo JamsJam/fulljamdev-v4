@@ -1,0 +1,83 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}LinkTree{% endblock %}
+
+{% block body %}
+    <div class="linktree-page">
+        <header class="linktree-page__header">
+            <div class="linktree-page__title-wrap">
+                <div class="linktree-page__mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M9.5 14.5 14.5 9.5M7.75 16.25l-1.5 1.5a4 4 0 0 1-5.66-5.66l4-4a4 4 0 0 1 5.66 0m6-4 1.5-1.5a4 4 0 1 1 5.66 5.66l-4 4a4 4 0 0 1-5.66 0" transform="translate(1 1) scale(.92)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div><p class="linktree-page__eyebrow">Votre espace</p><h1>LinkTree</h1><p class="linktree-page__subtitle">Tous vos liens, réunis au même endroit.</p></div>
+            </div>
+            <a class="linktree-page__settings-link" href="{{ path('app_dashboard_linktree_settings') }}">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" stroke="currentColor" stroke-width="1.7"/><path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3H3.7a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 0 1 3.6 0V2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z" transform="translate(1 2) scale(.91)" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Paramètres
+            </a>
+        </header>
+
+        <div class="linktree-page__layout">
+            <section class="linktree-manager" aria-labelledby="links-heading">
+                <section class="linktree-panel linktree-add">
+                    <div class="linktree-panel__heading">
+                        <div class="linktree-step">01</div>
+                        <div><h2>Ajouter un lien</h2><p>Commencez par son titre et son adresse.</p></div>
+                    </div>
+                    {{ form_start(add_form, {attr: {class: 'linktree-add__form'}}) }}
+                        {{ form_errors(add_form) }}
+                        <div class="linktree-add__fields"><twig:Form:Field :field="add_form.label" /><twig:Form:Field :field="add_form.href" /></div>
+                        {{ form_widget(add_form.save, {attr: {class: 'linktree-button linktree-button--primary'}}) }}
+                    {{ form_end(add_form) }}
+                    <p class="linktree-add__note"><span aria-hidden="true">✦</span> Le nouveau lien sera désactivé. Vous pourrez le publier depuis sa fiche.</p>
+                </section>
+
+                <section class="linktree-panel linktree-links" aria-labelledby="links-heading">
+                    <div class="linktree-links__heading">
+                        <div><p class="linktree-page__eyebrow">Organisation</p><h2 id="links-heading">Vos liens</h2></div>
+                        <span class="linktree-count">{{ tree.links|length }} <span>{{ tree.links|length == 1 ? 'lien' : 'liens' }}</span></span>
+                    </div>
+                    {% if tree.links is empty %}
+                        <div class="linktree-empty">
+                            <div class="linktree-empty__art" aria-hidden="true"><span></span><span></span><span></span><i>↗</i></div>
+                            <h3>Votre collection commence ici</h3>
+                            <p>Ajoutez votre premier lien avec le formulaire ci-dessus. Vous pourrez ensuite choisir lesquels afficher sur votre page.</p>
+                        </div>
+                    {% else %}
+                        <div class="linktree-list">
+                            {% for link in tree.links %}
+                                <article class="linktree-item{{ link.isOnline ? ' is-online' : ' is-offline' }}">
+                                    <div class="linktree-item__summary">
+                                        <div class="linktree-item__handle" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><circle cx="5" cy="4" r="1.2"/><circle cx="11" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/><circle cx="11" cy="12" r="1.2"/></svg></div>
+                                        <div class="linktree-item__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9.5 14.5 14.5 9.5m-8 8-1.2 1.2a4 4 0 0 1-5.7-5.7l4-4a4 4 0 0 1 5.7 0m6.2-6.2 1.2-1.2a4 4 0 0 1 5.7 5.7l-4 4a4 4 0 0 1-5.7 0" transform="translate(1 1) scale(.92)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+                                        <div class="linktree-item__copy"><h3>{{ link.label ?: 'Lien sans titre' }}{% if link.isPrefered %}<span class="linktree-item__favorite" title="Lien préféré">★</span>{% endif %}</h3><p>{{ link.href ?: 'Adresse manquante' }}</p></div>
+                                        <span class="linktree-status"><i></i>{{ link.isOnline ? 'Publié' : 'Désactivé' }}</span>
+                                        <details class="linktree-item__edit">
+                                            <summary aria-label="Modifier {{ link.label ?: 'ce lien' }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14 5 5 5M4 20l4.2-.8L19.4 8a2.1 2.1 0 0 0-3-3L5.2 16.2 4 20Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                                            <div class="linktree-item__editor">
+                                                <p class="linktree-page__eyebrow">Modifier le lien</p>
+                                                {{ form_start(link_forms[link.id]) }}
+                                                    {{ form_errors(link_forms[link.id]) }}
+                                                    <twig:Form:Field :field="link_forms[link.id].label" />
+                                                    <twig:Form:Field :field="link_forms[link.id].href" />
+                                                    <div class="linktree-item__options"><twig:Form:Field :field="link_forms[link.id].isOnline" :widgetAttr="{class: 'linktree-checkbox'}" /><twig:Form:Field :field="link_forms[link.id].isPrefered" :widgetAttr="{class: 'linktree-checkbox'}" /></div>
+                                                    {{ form_widget(link_forms[link.id].save, {attr: {class: 'linktree-button linktree-button--primary'}}) }}
+                                                {{ form_end(link_forms[link.id]) }}
+                                            </div>
+                                        </details>
+                                        <form class="linktree-item__delete-form" method="post" action="{{ path('app_dashboard_linktree_link_delete', {id: link.id}) }}" onsubmit="return confirm('Supprimer ce lien ?')">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_link_' ~ link.id) }}">
+                                            <button class="linktree-item__delete" type="submit" aria-label="Supprimer {{ link.label ?: 'ce lien' }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16m-10 4v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                                        </form>
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </section>
+            </section>
+
+            {% include 'dashboard/linktree/_preview.html.twig' with {title: 'Aperçu'} only %}
+        </div>
+    </div>
+{% endblock %}

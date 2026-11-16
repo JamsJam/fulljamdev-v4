@@ -30,6 +30,7 @@ phpstan.neon
 
 ###> symfony/page-builder###
 /public/uploads/pages/*
+/public/uploads/linktree/*
 ###< symfony/page-builder###
 
 ###> application settings ###

@@ -89,8 +89,13 @@
         <twig:Form:Field
             :field="general_form.homepagePageId"
             class="settings__field"
-            description="Cette page sera affichée à la racine du site. Laissez vide pour ne pas configurer de page d’accueil."
+            description="Choisissez la page affichée à la racine du site. Son titre et son chemin se modifient dans l’éditeur de pages."
         />
+        {% if general_form.vars.data.homepagePageId %}
+            <p class="settings__help">
+                <a href="{{ path('app_dashboard_page_edit', {id: general_form.vars.data.homepagePageId}) }}">Modifier le contenu et le chemin de la page d’accueil</a>
+            </p>
+        {% endif %}
         <twig:Form:Field
             :field="general_form.qrVisitCardPath"
             class="settings__field"

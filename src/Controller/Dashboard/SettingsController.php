@@ -6,6 +6,7 @@ use App\Application\Settings\Account\Dto\UserAccountDto;
 use App\Application\Settings\Account\Service\UpdateUserAccountService;
 use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Application\Settings\Service\UpdateGeneralSettingsService;
+use App\Application\Page\Page\Service\GetPagesService;
 use App\Entity\User;
 use App\Form\GeneralSettingsType;
 use App\Form\UserAccountType;
@@ -40,10 +41,18 @@ final class SettingsController extends AbstractController
         GetGeneralSettingsService $getGeneralSettingsService,
         UpdateGeneralSettingsService $updateGeneralSettingsService,
         UpdateUserAccountService $updateUserAccountService,
+        GetPagesService $getPagesService,
     ): Response {
         $settings = $getGeneralSettingsService->get();
+        $pageChoices = [];
+        foreach ($getPagesService->get() as $page) {
+            if (null !== $page->getId()) {
+                $pageChoices[$page->getTitle().' (/'.$page->getPath().')'] = $page->getId();
+            }
+        }
         $form = $this->createForm(GeneralSettingsType::class, $settings, [
             'action' => $this->generateUrl('app_dashboard_settings', ['section' => 'general']),
+            'page_choices' => $pageChoices,
         ]);
         $user = $this->getUser();
         if (!$user instanceof User) {

@@ -26,6 +26,10 @@ final readonly class LinkTreeProvider
     /** @return list<Link> */
     public function provideOnlineLinks(LinkTree $tree): array
     {
+        if (null === $tree->getId()) {
+            return [];
+        }
+
         return $this->links->findBy(['linkTree' => $tree, 'isOnline' => true], ['isPrefered' => 'DESC', 'id' => 'ASC']);
     }
 }

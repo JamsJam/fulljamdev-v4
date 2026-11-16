@@ -2,11 +2,11 @@
 
 namespace App\Controller\Dashboard;
 
+use App\Application\Page\Page\Service\GetPagesService;
 use App\Application\Settings\Account\Dto\UserAccountDto;
 use App\Application\Settings\Account\Service\UpdateUserAccountService;
 use App\Application\Settings\Service\GetGeneralSettingsService;
 use App\Application\Settings\Service\UpdateGeneralSettingsService;
-use App\Application\Page\Page\Service\GetPagesService;
 use App\Entity\User;
 use App\Form\GeneralSettingsType;
 use App\Form\UserAccountType;

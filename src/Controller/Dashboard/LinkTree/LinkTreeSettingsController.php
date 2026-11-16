@@ -8,6 +8,8 @@ use App\Application\LinkTree\Service\GetLinkTreeService;
 use App\Application\LinkTree\Service\SaveLinkTreeProfileService;
 use App\Service\Breadcrumb\BreadcrumbService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,10 +28,14 @@ final class LinkTreeSettingsController extends AbstractController
         $form = $this->createForm(LinkTreeType::class, $dto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $save->save($tree, $dto);
-            $this->addFlash('success', 'Les paramètres LinkTree ont été enregistrés.');
+            try {
+                $save->save($tree, $dto);
+                $this->addFlash('success', 'Les paramètres LinkTree ont été enregistrés.');
 
-            return $this->redirectToRoute('app_dashboard_linktree_settings', status: Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_dashboard_linktree_settings', status: Response::HTTP_SEE_OTHER);
+            } catch (FileException) {
+                $form->addError(new FormError('La photo n’a pas pu être enregistrée. Vérifiez que le dossier des photos LinkTree est accessible en écriture.'));
+            }
         }
 
         return $this->render('dashboard/linktree/settings.html.twig', [

@@ -1,0 +1,36 @@
+{% extends 'adminBase.html.twig' %}
+
+{% block title %}Paramètres LinkTree{% endblock %}
+
+{% block body %}
+    <div class="linktree-settings-page">
+        <header class="linktree-settings-page__header">
+            <div><p class="linktree-page__eyebrow">Personnalisation</p><h1>Votre profil</h1><p>Ces informations apparaîtront en haut de votre page LinkTree.</p></div>
+            <a class="linktree-settings-page__back" href="{{ path('app_dashboard_linktree') }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour aux liens</a>
+        </header>
+
+        <div class="linktree-profile-layout">
+            <section class="linktree-profile-card" aria-labelledby="profile-heading">
+                <h2 id="profile-heading">Informations du profil</h2>
+                <p class="linktree-profile-card__intro">Chaque champ est facultatif. Vous pourrez les compléter ou les modifier à tout moment.</p>
+                {{ form_start(form, {attr: {enctype: 'multipart/form-data', class: 'linktree-profile-form'}}) }}
+                    {{ form_errors(form) }}
+                    <div class="linktree-profile-photo">
+                        <div class="linktree-profile-photo__image">
+                            {% if tree.profilePicture %}<img src="{{ asset(tree.profilePicture) }}" alt="Photo actuelle">{% else %}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c.6-3.5 3.1-5.5 7-5.5s6.4 2 7 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>{% endif %}
+                        </div>
+                        <div class="linktree-profile-photo__copy">
+                            <strong>Photo de profil</strong>
+                            <twig:Form:Field :field="form.profilePictureFile" />
+                        </div>
+                    </div>
+                    <twig:Form:Field :field="form.name" :widgetAttr="{placeholder: 'Ex. Jamie Dev'}" />
+                    <twig:Form:Field :field="form.company" :widgetAttr="{placeholder: 'Ex. Studio Fulljamdev'}" />
+                    {{ form_widget(form.save, {attr: {class: 'linktree-button linktree-button--primary'}}) }}
+                {{ form_end(form) }}
+            </section>
+
+            {% include 'dashboard/linktree/_preview.html.twig' with {title: 'Aperçu du profil', aside_class: ' linktree-profile-preview'} only %}
+        </div>
+    </div>
+{% endblock %}

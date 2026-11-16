@@ -1,0 +1,10 @@
+<aside class="linktree-preview{{ aside_class|default('') }}" aria-label="{{ title }}">
+    <div class="linktree-preview__heading">
+        <div><p class="linktree-page__eyebrow">En direct</p><h2>{{ title }}</h2></div>
+        <span><i></i> Page publique</span>
+    </div>
+    <div class="linktree-preview__viewport">
+        <iframe src="{{ path('app_front_linktree') }}" title="Aperçu réel de la page publique LinkTree"></iframe>
+    </div>
+    <p class="linktree-preview__caption">Aperçu de la page publique réelle.</p>
+</aside>

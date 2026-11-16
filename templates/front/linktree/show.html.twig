@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tree.name ?: 'Mes liens' }}{% endblock %}
+{% block metadescription %}{% if tree.name %}Retrouvez tous les liens de {{ tree.name }}{% if tree.company %}, {{ tree.company }}{% endif %}.{% else %}Retrouvez tous mes liens au même endroit.{% endif %}{% endblock %}
+{% block main_attributes %} data-page="linktree"{% endblock %}
+{% block body %}
+    <section class="public-linktree" aria-labelledby="public-linktree-name">
+        <div class="public-linktree__ambient public-linktree__ambient--one" aria-hidden="true"></div>
+        <div class="public-linktree__ambient public-linktree__ambient--two" aria-hidden="true"></div>
+        <div class="public-linktree__content">
+            <div class="public-linktree__brand" aria-label="LinkTree"><span class="public-linktree__brand-mark">↗</span><span>LINKTREE</span></div>
+            <header class="public-linktree__profile">
+                <div class="public-linktree__avatar-wrap">
+                    {% if tree.profilePicture %}
+                        <img class="public-linktree__avatar" src="{{ asset(tree.profilePicture) }}" alt="Photo de {{ tree.name ?: 'profil' }}">
+                    {% else %}
+                        <div class="public-linktree__avatar public-linktree__avatar--placeholder" aria-hidden="true">{{ tree.name ? tree.name|first|upper : 'F' }}</div>
+                    {% endif %}
+                    <span class="public-linktree__avatar-ring" aria-hidden="true"></span>
+                </div>
+                <h1 id="public-linktree-name">{{ tree.name ?: 'Mes liens' }}</h1>
+                {% if tree.company %}<p class="public-linktree__company">{{ tree.company }}</p>{% endif %}
+                <p class="public-linktree__intro">Tous mes liens, au même endroit.</p>
+            </header>
+
+            {% if links is not empty %}
+                <nav class="public-linktree__links" aria-label="Liens de {{ tree.name ?: 'profil' }}">
+                    {% for link in links %}
+                        <a class="public-linktree__link{{ link.isPrefered ? ' is-preferred' : '' }}" href="{{ link.href }}" target="_blank" rel="noopener noreferrer">
+                            <span class="public-linktree__link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9.5 14.5 14.5 9.5m-8 8-1.2 1.2a4 4 0 0 1-5.7-5.7l4-4a4 4 0 0 1 5.7 0m6.2-6.2 1.2-1.2a4 4 0 0 1 5.7 5.7l-4 4a4 4 0 0 1-5.7 0" transform="translate(1 1) scale(.92)" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                            <span class="public-linktree__link-label">{{ link.label }}</span>
+                            {% if link.isPrefered %}<span class="public-linktree__featured">À découvrir</span>{% endif %}
+                            <span class="public-linktree__arrow" aria-hidden="true">↗</span>
+                        </a>
+                    {% endfor %}
+                </nav>
+            {% else %}
+                <div class="public-linktree__empty">
+                    <span class="public-linktree__empty-icon" aria-hidden="true">✳</span>
+                    <p>Les liens arrivent bientôt.</p>
+                </div>
+            {% endif %}
+
+            <footer class="public-linktree__footer"><span class="public-linktree__footer-line"></span><span>{{ tree.name ?: 'FULLJAMDEV' }}</span><span class="public-linktree__footer-line"></span></footer>
+        </div>
+    </section>
+{% endblock %}

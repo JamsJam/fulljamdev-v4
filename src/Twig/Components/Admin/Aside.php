@@ -18,11 +18,19 @@ final class Aside
      *     items: list<array{
      *         label: string,
      *         route?: string,
+     *         routeParameters?: array<string, string|int>,
      *         icon?: string,
      *         badge?: string|int,
      *         logout?: bool,
      *         activePrefixes?: list<string>,
-     *         children?: list<array{label: string, route: string, badge?: string|int, activePrefixes?: list<string>}>
+     *         children?: list<array{
+     *             label: string,
+     *             route?: string,
+     *             routeParameters?: array<string, string|int>,
+     *             icon?: string,
+     *             badge?: string|int,
+     *             activePrefixes?: list<string>
+     *         }>
      *     }>
      * }>
      */
@@ -35,28 +43,10 @@ final class Aside
                     'icon' => 'grommet-icons:projects',
                 ],
                 [
-                    'label' => 'Réservations',
-                    'icon' => 'material-symbols:calendar-month-outline-rounded',
-                    'children' => [
-                        [
-                            'label' => 'Rendez-vous',
-                            'route' => 'app_dashboard_reservation',
-                            'activePrefixes' => ['app_dashboard_reservation_appointment_'],
-                        ],
-                        [
-                            'label' => 'Calendrier',
-                            'route' => 'app_dashboard_reservation_calendar',
-                        ],
-                        [
-                            'label' => 'À traiter',
-                            'route' => 'app_dashboard_reservation_processing',
-                        ],
-                        [
-                            'label' => 'Plannings',
-                            'route' => 'app_dashboard_reservation_plannings',
-                            'activePrefixes' => ['app_dashboard_reservation_planning_'],
-                        ],
-                    ],
+                    'label' => 'Déconnexion',
+                    'route' => 'app_logout',
+                    'icon' => 'bx:log-out',
+                    'logout' => true,
                 ],
             ],
         ],
@@ -87,10 +77,40 @@ final class Aside
                     'icon' => 'iconoir:post',
                     'activePrefixes' => ['app_dashboard_page_'],
                 ],
+            ],
+        ],
+        [
+            'label' => 'CRM',
+            'items' => [
                 [
-                    'label' => 'Legal',
-                    'route' => 'app_dashboard_legal',
-                    'icon' => 'qlementine-icons:resume-16',
+                    'label' => 'Réservations',
+                    'icon' => 'material-symbols:calendar-month-outline-rounded',
+                    'children' => [
+                        [
+                            'label' => 'Rendez-vous',
+                            'route' => 'app_dashboard_reservation',
+                            // 'activePrefixes' => ['app_dashboard_reservation_appointment_'],
+                        ],
+                        [
+                            'label' => 'Calendrier',
+                            'route' => 'app_dashboard_reservation_calendar',
+                        ],
+                        [
+                            'label' => 'À traiter',
+                            'route' => 'app_dashboard_reservation_processing',
+                        ],
+                        [
+                            'label' => 'Plannings',
+                            'route' => 'app_dashboard_reservation_plannings',
+                            'activePrefixes' => ['app_dashboard_reservation_planning_'],
+                        ],
+                    ],
+                ],
+                [
+                    'label' => 'LinkTree',
+                    'route' => 'app_dashboard_linktree',
+                    'icon' => 'material-symbols:link-rounded',
+                    'activePrefixes' => ['app_dashboard_linktree_'],
                 ],
             ],
         ],
@@ -100,13 +120,33 @@ final class Aside
                 [
                     'label' => 'Paramètres',
                     'route' => 'app_dashboard_settings',
+                    'routeParameters' => ['section' => 'general'],
                     'icon' => 'ic:round-settings',
                 ],
                 [
-                    'label' => 'Déconnexion',
-                    'route' => 'app_logout',
-                    'icon' => 'bx:log-out',
-                    'logout' => true,
+                    'label' => 'Mon compte',
+                    'route' => 'app_dashboard_settings',
+                    'routeParameters' => ['section' => 'account'],
+                    'icon' => 'ic:round-people',
+                ],
+                [
+                    'label' => 'Legal',
+                    'children' => [
+                        [
+                            'label' => 'Politique de confidentialité',
+                            'route' => 'app_dashboard_legal',
+                            'icon' => 'qlementine-icons:resume-16',
+                        ],
+                        [
+                            'label' => 'Mentions légales',
+                            'route' => 'app_dashboard_legal',
+                            'icon' => 'qlementine-icons:resume-16',
+                        ], [
+                            'label' => 'Conditions générales d’utilisation',
+                            'route' => 'app_dashboard_legal',
+                            'icon' => 'qlementine-icons:resume-16',
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -117,16 +157,38 @@ final class Aside
         AppointmentsToProcessCountProvider $appointmentsToProcessCountProvider,
         ClockInterface $clock,
     ) {
-        $this->groups[0]['items'][1]['children'][2]['badge'] = $appointmentsToProcessCountProvider->provide(
+        $badge = $appointmentsToProcessCountProvider->provide(
             date: \DateTimeImmutable::createFromInterface($clock->now()),
         );
+
+        foreach ($this->groups as $groupIndex => $group) {
+            foreach ($group['items'] as $itemIndex => $item) {
+                foreach ($item['children'] ?? [] as $childIndex => $child) {
+                    if ('app_dashboard_reservation_processing' === ($child['route'] ?? null)) {
+                        $this->groups[$groupIndex]['items'][$itemIndex]['children'][$childIndex]['badge'] = $badge;
+                    }
+                }
+            }
+        }
     }
 
-    /** @param list<string> $activePrefixes */
-    public function isActive(string $route, array $activePrefixes = []): bool
+    /**
+     * @param list<string>              $activePrefixes
+     * @param array<string, string|int> $routeParameters
+     */
+    public function isActive(string $route, array $activePrefixes = [], array $routeParameters = []): bool
     {
-        $currentRoute = (string) $this->requestStack->getCurrentRequest()?->attributes->get('_route');
-        if ($route === $currentRoute) {
+        $request = $this->requestStack->getCurrentRequest();
+        $currentRoute = (string) $request?->attributes->get('_route');
+        $parametersMatch = true;
+        foreach ($routeParameters as $name => $value) {
+            if ((string) $request?->attributes->get((string) $name) !== (string) $value) {
+                $parametersMatch = false;
+                break;
+            }
+        }
+
+        if ($route === $currentRoute && $parametersMatch) {
             return true;
         }
 
@@ -140,12 +202,12 @@ final class Aside
     }
 
     /**
-     * @param list<array{route: string, activePrefixes?: list<string>}> $items
+     * @param list<array{route?: string, activePrefixes?: list<string>}> $items
      */
     public function hasActiveChild(array $items): bool
     {
         foreach ($items as $item) {
-            if ($this->isActive($item['route'], $item['activePrefixes'] ?? [])) {
+            if (isset($item['route']) && $this->isActive($item['route'], $item['activePrefixes'] ?? [])) {
                 return true;
             }
         }

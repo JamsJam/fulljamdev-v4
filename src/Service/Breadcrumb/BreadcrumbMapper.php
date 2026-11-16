@@ -46,6 +46,10 @@ final class BreadcrumbMapper
         'legal' => [
             'label' => 'Legal',
         ],
+        'linktree' => [
+            'label' => 'LinkTree',
+            'route' => 'app_dashboard_linktree',
+        ],
         'article' => [
             'label' => 'Articles',
             'route' => 'app_dashboard_blog',

@@ -81,10 +81,10 @@
 
     </head>
     <body class="front{{ app.current_route == 'app_home' ? ' front--accueil' : '' }}">
-        <twig:Front:Header :site="site" />
+        {% block site_header %}<twig:Front:Header :site="site" />{% endblock %}
         <main{% block main_attributes %}{% endblock %}>
             {% block body %}{% endblock %}
         </main>
-        <twig:Front:Footer :site="site" />
+        {% block site_footer %}<twig:Front:Footer :site="site" />{% endblock %}
     </body>
 </html>
